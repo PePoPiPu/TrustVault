@@ -29,7 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-class LoginActivity {
+class OnboardingActivity {
 
     @Composable // Allows us to create a Composable object
     @Preview
@@ -72,7 +72,7 @@ class LoginActivity {
 
             // Login Button
             OutlinedButton(
-                onClick = { /* TODO: Handle Login */},
+                onClick = { /* TODO: Go to Login Activity */},
                 modifier = Modifier
                     .fillMaxWidth(0.8f)
                     .height(50.dp),
@@ -85,7 +85,7 @@ class LoginActivity {
 
             // Register Button + Gradient
             Button(
-                onClick = {/* TODO: Handle registration */},
+                onClick = {/* TODO: Go to register activity */},
                 modifier = Modifier
                     .fillMaxWidth(0.8f) // resulting MaxWidth = MaxWidth * fraction AKA reduce max space
                     .height(50.dp), // Height of the button
