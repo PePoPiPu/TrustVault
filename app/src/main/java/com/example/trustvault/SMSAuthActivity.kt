@@ -98,7 +98,7 @@ class SMSAuthActivity {
                     colors = listOf(Color(0xFF5D1D6C), Color(0xFF5B3C93), Color(0xFF5A69CB), Color(0xFF921BAF))
                 )
 
-                Box(
+                Box(  
                     modifier = Modifier
                         .size(46.dp)
                 ) {
