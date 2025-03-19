@@ -46,6 +46,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.trustvault.ui.theme.DarkColorScheme
+import com.example.trustvault.ui.theme.DarkModePrimaryGradient
+import com.example.trustvault.ui.theme.LightColorScheme
+import com.example.trustvault.ui.theme.LightModePrimaryGradient
 
 class ThemeSelectionActivity {
 
@@ -70,7 +74,7 @@ class ThemeSelectionActivity {
         Column (
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0xFF111111)),
+                .background(if (darkTheme) DarkColorScheme.background else LightColorScheme.background),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -80,13 +84,13 @@ class ThemeSelectionActivity {
             Text(
                 text = "Elige un modo",
                 fontSize = 40.sp,
-                color = Color.White
+                color = if (darkTheme) DarkColorScheme.onBackground else LightColorScheme.onBackground
             )
             // General text
             Text(
                 text = "Presentamos el modo oscuro: \nuna interfaz elegante y amigable para la vista.",
                 fontSize = 20.sp,
-                color = Color(0xFFE9E9E9),
+                color = if (darkTheme) DarkColorScheme.onBackground else LightColorScheme.onBackground,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .padding(top = 20.dp, start = 20.dp, end = 20.dp)
@@ -95,8 +99,8 @@ class ThemeSelectionActivity {
             Spacer(modifier = Modifier.height(40.dp))
 
             Image(
-                painter = painterResource(id = R.drawable.img_dark_theme),
-                contentDescription = "Dark Mode Illustration",
+                painter = if (darkTheme) painterResource(id = R.drawable.img_dark_theme) else painterResource(id = R.drawable.img_light_theme),
+                contentDescription = if(darkTheme) "Dark Mode Illustration" else "LightMode Illustration",
                 modifier = Modifier.size(350.dp)
             )
 
@@ -104,7 +108,7 @@ class ThemeSelectionActivity {
 
             Text(
                 text = if (darkTheme) "Modo Oscuro" else "Modo Claro",
-                color = if (darkTheme) Color.White else Color.Black,
+                color = if (darkTheme) DarkColorScheme.onBackground else LightColorScheme.onBackground,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold
             )
@@ -134,9 +138,7 @@ class ThemeSelectionActivity {
                     modifier = Modifier
                         .fillMaxSize()
                         .background(
-                            brush = Brush.horizontalGradient(
-                                colors = listOf(Color(0xFFBC39DB), Color(0xFF7C8EFF), Color(0xFFE7A3F8))
-                            ),
+                            if (darkTheme) DarkModePrimaryGradient else LightModePrimaryGradient,
                             shape = RoundedCornerShape(12.dp)
                         ),
                     contentAlignment = Alignment.Center
@@ -199,7 +201,7 @@ class ThemeSelectionActivity {
                     .offset(x = offset)
                     .padding(all = padding)
                     .clip(shape = toggleShape)
-                    .background(if (darkTheme) Color(0xFF282D37) else Color(0xFF5F74FF))
+                    .background(if (darkTheme) DarkColorScheme.secondary else LightColorScheme.secondary)
             ) {}
             Row(
                 modifier = Modifier
@@ -220,7 +222,7 @@ class ThemeSelectionActivity {
                         modifier = Modifier.size(iconSize),
                         painter = painterResource(id = R.drawable.ic_moon),
                         contentDescription = "Dark Mode",
-                        tint = if (darkTheme) MaterialTheme.colorScheme.secondaryContainer else Color(0xFF171717)
+                        tint = if (darkTheme) DarkColorScheme.onBackground else LightColorScheme.onBackground
                     )
                 }
 
@@ -233,7 +235,7 @@ class ThemeSelectionActivity {
                         modifier = Modifier.size(iconSize),
                         painter = painterResource(id = R.drawable.ic_sun),
                         contentDescription = "Light Mode",
-                        tint = MaterialTheme.colorScheme.secondaryContainer
+                        tint = DarkColorScheme.onBackground
                     )
                 }
             }
