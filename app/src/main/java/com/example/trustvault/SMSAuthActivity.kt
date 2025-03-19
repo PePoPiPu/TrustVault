@@ -16,6 +16,10 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
@@ -27,16 +31,17 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.trustvault.ui.theme.DarkColorScheme
+import com.example.trustvault.ui.theme.LightColorScheme
 
 class SMSAuthActivity {
     @Composable
-    @Preview
     // TODO: As soon as this screen is painted, send a code to the users phone number and check it automatically, if possible
-    fun SMSAuthScreen() {
+    fun SMSAuthScreen(darkTheme: Boolean, onThemeUpdated: () -> Unit) {
         Column (
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0xFF111111)),
+                .background(if (darkTheme) DarkColorScheme.surface else LightColorScheme.background),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -74,7 +79,7 @@ class SMSAuthActivity {
             Text(
                 text = "El código ha sido enviado al 674 547 145", // TODO: Bring phone number from the previous form/saved number from the user
                 fontSize = 18.sp,
-                color = Color(0xFFB2B2B2)
+                color = if (darkTheme) DarkColorScheme.onBackground else LightColorScheme.onBackground
             )
 
             Spacer(modifier = Modifier.height(40.dp))
@@ -83,7 +88,7 @@ class SMSAuthActivity {
             Text(
                 text = "Reenviar el código en 00:30", // TODO: Start a 30 sec countdown, replace with a resend button once it finishes
                 fontSize = 18.sp,
-                color = Color(0xFFF9F9F9)
+                color = if (darkTheme) DarkColorScheme.onBackground else LightColorScheme.onBackground
             )
 
             Spacer(modifier = Modifier.height(40.dp))
@@ -94,11 +99,18 @@ class SMSAuthActivity {
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) { repeat(5) { // Repeat allows us to paint x times the elements that are inside the statement. Avoids code repetition
                 // Gradient brush to call it from the Canvas
-                val gradientBrush = Brush.linearGradient(
-                    colors = listOf(Color(0xFF5D1D6C), Color(0xFF5B3C93), Color(0xFF5A69CB), Color(0xFF921BAF))
-                )
+                val gradientBrush = if (darkTheme) {
+                    Brush.linearGradient(
+                        colors = listOf(Color(0xFF5D1D6C), Color(0xFF5B3C93), Color(0xFF5A69CB), Color(0xFF921BAF))
+                    )
+                } else
+                {
+                    Brush.linearGradient(
+                        colors = listOf(Color(0xFF5D1D6C), Color(0xFF5B3C93), Color(0xFF5A69CB), Color(0xFF921BAF))
+                    )
+                }
 
-                Box(  
+                Box(
                     modifier = Modifier
                         .size(46.dp)
                 ) {
@@ -122,5 +134,15 @@ class SMSAuthActivity {
                 }
             }
         }
+    }
+
+    @Composable
+    @Preview
+    fun SMSAuthPreview() {
+        var darkTheme by remember { mutableStateOf(false) } // This is to be set in the main activity. Set here for testing
+        SMSAuthScreen (
+            darkTheme = !darkTheme,
+            onThemeUpdated = {darkTheme = !darkTheme}
+        )
     }
 }
