@@ -31,7 +31,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.trustvault.ui.theme.DarkColorScheme
+import com.example.trustvault.ui.theme.DarkModePrimaryGradient
 import com.example.trustvault.ui.theme.LightColorScheme
+import com.example.trustvault.ui.theme.LightModePrimaryGradient
 
 class ThemeSelectionActivity(private val context: Context) {
 
@@ -42,9 +44,11 @@ class ThemeSelectionActivity(private val context: Context) {
      * @param userPreferences An instance of [UserPreferencesManager] to manage user preferences.
      */
     @Composable
-    fun ThemeSelectionScreen(onThemeUpdated: () -> Unit, userPreferences: UserPreferencesManager) {
-        // Observe the current dark theme setting using Flow
-        val darkTheme by userPreferences.darkThemeFlow.collectAsState(initial = false)
+    fun ThemeSelectionScreen(
+        viewModel: ThemeSelectionViewModel,
+        onThemeUpdated: () -> Unit
+    ) {
+        val darkTheme by viewModel.darkTheme.collectAsState()
 
         Column(
             modifier = Modifier
@@ -55,13 +59,14 @@ class ThemeSelectionActivity(private val context: Context) {
         ) {
             Spacer(modifier = Modifier.height(40.dp))
 
-            // Choose a theme title
+            // Theme Title
             Text(
                 text = "Elige un modo",
                 fontSize = 40.sp,
                 color = if (darkTheme) DarkColorScheme.onBackground else LightColorScheme.onBackground
             )
 
+            // Theme description
             Text(
                 text = "Presentamos el modo oscuro: \nuna interfaz elegante y amigable para la vista.",
                 fontSize = 20.sp,
@@ -73,14 +78,16 @@ class ThemeSelectionActivity(private val context: Context) {
 
             Spacer(modifier = Modifier.height(40.dp))
 
+            // Theme image
             Image(
                 painter = if (darkTheme) painterResource(id = R.drawable.img_dark_theme) else painterResource(id = R.drawable.img_light_theme),
-                contentDescription = if (darkTheme) "Dark Mode Illustration" else "LightMode Illustration",
+                contentDescription = if (darkTheme) "Dark Mode Illustration" else "Light Mode Illustration",
                 modifier = Modifier.size(350.dp)
             )
 
             Spacer(modifier = Modifier.height(40.dp))
 
+            // Theme Text
             Text(
                 text = if (darkTheme) "Modo Oscuro" else "Modo Claro",
                 color = if (darkTheme) DarkColorScheme.onBackground else LightColorScheme.onBackground,
@@ -94,12 +101,9 @@ class ThemeSelectionActivity(private val context: Context) {
             ThemeSwitcher(
                 darkTheme = darkTheme,
                 onClick = {
-                    // Update the theme in UserPreferencesManager with a suspended function
-                    suspend fun saveTheme()
-                    {
-                        userPreferences.saveDarkTheme(darkTheme)
-                    }
-                    onThemeUpdated() // Call the callback to update the theme state
+                    // Toggle theme via ViewModel
+                    viewModel.toggleTheme()
+                    onThemeUpdated()
                 },
                 size = 75.dp,
                 padding = 5.dp
@@ -121,7 +125,7 @@ class ThemeSelectionActivity(private val context: Context) {
                     modifier = Modifier
                         .fillMaxSize()
                         .background(
-                            if (darkTheme) DarkColorScheme.primary else LightColorScheme.primary,
+                            if (darkTheme) DarkModePrimaryGradient else LightModePrimaryGradient,
                             shape = RoundedCornerShape(12.dp)
                         ),
                     contentAlignment = Alignment.Center
@@ -131,6 +135,7 @@ class ThemeSelectionActivity(private val context: Context) {
             }
         }
     }
+
 
     /**
      * Composable function that displays a toggle switch to switch between dark and light themes.
@@ -208,8 +213,11 @@ class ThemeSelectionActivity(private val context: Context) {
 fun PreviewThemeSelectionScreen() {
     val context = LocalContext.current
     val themeSelectionActivity = ThemeSelectionActivity(context)
+    val mockUserPreferencesManager = UserPreferencesManager(context)
+    val mockViewModel = ThemeSelectionViewModel(mockUserPreferencesManager)
+
     themeSelectionActivity.ThemeSelectionScreen(
-        onThemeUpdated = { /* Do nothing here for preview */ },
-        userPreferences = UserPreferencesManager(context)
+        viewModel = mockViewModel,
+        onThemeUpdated = { /* Do nothing for preview */ }
     )
 }
