@@ -1,6 +1,6 @@
 package com.example.trustvault
 
-import androidx.compose.animation.core.AnimationSpec
+import android.content.Context
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
@@ -8,70 +8,45 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.trustvault.ui.theme.DarkColorScheme
-import com.example.trustvault.ui.theme.DarkModePrimaryGradient
 import com.example.trustvault.ui.theme.LightColorScheme
-import com.example.trustvault.ui.theme.LightModePrimaryGradient
 
-class ThemeSelectionActivity {
+class ThemeSelectionActivity(private val context: Context) {
 
     /**
      * This composable function displays a screen allowing users to choose between light and dark modes
      *
-     * Included in the screen:
-     * - A title prompting the user to choose a theme.
-     * - A brief description of the dark theme.
-     * - An illustration representing dark mode.
-     * - A toggle button to switch between dark and light themes.
-     * - A button to continue to the next screen (e.g., SMS authentication).
-     *
-     * @param darkTheme A boolean indicating whether the current theme is dark (true) or light (false).
      * @param onThemeUpdated A callback function that is invoked when the theme is updated. It returns nothing (Unit == void in Java)
-     *
-     * @author Alex Álvarez de Sotomayor Sugimoto
+     * @param userPreferences An instance of [UserPreferencesManager] to manage user preferences.
      */
     @Composable
-    fun ThemeSelectionScreen(darkTheme: Boolean, onThemeUpdated: () -> Unit){
+    fun ThemeSelectionScreen(onThemeUpdated: () -> Unit, userPreferences: UserPreferencesManager) {
+        // Observe the current dark theme setting using Flow
+        val darkTheme by userPreferences.darkThemeFlow.collectAsState(initial = false)
 
-        Column (
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(if (darkTheme) DarkColorScheme.background else LightColorScheme.background),
@@ -86,7 +61,7 @@ class ThemeSelectionActivity {
                 fontSize = 40.sp,
                 color = if (darkTheme) DarkColorScheme.onBackground else LightColorScheme.onBackground
             )
-            // General text
+
             Text(
                 text = "Presentamos el modo oscuro: \nuna interfaz elegante y amigable para la vista.",
                 fontSize = 20.sp,
@@ -100,7 +75,7 @@ class ThemeSelectionActivity {
 
             Image(
                 painter = if (darkTheme) painterResource(id = R.drawable.img_dark_theme) else painterResource(id = R.drawable.img_light_theme),
-                contentDescription = if(darkTheme) "Dark Mode Illustration" else "LightMode Illustration",
+                contentDescription = if (darkTheme) "Dark Mode Illustration" else "LightMode Illustration",
                 modifier = Modifier.size(350.dp)
             )
 
@@ -115,9 +90,17 @@ class ThemeSelectionActivity {
 
             Spacer(modifier = Modifier.height(40.dp))
 
-            ThemeSwitcher (
+            // Theme switcher
+            ThemeSwitcher(
                 darkTheme = darkTheme,
-                onClick = onThemeUpdated,
+                onClick = {
+                    // Update the theme in UserPreferencesManager with a suspended function
+                    suspend fun saveTheme()
+                    {
+                        userPreferences.saveDarkTheme(darkTheme)
+                    }
+                    onThemeUpdated() // Call the callback to update the theme state
+                },
                 size = 75.dp,
                 padding = 5.dp
             )
@@ -125,8 +108,8 @@ class ThemeSelectionActivity {
             Spacer(modifier = Modifier.height(30.dp))
 
             // Continue Button
-            Button (
-                onClick = { /* TODO: Go to SMS authentication activity */},
+            Button(
+                onClick = { /* TODO: Go to SMS authentication activity */ },
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
                     .height(50.dp),
@@ -138,7 +121,7 @@ class ThemeSelectionActivity {
                     modifier = Modifier
                         .fillMaxSize()
                         .background(
-                            if (darkTheme) DarkModePrimaryGradient else LightModePrimaryGradient,
+                            if (darkTheme) DarkColorScheme.primary else LightColorScheme.primary,
                             shape = RoundedCornerShape(12.dp)
                         ),
                     contentAlignment = Alignment.Center
@@ -148,91 +131,65 @@ class ThemeSelectionActivity {
             }
         }
     }
+
     /**
      * Composable function that displays a toggle switch to switch between dark and light themes.
      *
-     * This switch includes:
-     * - A background that changes color based on the selected theme.
-     * - A movable toggle that animates between the dark and light theme positions.
-     * - Icons representing the dark and light modes.
-     * - A callback that is triggered when the switch is clicked.
-     *
      * @param darkTheme A boolean indicating whether the current theme is dark (true) or light (false).
      * @param size The size of the entire switch component.
-     * @param iconSize The size of the icons (moon and sun) inside the toggle.
      * @param padding Padding around the circle component inside.
-     * @param borderWidth The width of the border around the switch.
-     * @param parentShape The shape of the switch container (a circle as default).
-     * @param toggleShape The shape of the toggle inside the switch (a circle as default).
-     * @param animationSpec The animation spec for the toggle's movement (default is a tween with 300ms duration).
      * @param onClick A callback function that is invoked when the switch is clicked to change the theme.
-     *
-     * @author Alex Álvarez de Sotomayor Sugimoto
      */
     @Composable
     fun ThemeSwitcher(
         darkTheme: Boolean = false,
         size: Dp = 150.dp,
-        iconSize: Dp = size / 3,
         padding: Dp = 10.dp,
-        borderWidth: Dp = 1.dp,
-        parentShape: Shape = CircleShape,
-        toggleShape: Shape = CircleShape,
-        animationSpec: AnimationSpec<Dp> = tween(durationMillis = 300), // Tween stands for tween animation AKA generating frames between 2 keyframes. Keyframes are set by the offset later.
         onClick: () -> Unit
     ) {
         val offset by animateDpAsState(
             targetValue = if (darkTheme) 0.dp else size,
-            animationSpec = animationSpec
+            animationSpec = tween(durationMillis = 300)
         )
 
-        // This is the actual container of the switch
-        Box(modifier = Modifier
-            .width(size * 2) // Multiply by 2 since we have to icons
-            .height(size)
-            .clip(shape = parentShape)
-            .clickable { onClick() }
-            .background(if (darkTheme) Color(0XFF171717) else Color.White)
+        Box(
+            modifier = Modifier
+                .width(size * 2) // Multiply by 2 since we have 2 icons
+                .height(size)
+                .clip(CircleShape)
+                .clickable { onClick() }
+                .background(if (darkTheme) Color(0XFF171717) else Color.White)
         ) {
-            // This is the toggle that we move with the tween animation
             Box(
                 modifier = Modifier
                     .size(size)
                     .offset(x = offset)
                     .padding(all = padding)
-                    .clip(shape = toggleShape)
+                    .clip(CircleShape)
                     .background(if (darkTheme) DarkColorScheme.secondary else LightColorScheme.secondary)
-            ) {}
+            )
             Row(
                 modifier = Modifier
-                    .border(
-                        border = BorderStroke(
-                            width = borderWidth,
-                            color = Color(0xFF282D37)
-                        ),
-                        shape = parentShape
-                    )
+                    .border(BorderStroke(1.dp, Color(0xFF282D37)))
             ) {
-                // Container for the moon icon
                 Box(
                     modifier = Modifier.size(size),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        modifier = Modifier.size(iconSize),
+                        modifier = Modifier.size(size / 3),
                         painter = painterResource(id = R.drawable.ic_moon),
                         contentDescription = "Dark Mode",
                         tint = if (darkTheme) DarkColorScheme.onBackground else LightColorScheme.onBackground
                     )
                 }
 
-                // Container for the sun icon
                 Box(
                     modifier = Modifier.size(size),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        modifier = Modifier.size(iconSize),
+                        modifier = Modifier.size(size / 3),
                         painter = painterResource(id = R.drawable.ic_sun),
                         contentDescription = "Light Mode",
                         tint = DarkColorScheme.onBackground
@@ -241,18 +198,18 @@ class ThemeSelectionActivity {
             }
         }
     }
+}
 
-    /**
-     * This function is used purely for previewing
-     */
-    @Preview
-    @Composable
-    fun PreviewThemeSelectionScreen()
-    {
-        var darkTheme by remember { mutableStateOf(false) } // This is to be set in the main activity. Set here for testing
-        ThemeSelectionScreen(
-            darkTheme = !darkTheme,
-            onThemeUpdated = {darkTheme = !darkTheme}
-        )
-    }
+/**
+ * This function is used purely for previewing the ThemeSelectionScreen composable.
+ */
+@Preview(showBackground = true)
+@Composable
+fun PreviewThemeSelectionScreen() {
+    val context = LocalContext.current
+    val themeSelectionActivity = ThemeSelectionActivity(context)
+    themeSelectionActivity.ThemeSelectionScreen(
+        onThemeUpdated = { /* Do nothing here for preview */ },
+        userPreferences = UserPreferencesManager(context)
+    )
 }
