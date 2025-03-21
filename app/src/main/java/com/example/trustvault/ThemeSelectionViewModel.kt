@@ -6,6 +6,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
+/**
+ * This ViewModel is responsible for managing and toggling the app's theme (dark or light).
+ *
+ * This ViewModel interacts with the [UserPreferencesManager] to retrieve and store the user's theme preference.
+ * It exposes a [StateFlow] that provides the current theme state, which can be observed to reflect changes in the UI.
+ *
+ * @property userPreferencesManager The [UserPreferencesManager] used to load and save theme preferences.
+ * @author Alex Sugimoto
+ */
 class ThemeSelectionViewModel(private val userPreferencesManager: UserPreferencesManager) : ViewModel() {
 
     // MutableLiveData to store the current theme state
