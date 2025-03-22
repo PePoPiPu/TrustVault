@@ -50,7 +50,8 @@ class LoginActivity {
     fun LoginScreen(
         darkTheme: Boolean,
         viewModel: LoginScreenViewModel = viewModel(),
-        onGoBackClick: () -> Unit = {}
+        onGoBackClick: () -> Unit = {},
+        onRegisterClick: () -> Unit = {}
     ) {
         val context = LocalContext.current
         Column (
@@ -186,7 +187,11 @@ class LoginActivity {
                         fontWeight = FontWeight.SemiBold
 
                     ),
-                    modifier = Modifier.padding(top = 250.dp, bottom = 16.dp)
+                    modifier = Modifier
+                        .padding(top = 250.dp, bottom = 16.dp)
+                        .clickable {
+                            onRegisterClick()
+                        }
                 )
             }
             Row (
@@ -201,7 +206,12 @@ class LoginActivity {
                         fontSize = 15.sp,
                         fontWeight = FontWeight.SemiBold
                     ),
-                    modifier = Modifier.padding(bottom = 32.dp)
+                    modifier = Modifier
+                        .padding(bottom = 32.dp)
+                        .clickable {
+                            /* TODO: Go to Lost password activity */
+                            Toast.makeText(context, "Te pasa por cafre, cacho mamón.", Toast.LENGTH_SHORT).show()
+                        }
                 )
             }
         }

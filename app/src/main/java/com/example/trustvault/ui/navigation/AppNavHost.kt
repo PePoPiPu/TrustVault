@@ -43,6 +43,9 @@ fun AppNavHost(
                 darkTheme = true,
                 onGoBackClick = {
                     navController.navigate(Screen.GetStarted.route)
+                },
+                onRegisterClick = {
+                    navController.navigate(Screen.Register.route)
                 }
             )
         }
