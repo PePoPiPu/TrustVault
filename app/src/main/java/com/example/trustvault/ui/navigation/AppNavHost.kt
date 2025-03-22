@@ -13,12 +13,28 @@ import com.example.trustvault.ui.screens.GetStartedActivity
 import com.example.trustvault.ui.screens.LoginScreen
 import com.example.trustvault.ui.screens.RegisterActivity
 
+/**
+ * This sealed class represents different screens in the app using data objects.
+ *
+ * @property route The navigation route associated with the screen.
+ *
+ * @author Alex Álvarez de Sotomayor Sugimoto
+ */
 sealed class Screen(val route: String) {
     data object GetStarted : Screen("GetStartedActivity")
     data object Login : Screen("Login")
     data object Register : Screen("RegisterActivity")
 }
 
+/**
+ * App navigation host that manages screen transitions and navigation between screens.
+ *
+ * @param modifier Modifier for styling the navigation host.
+ * @param navController Controller for handling navigation between screens.
+ * @param startDestination The first screen that is displayed when the app starts.
+ *
+ * @author Alex Álvarez de Sotomayor Sugimoto
+ */
 @Composable
 fun AppNavHost(
     modifier: Modifier = Modifier,
