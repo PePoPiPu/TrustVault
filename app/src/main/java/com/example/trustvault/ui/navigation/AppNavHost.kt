@@ -39,7 +39,7 @@ fun AppNavHost(
         }
         composable(Screen.Register.route) {
             RegisterActivity().RegisterScreen(
-                darkTheme = true,
+                darkTheme = false,
                 onGoBackClick = {
                     navController.navigate(Screen.GetStarted.route)
                 }

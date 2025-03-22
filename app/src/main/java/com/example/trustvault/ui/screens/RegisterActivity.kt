@@ -36,8 +36,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.trustvault.R
+import com.example.trustvault.ui.theme.DarkColorScheme
 import com.example.trustvault.ui.theme.DarkModePrimaryGradient
 import com.example.trustvault.ui.theme.DisabledButtonGradient
+import com.example.trustvault.ui.theme.LightColorScheme
 import com.example.trustvault.ui.theme.LightModePrimaryGradient
 import com.example.trustvault.ui.viewmodels.RegisterViewModel
 
@@ -52,7 +54,7 @@ class RegisterActivity {
         Column (
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0xFF111111)),
+                .background(if (darkTheme) DarkColorScheme.surface else LightColorScheme.background),
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -64,7 +66,7 @@ class RegisterActivity {
                 horizontalArrangement = Arrangement.Start
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.ic_go_back),
+                    painter = if (darkTheme) painterResource(id = R.drawable.ic_go_back) else painterResource(id = R.drawable.ic_go_back_black),
                     contentDescription = "Go Back Button",
                     modifier = Modifier
                         .size(25.dp)
@@ -95,7 +97,7 @@ class RegisterActivity {
             ) {
                 Text(
                     text = "Información Personal",
-                    color = Color(0xFFF2F2F2),
+                    color = if (darkTheme) DarkColorScheme.onBackground else LightColorScheme.onBackground,
                     fontSize = 20.sp,
                     textAlign = TextAlign.Start
                 )
