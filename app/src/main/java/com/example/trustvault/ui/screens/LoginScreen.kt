@@ -43,6 +43,24 @@ import com.example.trustvault.ui.theme.LightColorScheme
 import com.example.trustvault.ui.theme.LightModePrimaryGradient
 import com.example.trustvault.ui.viewmodels.LoginScreenViewModel
 
+    /**
+     * Function that represents the Login Screen
+     * It is designed with different styles based on the dark/light theme of the app.
+     *
+     * This screen allows users to log in by entering their username and password. It provides
+     * navigation to go back, and a link to the registration screen if the user does not have an account.
+     *
+     * @param darkTheme A boolean flag indicating whether the app is in dark theme mode. This affects
+     * the colors and styles of the UI components. If true, dark theme is applied; otherwise, the light theme is used.
+     * @param viewModel The [LoginScreenViewModel] that holds the state and business logic of the Login screen.
+     * It manages the username, password, and form validity states.
+     * @param onGoBackClick A lambda function that will be called when the "Go Back" button is clicked.
+     * This can be used to navigate to the previous screen.
+     * @param onRegisterClick A lambda function that will be called when the "Register" link is clicked.
+     * This can be used to navigate to the registration screen.
+     *
+     * @author David Pires Manzanares
+     */
     @Composable // Composable object
     fun LoginScreen(
         darkTheme: Boolean,
