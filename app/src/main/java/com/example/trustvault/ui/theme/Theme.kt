@@ -50,6 +50,10 @@ val DarkModePrimaryGradient = Brush.linearGradient(
     colors = listOf(Color(0xFFBC39DB), Color(0xFF7C8EFF), Color(0xFFE7A3F8))
 )
 
+val DisabledButtonGradient = Brush.linearGradient(
+    colors = listOf(Color(0xFF8C8C8C), Color(0xFF6C6C6C), Color(0xFFCECECE))
+)
+
 @Composable
 fun TrustVaultTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),

@@ -3,6 +3,7 @@ package com.example.trustvault.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,17 +34,20 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.trustvault.R
+import com.example.trustvault.ui.theme.DarkModePrimaryGradient
+import com.example.trustvault.ui.theme.DisabledButtonGradient
+import com.example.trustvault.ui.theme.LightModePrimaryGradient
+import com.example.trustvault.ui.viewmodels.RegisterViewModel
 
 class RegisterActivity {
     @Composable
-    @Preview
-    fun RegisterScreen() {
-        var email by remember { mutableStateOf("") }
-        var username by remember { mutableStateOf("") }
-        var phone by remember { mutableStateOf("") }
-        var password by remember { mutableStateOf("") }
-        var confirmPassword by remember { mutableStateOf("") }
+    fun RegisterScreen(
+        darkTheme: Boolean,
+        viewModel: RegisterViewModel = viewModel(),
+        onGoBackClick: () -> Unit = {}
+    ) {
 
         Column (
             modifier = Modifier
@@ -62,7 +66,11 @@ class RegisterActivity {
                 Image(
                     painter = painterResource(id = R.drawable.ic_go_back),
                     contentDescription = "Go Back Button",
-                    modifier = Modifier.size(25.dp)
+                    modifier = Modifier
+                        .size(25.dp)
+                        .clickable {
+                            onGoBackClick
+                        }
                 )
             }
 
@@ -102,8 +110,8 @@ class RegisterActivity {
             ) {
                 // Email Input
                 OutlinedTextField(
-                    value = email,
-                    onValueChange = { email = it },
+                    value = viewModel.email,
+                    onValueChange = { viewModel.email = it },
                     label = { Text("E-Mail") },
                     modifier = Modifier.fillMaxWidth(0.9f),
                     colors = OutlinedTextFieldDefaults.colors(
@@ -116,8 +124,8 @@ class RegisterActivity {
 
                 // Username Input
                 OutlinedTextField(
-                    value = username,
-                    onValueChange = { username = it },
+                    value = viewModel.username,
+                    onValueChange = { viewModel.username = it },
                     label = { Text("Nombre de usuario") },
                     modifier = Modifier.fillMaxWidth(0.9f),
                     colors = OutlinedTextFieldDefaults.colors(
@@ -130,8 +138,8 @@ class RegisterActivity {
 
                 // Phone Input
                 OutlinedTextField(
-                    value = phone,
-                    onValueChange = { phone = it },
+                    value = viewModel.phone,
+                    onValueChange = { viewModel.phone = it },
                     label = { Text("Teléfono") },
                     modifier = Modifier.fillMaxWidth(0.9f),
                     colors = OutlinedTextFieldDefaults.colors(
@@ -144,8 +152,8 @@ class RegisterActivity {
 
                 // Password Input
                 OutlinedTextField(
-                    value = password,
-                    onValueChange = { password = it },
+                    value = viewModel.password,
+                    onValueChange = { viewModel.password = it },
                     label = { Text("Contraseña") },
                     visualTransformation = PasswordVisualTransformation(),
                     modifier = Modifier.fillMaxWidth(0.9f),
@@ -159,15 +167,16 @@ class RegisterActivity {
 
                 // Confirm Password Input
                 OutlinedTextField(
-                    value = confirmPassword,
-                    onValueChange = { confirmPassword = it },
+                    value = viewModel.confirmPassword,
+                    onValueChange = { viewModel.confirmPassword = it },
                     label = { Text("Confirma tu contraseña") },
                     visualTransformation = PasswordVisualTransformation(),
                     modifier = Modifier.fillMaxWidth(0.9f),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedContainerColor = Color(0xFFF2F2F2),
                         unfocusedContainerColor = Color(0xFFF2F2F2),
-                        disabledContainerColor = Color(0xFFF2F2F2)
+                        disabledContainerColor = Color(0xFFF2F2F2),
+                        focusedLabelColor = if (darkTheme) Color.White else Color.Black,
                     ),
                     shape = RoundedCornerShape(12.dp)
                 )
@@ -177,21 +186,24 @@ class RegisterActivity {
 
             // Continue Button
             Button (
-                onClick = { /* TODO: Go to SMS authentication activity */},
+                onClick = { /* TODO: Handle registration logic and go to SMS Auth Activity */},
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
                     .height(50.dp),
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent), // Transparent as it is the same color of the background
-                contentPadding = PaddingValues()
+                contentPadding = PaddingValues(),
+                enabled = viewModel.isFormValid
             ) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(
-                            brush = Brush.horizontalGradient(
-                                colors = listOf(Color(0xFFBC39DB), Color(0xFF7C8EFF), Color(0xFFE7A3F8))
-                            ),
+                            when {
+                                darkTheme && viewModel.isFormValid -> DarkModePrimaryGradient
+                                !darkTheme && viewModel.isFormValid -> LightModePrimaryGradient
+                                else -> DisabledButtonGradient  // Greyed out when form is not filled out
+                            },
                             shape = RoundedCornerShape(12.dp)
                         ),
                     contentAlignment = Alignment.Center
