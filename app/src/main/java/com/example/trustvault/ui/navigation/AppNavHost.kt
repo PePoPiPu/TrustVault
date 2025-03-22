@@ -2,6 +2,7 @@ package com.example.trustvault.ui.navigation
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -29,7 +30,21 @@ fun AppNavHost(
         startDestination = startDestination,
         modifier = modifier
     ) {
-        composable(Screen.GetStarted.route) {
+        composable(
+            route = Screen.GetStarted.route,
+            exitTransition = { // Only exit transition since this is the first screen
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            },
+            popEnterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            }
+        ) {
             GetStartedActivity().GetStartedScreen(
                 darkTheme = true,
                 onLoginClick = {
@@ -42,26 +57,18 @@ fun AppNavHost(
         }
         composable(
             route = Screen.Login.route,
-            enterTransition = {
-                when (Screen.Login.route) {
-                    "Login" ->
-                        slideIntoContainer(
-                            AnimatedContentTransitionScope.SlideDirection.Left,
-                            animationSpec = tween(600)
-                        )
-
-                    else -> null
-                }
+            enterTransition = { // entering the login screen
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
             },
-            exitTransition = {
-                scaleOutOfContainer(direction = ScaleTransitionDirection.INWARDS)
+            exitTransition = { // when you exit the login screen
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
             },
-            popEnterTransition = {
-                scaleIntoContainer(direction = ScaleTransitionDirection.OUTWARDS)
-            },
-            popExitTransition = {
-                scaleOutOfContainer()
-            }
         ) {
             LoginScreen(
                 darkTheme = true,
@@ -73,7 +80,21 @@ fun AppNavHost(
                 }
             )
         }
-        composable(Screen.Register.route) {
+        composable(
+            route = Screen.Register.route,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            },
+            exitTransition = { // when you exit the login screen
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            },
+        ) {
             RegisterActivity().RegisterScreen(
                 darkTheme = true,
                 onGoBackClick = {
