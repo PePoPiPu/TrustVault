@@ -51,6 +51,9 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.datastore.preferences)
     implementation("androidx.navigation:navigation-compose:2.8.9")
+    implementation("androidx.compose.ui:ui:1.7.8") // Versión más reciente de Compose UI
+    implementation("androidx.compose.material:material:1.7.8") // Material Design en Compose
+    implementation("androidx.compose.animation:animation:1.7.8") // Para animaciones
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -58,4 +61,5 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
 }
