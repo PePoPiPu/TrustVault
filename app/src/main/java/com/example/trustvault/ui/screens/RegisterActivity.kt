@@ -69,7 +69,7 @@ class RegisterActivity {
                     modifier = Modifier
                         .size(25.dp)
                         .clickable {
-                            onGoBackClick
+                            onGoBackClick()
                         }
                 )
             }
