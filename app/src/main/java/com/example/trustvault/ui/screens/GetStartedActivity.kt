@@ -1,8 +1,6 @@
 package com.example.trustvault.ui.screens
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,11 +18,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,6 +33,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.runtime.State
 import com.example.trustvault.R
 import com.example.trustvault.ui.theme.DarkColorScheme
 import com.example.trustvault.ui.theme.DarkModePrimaryGradient
@@ -40,25 +43,16 @@ import com.example.trustvault.ui.theme.LightColorScheme
 import com.example.trustvault.ui.theme.LightModePrimaryGradient
 import com.example.trustvault.ui.theme.TrustVaultTheme
 
-class MainActivity : ComponentActivity() {
+class GetStartedActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            var darkTheme by remember { mutableStateOf(false) }
 
-            TrustVaultTheme(darkTheme = darkTheme) {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    LoginScreen(
-                        darkTheme = darkTheme
-                    )
-                }
+        setContent{
+            TrustVaultTheme {
+                GetStartedScreen(darkTheme = true)
             }
         }
     }
-
     /**
      * Displays the login screen with a logo, title, and authentication buttons.
      *
@@ -67,7 +61,11 @@ class MainActivity : ComponentActivity() {
      * @author Alex Sugimoto
      */
     @Composable // Allows us to create a Composable object
-    fun LoginScreen(darkTheme: Boolean) {
+    fun GetStartedScreen(
+        onLoginClick: () -> Unit = {},
+        onRegisterClick: () -> Unit = {},
+        darkTheme: Boolean
+    ) {
         Column (
             modifier = Modifier // Defining the attributes for this column
                 .fillMaxSize() // Make the layout fill all available space
@@ -106,7 +104,7 @@ class MainActivity : ComponentActivity() {
 
             // Login Button
             OutlinedButton(
-                onClick = { /* TODO: Go to Login Activity */},
+                onClick = onLoginClick,
                 modifier = Modifier
                     .fillMaxWidth(0.8f)
                     .height(50.dp)
@@ -127,7 +125,7 @@ class MainActivity : ComponentActivity() {
 
             // Register Button + Gradient
             Button(
-                onClick = {/* TODO: Go to register activity */},
+                onClick = onRegisterClick,
                 modifier = Modifier
                     .fillMaxWidth(0.8f) // resulting MaxWidth = MaxWidth * fraction AKA reduce max space
                     .height(50.dp), // Height of the button
@@ -155,7 +153,7 @@ class MainActivity : ComponentActivity() {
     @Preview
     fun LoginScreenPreview() {
         var darkTheme by remember { mutableStateOf(false) } // This is to be set in the main activity. Set here for testing
-        LoginScreen (
+        GetStartedScreen (
             darkTheme = !darkTheme
         )
     }
