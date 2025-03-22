@@ -1,4 +1,4 @@
-package com.example.trustvault
+package com.example.trustvault.ui.screens
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -33,6 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.trustvault.R
 import com.example.trustvault.ui.theme.DarkColorScheme
 import com.example.trustvault.ui.theme.DarkModePrimaryGradient
 import com.example.trustvault.ui.theme.LightColorScheme

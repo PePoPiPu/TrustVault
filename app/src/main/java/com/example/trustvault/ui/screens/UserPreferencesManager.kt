@@ -1,4 +1,4 @@
-package com.example.trustvault
+package com.example.trustvault.ui.screens
 
 import android.content.Context
 import androidx.datastore.preferences.core.booleanPreferencesKey

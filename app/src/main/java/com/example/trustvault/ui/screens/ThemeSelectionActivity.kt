@@ -1,4 +1,4 @@
-package com.example.trustvault
+package com.example.trustvault.ui.screens
 
 import android.content.Context
 import androidx.compose.animation.core.animateDpAsState
@@ -30,10 +30,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.trustvault.R
 import com.example.trustvault.ui.theme.DarkColorScheme
 import com.example.trustvault.ui.theme.DarkModePrimaryGradient
 import com.example.trustvault.ui.theme.LightColorScheme
 import com.example.trustvault.ui.theme.LightModePrimaryGradient
+import com.example.trustvault.ui.viewmodels.ThemeSelectionViewModel
 
 class ThemeSelectionActivity(private val context: Context) {
 
