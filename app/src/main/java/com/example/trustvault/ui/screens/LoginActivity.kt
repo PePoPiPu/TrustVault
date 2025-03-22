@@ -1,4 +1,4 @@
-package com.example.trustvault
+package com.example.trustvault.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
