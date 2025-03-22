@@ -37,7 +37,7 @@ import com.example.trustvault.ui.theme.LightColorScheme
 import com.example.trustvault.ui.theme.LightModePrimaryGradient
 import com.example.trustvault.ui.viewmodels.ThemeSelectionViewModel
 
-class ThemeSelectionActivity(private val context: Context) {
+class ThemeSelectionActivity() {
 
     /**
      * This composable function displays a screen allowing users to choose between light and dark modes
@@ -48,7 +48,6 @@ class ThemeSelectionActivity(private val context: Context) {
     @Composable
     fun ThemeSelectionScreen(
         viewModel: ThemeSelectionViewModel,
-        onThemeUpdated: () -> Unit
     ) {
         val darkTheme by viewModel.darkTheme.collectAsState()
 
@@ -105,7 +104,6 @@ class ThemeSelectionActivity(private val context: Context) {
                 onClick = {
                     // Toggle theme via ViewModel
                     viewModel.toggleTheme()
-                    onThemeUpdated()
                 },
                 size = 75.dp,
                 padding = 5.dp
@@ -214,12 +212,11 @@ class ThemeSelectionActivity(private val context: Context) {
 @Composable
 fun PreviewThemeSelectionScreen() {
     val context = LocalContext.current
-    val themeSelectionActivity = ThemeSelectionActivity(context)
+    val themeSelectionActivity = ThemeSelectionActivity()
     val mockUserPreferencesManager = UserPreferencesManager(context)
     val mockViewModel = ThemeSelectionViewModel(mockUserPreferencesManager)
 
     themeSelectionActivity.ThemeSelectionScreen(
         viewModel = mockViewModel,
-        onThemeUpdated = { /* Do nothing for preview */ }
     )
 }
