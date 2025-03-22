@@ -48,7 +48,7 @@ class RegisterActivity {
     fun RegisterScreen(
         darkTheme: Boolean,
         viewModel: RegisterViewModel = viewModel(),
-        onGoBackClick: () -> Unit = {}
+        onGoBackClick: () -> Unit = {} // Pass a lambda function with no return as a parameter
     ) {
 
         Column (
@@ -119,7 +119,8 @@ class RegisterActivity {
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedContainerColor = Color(0xFFF2F2F2),
                         unfocusedContainerColor = Color(0xFFF2F2F2),
-                        disabledContainerColor = Color(0xFFF2F2F2)
+                        disabledContainerColor = Color(0xFFF2F2F2),
+                        focusedLabelColor = if (darkTheme) Color.White else Color.Black
                     ),
                     shape = RoundedCornerShape(12.dp)
                 )
@@ -133,7 +134,8 @@ class RegisterActivity {
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedContainerColor = Color(0xFFF2F2F2),
                         unfocusedContainerColor = Color(0xFFF2F2F2),
-                        disabledContainerColor = Color(0xFFF2F2F2)
+                        disabledContainerColor = Color(0xFFF2F2F2),
+                        focusedLabelColor = if (darkTheme) Color.White else Color.Black
                     ),
                     shape = RoundedCornerShape(12.dp)
                 )
@@ -147,7 +149,8 @@ class RegisterActivity {
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedContainerColor = Color(0xFFF2F2F2),
                         unfocusedContainerColor = Color(0xFFF2F2F2),
-                        disabledContainerColor = Color(0xFFF2F2F2)
+                        disabledContainerColor = Color(0xFFF2F2F2),
+                        focusedLabelColor = if (darkTheme) Color.White else Color.Black
                     ),
                     shape = RoundedCornerShape(12.dp)
                 )
@@ -162,7 +165,8 @@ class RegisterActivity {
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedContainerColor = Color(0xFFF2F2F2),
                         unfocusedContainerColor = Color(0xFFF2F2F2),
-                        disabledContainerColor = Color(0xFFF2F2F2)
+                        disabledContainerColor = Color(0xFFF2F2F2),
+                        focusedLabelColor = if (darkTheme) Color.White else Color.Black
                     ),
                     shape = RoundedCornerShape(12.dp)
                 )

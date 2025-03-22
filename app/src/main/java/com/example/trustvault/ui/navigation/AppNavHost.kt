@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.trustvault.ui.screens.GetStartedActivity
+import com.example.trustvault.ui.screens.LoginActivity
 import com.example.trustvault.ui.screens.RegisterActivity
 
 sealed class Screen(val route: String) {
@@ -37,9 +38,17 @@ fun AppNavHost(
                 }
             )
         }
+        composable(Screen.Login.route) {
+            LoginActivity().LoginScreen(
+                darkTheme = true,
+                onGoBackClick = {
+                    navController.navigate(Screen.GetStarted.route)
+                }
+            )
+        }
         composable(Screen.Register.route) {
             RegisterActivity().RegisterScreen(
-                darkTheme = false,
+                darkTheme = true,
                 onGoBackClick = {
                     navController.navigate(Screen.GetStarted.route)
                 }
