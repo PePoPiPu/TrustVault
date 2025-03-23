@@ -36,18 +36,20 @@ import com.example.trustvault.ui.theme.DarkModePrimaryGradient
 import com.example.trustvault.ui.theme.LightColorScheme
 import com.example.trustvault.ui.theme.LightModePrimaryGradient
 import com.example.trustvault.ui.viewmodels.ThemeSelectionViewModel
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 class ThemeSelectionActivity() {
 
     /**
      * This composable function displays a screen allowing users to choose between light and dark modes
      *
-     * @param onThemeUpdated A callback function that is invoked when the theme is updated. It returns nothing (Unit == void in Java)
      * @param userPreferences An instance of [UserPreferencesManager] to manage user preferences.
      */
     @Composable
     fun ThemeSelectionScreen(
         viewModel: ThemeSelectionViewModel,
+        userPreferencesManager: UserPreferencesManager
     ) {
         val darkTheme by viewModel.darkTheme.collectAsState()
 
@@ -104,6 +106,9 @@ class ThemeSelectionActivity() {
                 onClick = {
                     // Toggle theme via ViewModel
                     viewModel.toggleTheme()
+                    MainScope().launch { // Coroutine to save the theme
+                        userPreferencesManager.saveDarkTheme(darkTheme)
+                    }
                 },
                 size = 75.dp,
                 padding = 5.dp
@@ -203,20 +208,4 @@ class ThemeSelectionActivity() {
             }
         }
     }
-}
-
-/**
- * This function is used purely for previewing the ThemeSelectionScreen composable.
- */
-@Preview(showBackground = true)
-@Composable
-fun PreviewThemeSelectionScreen() {
-    val context = LocalContext.current
-    val themeSelectionActivity = ThemeSelectionActivity()
-    val mockUserPreferencesManager = UserPreferencesManager(context)
-    val mockViewModel = ThemeSelectionViewModel(mockUserPreferencesManager)
-
-    themeSelectionActivity.ThemeSelectionScreen(
-        viewModel = mockViewModel,
-    )
 }
