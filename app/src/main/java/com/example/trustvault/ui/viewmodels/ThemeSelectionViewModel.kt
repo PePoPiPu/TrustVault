@@ -22,10 +22,9 @@ class ThemeSelectionViewModel(private val userPreferencesManager: UserPreference
     private val _darkTheme = MutableStateFlow(false)
     val darkTheme: StateFlow<Boolean> = _darkTheme
 
-    init {
-        // Load the current theme state from UserPreferencesManager
-        viewModelScope.launch {
-            _darkTheme.value = userPreferencesManager.getCurrentTheme()
+    init { // Init allows code inside to execute once the class is initiated before anything else
+        viewModelScope.launch { // Starts a coroutine in the scope of the ViewModel (if the ViewModel is cleared, the coroutines are cancelled
+            _darkTheme.value = userPreferencesManager.getCurrentTheme() // Gets the value of the current theme
         }
     }
 

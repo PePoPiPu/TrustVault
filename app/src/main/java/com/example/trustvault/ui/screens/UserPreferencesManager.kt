@@ -42,7 +42,7 @@ private val Context.dataStore by preferencesDataStore(name = "user_preferences")
  * ```
  *
  * @param context The context used to access the DataStore.
- * @author Alex Sugimoto
+ * @author Alex Álvarez de Sotomayor Sugimoto
  */
 class UserPreferencesManager(private val context: Context) {
     // Preferences keys
@@ -68,7 +68,7 @@ class UserPreferencesManager(private val context: Context) {
      * @return A flow that emits the current dark theme setting, where `true` indicates dark mode is enabled
      *         and `false` indicates dark mode is disabled (or not set).
      *
-     * @author Alex Sugimoto
+     * @author Alex Álvarez de Sotomayor Sugimoto
      */
 
     val darkThemeFlow: Flow<Boolean> = context.dataStore.data.map { preferences ->
