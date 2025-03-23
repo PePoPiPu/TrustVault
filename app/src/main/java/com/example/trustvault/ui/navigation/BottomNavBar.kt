@@ -26,6 +26,16 @@ import com.example.trustvault.ui.theme.DarkColorScheme
 import com.example.trustvault.ui.theme.DarkModePrimaryGradient
 import com.example.trustvault.ui.theme.TransparentGradient
 
+/**
+ * A composable function that displays a custom bottom navigation bar.
+ * The navigation bar includes animated indicators for each item.
+ * The indicators animate their size when a navigation item is selected or unselected.
+ *
+ * @param navController The [NavHostController] that manages the navigation between destinations.
+ *                      It is used to navigate to the selected route when a navigation item is clicked.
+ *
+ * @author Alex Álvarez de Sotomayor Sugimoto
+ */
 @Composable
 fun BottomNavBar(
     navController: NavHostController
@@ -46,7 +56,6 @@ fun BottomNavBar(
         menuItems.forEach { item ->
             val selected = currentRoute(navController) == item.route
 
-
             val indicatorHeight by animateDpAsState(
                 targetValue = if (selected) 35.dp else 50.dp,
                 animationSpec = spring(Spring.DampingRatioMediumBouncy, Spring.StiffnessMedium)
@@ -61,7 +70,7 @@ fun BottomNavBar(
                 selected = selected,
                 onClick = { navController.navigate(item.route) },
                 icon = {
-                    Box(
+                    Box( // Custom indicator to allow the use of gradients
                         contentAlignment = Alignment.Center,
                         modifier = Modifier
                             .height(indicatorHeight)
@@ -79,8 +88,6 @@ fun BottomNavBar(
                     }
                 },
                 colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = Color.White, // Keep icon white on selection
-                    unselectedIconColor = Color.LightGray,
                     indicatorColor = Color.Transparent // Hide default indicator
                 )
             )
