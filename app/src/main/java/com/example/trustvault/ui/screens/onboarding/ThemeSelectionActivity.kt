@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.trustvault.R
 import com.example.trustvault.ui.theme.DarkColorScheme
 import com.example.trustvault.ui.theme.DarkModePrimaryGradient
@@ -39,7 +40,7 @@ import com.example.trustvault.ui.viewmodels.ThemeSelectionViewModel
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
-class ThemeSelectionActivity() {
+class ThemeSelectionActivity {
 
     /**
      * This composable function displays a screen allowing users to choose between light and dark modes
@@ -48,7 +49,7 @@ class ThemeSelectionActivity() {
      */
     @Composable
     fun ThemeSelectionScreen(
-        viewModel: ThemeSelectionViewModel,
+        viewModel: ThemeSelectionViewModel = viewModel(),
         userPreferencesManager: UserPreferencesManager
     ) {
         val darkTheme by viewModel.darkTheme.collectAsState()

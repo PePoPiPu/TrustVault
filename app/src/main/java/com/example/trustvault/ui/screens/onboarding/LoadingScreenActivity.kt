@@ -1,5 +1,6 @@
 package com.example.trustvault.ui.screens.onboarding
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -19,7 +20,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -30,38 +30,54 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.platform.LocalDensity
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.trustvault.R
 import com.example.trustvault.ui.theme.DarkColorScheme
 import com.example.trustvault.ui.theme.LightColorScheme
+import com.example.trustvault.ui.viewmodels.LoaderScreenViewModel
 
 class LoadingScreenActivity {
     @Composable
     fun Loader(
         darkTheme: Boolean,
+        goToMainScreenAfterWait: () -> Unit, // Lambda function for navigation
+        viewModel: LoaderScreenViewModel = viewModel()
     ) {
-        Column (
-            modifier = Modifier // Create this column and the attributes
+        val navigateToNextScreen by viewModel.navigateToNextScreen.collectAsState()
+
+        LaunchedEffect(Unit) {
+            viewModel.waitForSeconds() // Call function as soon as UI loads
+        }
+
+        LaunchedEffect(navigateToNextScreen) {
+            if (navigateToNextScreen) {
+                goToMainScreenAfterWait() // Trigger navigation once
+                Log.d("Hola", "Hola") // Debug log
+            }
+        }
+
+        Column(
+            modifier = Modifier
                 .fillMaxSize()
-                .fillMaxHeight()// Make the layout fill all available space
+                .fillMaxHeight()
                 .background(if (darkTheme) DarkColorScheme.surface else LightColorScheme.background),
-            verticalArrangement = Arrangement.Top, // Vertical Alignment
-            horizontalAlignment = Alignment.CenterHorizontally // Horizontal Alignment
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(id = R.drawable.ok), // Paints the resource
-                contentDescription = "Succesfull login/register logo", // Content Description for impaired individuals
+                painter = painterResource(id = R.drawable.ok),
+                contentDescription = "Successful login/register logo",
                 modifier = Modifier
                     .size(400.dp)
                     .padding(top = 60.dp)
             )
-            Row (
-                modifier = Modifier
-                    .fillMaxWidth(),
+            Row(
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
                     text = "Terminado!",
-                    style = TextStyle (
+                    style = TextStyle(
                         color = Color.White,
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold
@@ -69,30 +85,29 @@ class LoadingScreenActivity {
                     modifier = Modifier.padding(top = 100.dp, bottom = 32.dp)
                 )
             }
-            Row (
-                modifier = Modifier
-                    .fillMaxWidth(),
+            Row(
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
                     text = "Ya puedes empezar a crear y guardar contraseñas de forma segura",
-                    style = TextStyle (
+                    style = TextStyle(
                         color = Color.White,
                         fontSize = 20.sp,
                         textAlign = TextAlign.Center
                     ),
-                    modifier = Modifier.padding(horizontal =  60.dp, vertical = 20.dp)
+                    modifier = Modifier.padding(horizontal = 60.dp, vertical = 20.dp)
                 )
             }
-            Row (
-                modifier = Modifier
-                    .fillMaxWidth(),
+            Row(
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ) {
                 LoaderIcon()
             }
         }
     }
+
     @Composable
     fun LoaderIcon(
         size: Dp = 60.dp, // indicator size

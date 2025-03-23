@@ -13,7 +13,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,12 +37,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.trustvault.R
 import com.example.trustvault.ui.theme.DarkColorScheme
+import com.example.trustvault.ui.theme.DarkModePrimaryGradient
+import com.example.trustvault.ui.theme.DisabledButtonGradient
 import com.example.trustvault.ui.theme.LightColorScheme
+import com.example.trustvault.ui.theme.LightModePrimaryGradient
 
 class SMSAuthActivity {
     @Composable
     // TODO: As soon as this screen is painted, send a code to the users phone number and check it automatically, if possible
-    fun SMSAuthScreen(darkTheme: Boolean) {
+    fun SMSAuthScreen(
+        darkTheme: Boolean,
+        onContinueClick: () -> Unit = {}
+    ) {
         Column (
             modifier = Modifier
                 .fillMaxSize()
@@ -134,6 +144,22 @@ class SMSAuthActivity {
                 }
                 }
             }
+            Spacer(modifier = Modifier.height(40.dp))
+
+            Row (
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    text = "Pulsame",
+                    modifier = Modifier
+                        .clickable {
+                            onContinueClick()
+                        }
+                )
+            }
+
+            Spacer(modifier = Modifier.height(40.dp))
         }
     }
 
