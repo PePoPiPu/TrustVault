@@ -1,6 +1,8 @@
 package com.example.trustvault.ui.screens.onboarding
 
 import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -11,7 +13,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
 
 // Defines dataStore property for the current context and saves data in "user_preferences" file
-private val Context.dataStore by preferencesDataStore(name = "user_preferences")
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_preferences")
 
 /**
  * This is a manager class that handles user preferences using Jetpack DataStore.
@@ -42,9 +44,9 @@ private val Context.dataStore by preferencesDataStore(name = "user_preferences")
  * ```
  *
  * @param context The context used to access the DataStore.
- * @author Alex Sugimoto
+ * @author Alex Álvarez de Sotomayor Sugimoto
  */
-class UserPreferencesManager(private val context: Context) {
+class UserPreferencesManager(private val context: Context) { // Context is needed to access the dataStore instance
     // Preferences keys
     private val THEME_KEY = booleanPreferencesKey("dark_theme")
     private val LANGUAGE_KEY = stringPreferencesKey("language")
@@ -68,7 +70,7 @@ class UserPreferencesManager(private val context: Context) {
      * @return A flow that emits the current dark theme setting, where `true` indicates dark mode is enabled
      *         and `false` indicates dark mode is disabled (or not set).
      *
-     * @author Alex Sugimoto
+     * @author Alex Álvarez de Sotomayor Sugimoto
      */
 
     val darkThemeFlow: Flow<Boolean> = context.dataStore.data.map { preferences ->
@@ -84,6 +86,7 @@ class UserPreferencesManager(private val context: Context) {
     }
 
     // Save preferences
+    // I/O operations should always be done asynchronously
     // A suspend function can pause its execution at certain points and resume later.
     // A suspend function is useful to perform non-blocking operations (doesn't block the thread)
     suspend fun saveDarkTheme(isDarkMode: Boolean) {

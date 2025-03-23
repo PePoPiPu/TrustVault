@@ -38,7 +38,7 @@ import com.example.trustvault.ui.theme.LightColorScheme
 class SMSAuthActivity {
     @Composable
     // TODO: As soon as this screen is painted, send a code to the users phone number and check it automatically, if possible
-    fun SMSAuthScreen(darkTheme: Boolean, onThemeUpdated: () -> Unit) {
+    fun SMSAuthScreen(darkTheme: Boolean) {
         Column (
             modifier = Modifier
                 .fillMaxSize()
@@ -142,8 +142,7 @@ class SMSAuthActivity {
     fun SMSAuthPreview() {
         var darkTheme by remember { mutableStateOf(false) } // This is to be set in the main activity. Set here for testing
         SMSAuthScreen (
-            darkTheme = !darkTheme,
-            onThemeUpdated = {darkTheme = !darkTheme}
+            darkTheme = !darkTheme
         )
     }
 }

@@ -31,16 +31,19 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.platform.LocalDensity
 import com.example.trustvault.R
+import com.example.trustvault.ui.theme.DarkColorScheme
+import com.example.trustvault.ui.theme.LightColorScheme
 
 class LoadingScreenActivity {
     @Composable
-    @Preview
-    fun Loader() {
+    fun Loader(
+        darkTheme: Boolean,
+    ) {
         Column (
             modifier = Modifier // Create this column and the attributes
                 .fillMaxSize()
                 .fillMaxHeight()// Make the layout fill all available space
-                .background(Color(0xFF111111)),
+                .background(if (darkTheme) DarkColorScheme.surface else LightColorScheme.background),
             verticalArrangement = Arrangement.Top, // Vertical Alignment
             horizontalAlignment = Alignment.CenterHorizontally // Horizontal Alignment
         ) {

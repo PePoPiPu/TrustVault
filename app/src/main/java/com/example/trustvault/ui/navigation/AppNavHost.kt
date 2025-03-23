@@ -16,6 +16,9 @@ import com.example.trustvault.ui.screens.home.UserProfile
 import com.example.trustvault.ui.screens.onboarding.GetStartedActivity
 import com.example.trustvault.ui.screens.onboarding.LoginScreen
 import com.example.trustvault.ui.screens.onboarding.RegisterActivity
+import com.example.trustvault.ui.screens.onboarding.LoadingScreenActivity
+import com.example.trustvault.ui.screens.onboarding.SMSAuthActivity
+import com.example.trustvault.ui.screens.onboarding.ThemeSelectionActivity
 
 /**
  * This sealed class represents different screens in the app using data objects.
@@ -28,7 +31,12 @@ sealed class Screen(val route: String) {
     data object GetStarted : Screen("GetStartedActivity")
     data object Login : Screen("Login")
     data object Register : Screen("RegisterActivity")
+
     data object MainScreen : Screen("MainScreen")
+    data object LoaderScreen : Screen("LoadingScreenActivity")
+    data object ThemeSelection : Screen("ThemeSelectionActivity")
+    data object SMSAuth : Screen("SMSAuthScreen")
+
 }
 
 /**
@@ -124,6 +132,7 @@ fun AppNavHost(
                 }
             )
         }
+
         composable(
             route = Screen.MainScreen.route
         ) {
@@ -149,5 +158,63 @@ fun AppNavHost(
         ) {
             UserProfile()
         }
+
+        composable (
+            route = Screen.LoaderScreen.route,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            },
+            exitTransition = { // when you exit the login screen
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            },
+        ) {
+            LoadingScreenActivity().Loader(
+                darkTheme = true
+            )
+        }
+        /*composable (
+            route = Screen.SMSAuth.route,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            },
+            exitTransition = { // when you exit the login screen
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            },
+        ) {
+            SMSAuthActivity().SMSAuthScreen(
+            )
+        }*/
+
+        /*composable (
+            route = Screen.ThemeSelection.route,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            },
+            exitTransition = { // when you exit the login screen
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            },
+        ) {
+            ThemeSelectionActivity().ThemeSelectionScreen(
+                ¿¿¿¿¿¿ viewModel = TODO() ?????
+            )
+        }*/
     }
 }
