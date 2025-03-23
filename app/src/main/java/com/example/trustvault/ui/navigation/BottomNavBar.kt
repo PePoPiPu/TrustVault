@@ -1,14 +1,34 @@
 package com.example.trustvault.ui.navigation
 
-//noinspection UsingMaterialAndMaterial3Libraries
-import androidx.compose.material.BottomAppBar
-//noinspection UsingMaterialAndMaterial3Libraries
-import androidx.compose.material.Icon
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.trustvault.domain.models.ItemsBottomNav
+import com.example.trustvault.ui.theme.DarkColorScheme
+import com.example.trustvault.ui.theme.DarkModePrimaryGradient
+import com.example.trustvault.ui.theme.TransparentGradient
 
 @Composable
 fun BottomNavBar(
@@ -20,21 +40,54 @@ fun BottomNavBar(
         ItemsBottomNav.ItemBottomNav3,
         ItemsBottomNav.ItemBottomNav4
     )
-    BottomAppBar {
-        NavigationBar {
-            menuItems.forEach { item ->
-                val selected = currentRoute(navController) == item.route
-                NavigationBarItem(
-                    selected = selected,
-                    onClick = { navController.navigate(item.route) },
-                    icon = {
+
+    NavigationBar (
+        containerColor = DarkColorScheme.background,
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(35.dp, 35.dp, 0.dp, 0.dp))
+    ) {
+        menuItems.forEach { item ->
+            val selected = currentRoute(navController) == item.route
+
+
+            val indicatorHeight by animateDpAsState(
+                targetValue = if (selected) 35.dp else 50.dp,
+                animationSpec = spring(Spring.DampingRatioMediumBouncy, Spring.StiffnessMedium)
+            )
+
+            val indicatorWidth by animateDpAsState(
+                targetValue = if (selected) 55.dp else 70.dp,
+                animationSpec = spring(Spring.DampingRatioMediumBouncy, Spring.StiffnessMedium)
+            )
+
+            NavigationBarItem(
+                selected = selected,
+                onClick = { navController.navigate(item.route) },
+                icon = {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .height(indicatorHeight)
+                            .width(indicatorWidth)
+                            .background(
+                                if (selected) DarkModePrimaryGradient else TransparentGradient,
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                    ) {
                         Icon(
                             imageVector = item.icon,
-                            contentDescription = item.title
+                            contentDescription = item.title,
+                            tint = if (selected) DarkColorScheme.surface else DarkColorScheme.onSurface
                         )
                     }
+                },
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = Color.White, // Keep icon white on selection
+                    unselectedIconColor = Color.LightGray,
+                    indicatorColor = Color.Transparent // Hide default indicator
                 )
-            }
+            )
         }
     }
 }

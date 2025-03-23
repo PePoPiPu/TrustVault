@@ -54,6 +54,10 @@ val DisabledButtonGradient = Brush.linearGradient(
     colors = listOf(Color(0xFF8C8C8C), Color(0xFF6C6C6C), Color(0xFFCECECE))
 )
 
+val TransparentGradient = Brush.linearGradient(
+    colors = listOf(Color(0x00BC39DB), Color(0x007C8EFF), Color(0x00E7A3F8))
+)
+
 @Composable
 fun TrustVaultTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
