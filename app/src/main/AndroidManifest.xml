@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.screens.GetStartedActivity"
+            android:name=".ui.screens.onboarding.GetStartedActivity"
             android:exported="true"
             android:theme="@style/Theme.TrustVault" />
 

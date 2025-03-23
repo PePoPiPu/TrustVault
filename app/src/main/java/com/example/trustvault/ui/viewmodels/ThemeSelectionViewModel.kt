@@ -2,7 +2,7 @@ package com.example.trustvault.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.trustvault.ui.screens.UserPreferencesManager
+import com.example.trustvault.ui.screens.onboarding.UserPreferencesManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch

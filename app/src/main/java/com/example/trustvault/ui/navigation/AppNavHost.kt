@@ -2,16 +2,20 @@ package com.example.trustvault.ui.navigation
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.trustvault.ui.screens.GetStartedActivity
-import com.example.trustvault.ui.screens.LoginScreen
-import com.example.trustvault.ui.screens.RegisterActivity
+import com.example.trustvault.ui.screens.home.DarkWebMonitor
+import com.example.trustvault.ui.screens.home.HomeScreen
+import com.example.trustvault.ui.screens.home.MainScreen
+import com.example.trustvault.ui.screens.home.SearchScreen
+import com.example.trustvault.ui.screens.home.UserProfile
+import com.example.trustvault.ui.screens.onboarding.GetStartedActivity
+import com.example.trustvault.ui.screens.onboarding.LoginScreen
+import com.example.trustvault.ui.screens.onboarding.RegisterActivity
 
 /**
  * This sealed class represents different screens in the app using data objects.
@@ -24,6 +28,7 @@ sealed class Screen(val route: String) {
     data object GetStarted : Screen("GetStartedActivity")
     data object Login : Screen("Login")
     data object Register : Screen("RegisterActivity")
+    data object MainScreen : Screen("MainScreen")
 }
 
 /**
@@ -37,14 +42,12 @@ sealed class Screen(val route: String) {
  */
 @Composable
 fun AppNavHost(
-    modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     startDestination: String = Screen.GetStarted.route
 ) {
     NavHost(
         navController = navController,
         startDestination = startDestination,
-        modifier = modifier
     ) {
         composable(
             route = Screen.GetStarted.route,
@@ -115,8 +118,36 @@ fun AppNavHost(
                 darkTheme = true,
                 onGoBackClick = {
                     navController.navigate(Screen.GetStarted.route)
+                },
+                onContinueClick = {
+                    navController.navigate(Screen.MainScreen.route)
                 }
             )
+        }
+        composable(
+            route = Screen.MainScreen.route
+        ) {
+            MainScreen()
+        }
+        composable(
+            route = NavScreen.HomeScreen.name
+        ) {
+            HomeScreen()
+        }
+        composable(
+            route = NavScreen.SearchScreen.name
+        ) {
+            SearchScreen()
+        }
+        composable(
+            route = NavScreen.DarkWebMonitorScreen.name
+        ) {
+            DarkWebMonitor()
+        }
+        composable(
+            route = NavScreen.UserProfileScreen.name
+        ) {
+            UserProfile()
         }
     }
 }

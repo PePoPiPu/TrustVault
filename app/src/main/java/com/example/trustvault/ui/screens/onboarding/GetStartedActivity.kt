@@ -1,4 +1,4 @@
-package com.example.trustvault.ui.screens
+package com.example.trustvault.ui.screens.onboarding
 
 import android.os.Bundle
 import androidx.compose.foundation.BorderStroke
@@ -35,7 +35,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.runtime.State
 import com.example.trustvault.R
 import com.example.trustvault.ui.theme.DarkColorScheme
 import com.example.trustvault.ui.theme.DarkModePrimaryGradient

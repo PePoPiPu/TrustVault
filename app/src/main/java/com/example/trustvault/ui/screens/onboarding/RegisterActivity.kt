@@ -1,4 +1,4 @@
-package com.example.trustvault.ui.screens
+package com.example.trustvault.ui.screens.onboarding
 
 
 import androidx.compose.foundation.Image
@@ -22,7 +22,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -31,7 +30,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -48,7 +46,8 @@ class RegisterActivity {
     fun RegisterScreen(
         darkTheme: Boolean,
         viewModel: RegisterViewModel = viewModel(),
-        onGoBackClick: () -> Unit = {} // Pass a lambda function with no return as a parameter
+        onGoBackClick: () -> Unit = {}, // Pass a lambda function with no return as a parameter
+        onContinueClick: () -> Unit = {}
     ) {
 
         Column (
@@ -192,7 +191,10 @@ class RegisterActivity {
 
             // Continue Button
             Button (
-                onClick = { /* TODO: Handle registration logic and go to SMS Auth Activity */},
+                onClick = {
+                /* TODO: Handle registration logic and go to SMS Auth Activity */
+                    onContinueClick()
+                },
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
                     .height(50.dp),

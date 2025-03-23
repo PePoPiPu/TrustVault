@@ -1,4 +1,4 @@
-package com.example.trustvault.ui.screens
+package com.example.trustvault.ui.screens.onboarding
 
 import android.widget.Toast
 import androidx.compose.foundation.Image

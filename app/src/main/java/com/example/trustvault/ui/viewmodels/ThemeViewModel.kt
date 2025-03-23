@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.trustvault.ui.screens.UserPreferencesManager
+import com.example.trustvault.ui.screens.onboarding.UserPreferencesManager
 import kotlinx.coroutines.launch
 
 /**

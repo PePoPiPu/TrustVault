@@ -54,6 +54,7 @@ dependencies {
     implementation("androidx.compose.ui:ui:1.7.8") // Versión más reciente de Compose UI
     implementation("androidx.compose.material:material:1.7.8") // Material Design en Compose
     implementation("androidx.compose.animation:animation:1.7.8") // Para animaciones
+    implementation("androidx.compose.material:material-icons-extended-android:1.7.8")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
