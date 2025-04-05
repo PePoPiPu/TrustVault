@@ -15,7 +15,7 @@ import com.example.trustvault.ui.screens.home.UserProfile
 import com.example.trustvault.ui.screens.onboarding.GetStartedScreen
 import com.example.trustvault.ui.screens.onboarding.LoaderScreen
 import com.example.trustvault.ui.screens.onboarding.LoginScreen
-import com.example.trustvault.ui.screens.onboarding.RegisterActivity
+import com.example.trustvault.ui.screens.onboarding.RegisterScreen
 import com.example.trustvault.ui.screens.onboarding.SMSAuthScreen
 import com.example.trustvault.ui.screens.onboarding.ThemeSelectionScreen
 
@@ -142,7 +142,7 @@ fun AppNavHost(
                 )
             },
         ) {
-            RegisterActivity().RegisterScreen(
+            RegisterScreen(
                 onGoBackClick = {
                     navController.navigate(Screen.ThemeSelection.route)
                 },

@@ -14,13 +14,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -32,16 +35,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.trustvault.R
 import com.example.trustvault.ui.theme.DarkColorScheme
 import com.example.trustvault.ui.theme.DarkModePrimaryGradient
 import com.example.trustvault.ui.theme.DisabledButtonGradient
 import com.example.trustvault.ui.theme.LightColorScheme
 import com.example.trustvault.ui.theme.LightModePrimaryGradient
+import com.example.trustvault.ui.utils.rememberImeState
 import com.example.trustvault.ui.viewmodels.RegisterViewModel
 
-class RegisterActivity {
     @Composable
     fun RegisterScreen(
         viewModel: RegisterViewModel = hiltViewModel(),
@@ -49,10 +51,19 @@ class RegisterActivity {
         onContinueClick: () -> Unit = {}
     ) {
         val darkTheme = viewModel.darkTheme
+        val imeState = rememberImeState()
+        val scrollState = rememberScrollState()
+
+        LaunchedEffect(key1= imeState.value) {
+            if (imeState.value) {
+                scrollState.scrollTo(scrollState.maxValue)
+            }
+        }
         Column (
             modifier = Modifier
                 .fillMaxSize()
-                .background(if (darkTheme) DarkColorScheme.surface else LightColorScheme.background),
+                .background(if (darkTheme) DarkColorScheme.surface else LightColorScheme.background)
+                .verticalScroll(scrollState),
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -226,4 +237,3 @@ class RegisterActivity {
             Spacer(modifier = Modifier.height(20.dp))
         }
     }
-}
