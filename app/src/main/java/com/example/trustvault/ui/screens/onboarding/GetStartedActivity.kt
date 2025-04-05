@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.ui.graphics.ColorFilter
 import com.example.trustvault.R
 import com.example.trustvault.ui.theme.DarkColorScheme
 import com.example.trustvault.ui.theme.DarkModePrimaryGradient
@@ -74,9 +75,10 @@ class GetStartedActivity : ComponentActivity() {
         ) {
             // Logo
             Image(
-                painter = if (darkTheme) painterResource(id = R.drawable.ic_trustvault) else painterResource(id = R.drawable.ic_trustvault_black), // Paints the resource
+                painter = painterResource(id = R.drawable.ic_trustvault), // Paints the resource
                 contentDescription = "TrustVault Logo", // Content Description for impaired individuals
-                modifier = Modifier.size(100.dp)
+                modifier = Modifier.size(100.dp),
+                colorFilter = if (darkTheme) ColorFilter.tint(Color.White) else ColorFilter.tint(Color.Black)
             )
             Row (
                 modifier = Modifier
