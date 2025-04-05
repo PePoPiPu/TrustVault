@@ -1,6 +1,5 @@
 package com.example.trustvault.ui.screens.onboarding
 
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -75,7 +74,7 @@ class RegisterActivity {
                 )
             }
 
-            Spacer(Modifier.height(40.dp))
+            Spacer(Modifier.height(10.dp))
 
             // Title
             Text(
@@ -87,7 +86,7 @@ class RegisterActivity {
                     )
                 )
             )
-            Spacer(Modifier.height(40.dp))
+            Spacer(Modifier.height(10.dp))
             // Form Title
             Row (
                 modifier = Modifier
@@ -107,12 +106,13 @@ class RegisterActivity {
                 modifier = Modifier
                     .fillMaxHeight(0.5f),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceBetween
+                verticalArrangement = Arrangement.SpaceEvenly
             ) {
                 // Email Input
                 OutlinedTextField(
                     value = viewModel.email,
                     onValueChange = { viewModel.email = it },
+                    singleLine = true,
                     label = { Text("E-Mail") },
                     modifier = Modifier.fillMaxWidth(0.9f),
                     colors = OutlinedTextFieldDefaults.colors(
@@ -128,6 +128,7 @@ class RegisterActivity {
                 OutlinedTextField(
                     value = viewModel.username,
                     onValueChange = { viewModel.username = it },
+                    singleLine = true,
                     label = { Text("Nombre de usuario") },
                     modifier = Modifier.fillMaxWidth(0.9f),
                     colors = OutlinedTextFieldDefaults.colors(
@@ -143,6 +144,7 @@ class RegisterActivity {
                 OutlinedTextField(
                     value = viewModel.phone,
                     onValueChange = { viewModel.phone = it },
+                    singleLine = true,
                     label = { Text("Teléfono") },
                     modifier = Modifier.fillMaxWidth(0.9f),
                     colors = OutlinedTextFieldDefaults.colors(
@@ -158,6 +160,7 @@ class RegisterActivity {
                 OutlinedTextField(
                     value = viewModel.password,
                     onValueChange = { viewModel.password = it },
+                    singleLine = true,
                     label = { Text("Contraseña") },
                     visualTransformation = PasswordVisualTransformation(),
                     modifier = Modifier.fillMaxWidth(0.9f),
@@ -170,10 +173,11 @@ class RegisterActivity {
                     shape = RoundedCornerShape(12.dp)
                 )
 
-                // Confirm Password Input
+                // Confirm password Input
                 OutlinedTextField(
                     value = viewModel.confirmPassword,
                     onValueChange = { viewModel.confirmPassword = it },
+                    singleLine = true,
                     label = { Text("Confirma tu contraseña") },
                     visualTransformation = PasswordVisualTransformation(),
                     modifier = Modifier.fillMaxWidth(0.9f),
@@ -181,7 +185,7 @@ class RegisterActivity {
                         focusedContainerColor = Color(0xFFF2F2F2),
                         unfocusedContainerColor = Color(0xFFF2F2F2),
                         disabledContainerColor = Color(0xFFF2F2F2),
-                        focusedLabelColor = if (darkTheme) Color.White else Color.Black,
+                        focusedLabelColor = if (darkTheme) Color.White else Color.Black
                     ),
                     shape = RoundedCornerShape(12.dp)
                 )
@@ -219,7 +223,7 @@ class RegisterActivity {
                     Text("Continuar", color = Color.White, fontSize = 16.sp)
                 }
             }
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(20.dp))
         }
     }
 }
