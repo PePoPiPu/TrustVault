@@ -2,14 +2,7 @@ package com.example.trustvault.ui.screens.onboarding
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -35,29 +28,38 @@ import com.example.trustvault.ui.theme.DarkColorScheme
 import com.example.trustvault.ui.theme.LightColorScheme
 import com.example.trustvault.ui.viewmodels.LoaderScreenViewModel
 
-
+/**
+ * LoaderScreen is a composable that shows a loading animation and a success message
+ * after login or registration. It also handles navigation after a delay.
+ *
+ * @param viewModel The [LoaderScreenViewModel] that provides theme and navigation logic.
+ * @param goToMainScreenAfterWait Lambda to be invoked when it's time to navigate to the main screen.
+ *
+ * @author David Pires Manzanares
+ */
 @Composable
 fun LoaderScreen(
     viewModel: LoaderScreenViewModel = hiltViewModel(),
-    goToMainScreenAfterWait: () -> Unit // Lambda function for navigation
+    goToMainScreenAfterWait: () -> Unit
 ) {
     val darkTheme = viewModel.darkTheme
     val navigateToNextScreen by viewModel.navigateToNextScreen.collectAsState()
 
+    // Trigger loading logic when the composable is first launched
     LaunchedEffect(Unit) {
-        viewModel.waitForSeconds() // Call function as soon as UI loads
+        viewModel.waitForSeconds()
     }
 
+    // Once navigation flag is true, perform the navigation
     LaunchedEffect(navigateToNextScreen) {
         if (navigateToNextScreen) {
-            goToMainScreenAfterWait() // Trigger navigation once TODO: Substitute to a function in viewmodel that waits for everything to load!!!!
+            goToMainScreenAfterWait()
         }
     }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .fillMaxHeight()
             .background(if (darkTheme) DarkColorScheme.surface else LightColorScheme.background),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -69,6 +71,7 @@ fun LoaderScreen(
                 .size(400.dp)
                 .padding(top = 60.dp)
         )
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
@@ -83,6 +86,7 @@ fun LoaderScreen(
                 modifier = Modifier.padding(top = 100.dp, bottom = 32.dp)
             )
         }
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
@@ -97,6 +101,7 @@ fun LoaderScreen(
                 modifier = Modifier.padding(horizontal = 60.dp, vertical = 20.dp)
             )
         }
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
@@ -106,55 +111,51 @@ fun LoaderScreen(
     }
 }
 
+/**
+ * LoaderIcon displays a circular loading animation using a canvas and custom animation logic.
+ *
+ * @param size The size of the loader indicator.
+ * @param sweepAngle The angle covered by the spinning arc.
+ * @param color The color of the spinning arc.
+ * @param strokeWidth The stroke width of both the background circle and the spinning arc.
+ *
+ * @author David Pires Manzanares
+ */
 @Composable
 fun LoaderIcon(
-    size: Dp = 60.dp, // indicator size
-    sweepAngle: Float = 90f, // angle (lenght) of indicator arc
-    color: Color = MaterialTheme.colors.primary, // color of indicator arc line
-    strokeWidth: Dp = ProgressIndicatorDefaults.StrokeWidth //width of cicle and ar lines
+    size: Dp = 60.dp,
+    sweepAngle: Float = 90f,
+    color: Color = MaterialTheme.colors.primary,
+    strokeWidth: Dp = ProgressIndicatorDefaults.StrokeWidth
 ) {
-    ////// animation //////
-
+    // Infinite animation that updates the start angle of the arc
     val transition = rememberInfiniteTransition()
 
-    // define the changing value from 0 to 360.
-    // This is the angle of the beginning of indicator arc
-    // this value will change over time from 0 to 360 and repeat indefinitely.
-    // it changes starting position of the indicator arc and the animation is obtained
     val currentArcStartAngle by transition.animateValue(
-        0,
-        360,
-        Int.VectorConverter,
-        infiniteRepeatable(
-            animation = tween(
-                durationMillis = 1100,
-                easing = LinearEasing
-            )
+        initialValue = 0,
+        targetValue = 360,
+        typeConverter = Int.VectorConverter,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 1100, easing = LinearEasing)
         )
     )
 
-    ////// draw /////
-
-    // define stroke with given width and arc ends type considering device DPI
     val stroke = with(LocalDensity.current) {
         Stroke(width = strokeWidth.toPx(), cap = StrokeCap.Butt)
     }
 
-    // draw on canvas
+    // Draw the loader using Canvas
     Canvas(
-        Modifier
-            .size(size) // canvas size
-            .padding(strokeWidth / 2) //padding. otherwise, not the whole circle will fit in the canvas
+        modifier = Modifier
+            .size(size)
+            .padding(strokeWidth / 2)
     ) {
-        // draw background (gray) circle with defined stroke.
-        // without explicit center and radius it fit canvas bounds
+        // Draw base circle
         drawCircle(Color.LightGray, style = stroke)
 
-        // draw arc with the same stroke
+        // Draw animated arc
         drawArc(
-            color,
-            // arc start angle
-            // -90 shifts the start position towards the y-axis
+            color = color,
             startAngle = currentArcStartAngle.toFloat() - 90,
             sweepAngle = sweepAngle,
             useCenter = false,
