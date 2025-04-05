@@ -7,16 +7,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.trustvault.ui.screens.onboarding.UserPreferencesManager
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * ViewModel that interacts with [UserPreferencesManager] to manage theme preferences.
  */
-class ThemeViewModel(private val context: Context) : ViewModel() {
-
-    constructor() : this(Application())
-
-    private val userPreferencesManager = UserPreferencesManager(context)
+@HiltViewModel
+class ThemeViewModel @Inject constructor(private val userPreferencesManager: UserPreferencesManager) : ViewModel() {
 
     // LiveData is used to expose the current theme state to the UI
     private val _isDarkTheme = MutableLiveData<Boolean>()

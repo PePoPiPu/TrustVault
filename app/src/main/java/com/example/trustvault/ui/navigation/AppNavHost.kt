@@ -17,6 +17,7 @@ import com.example.trustvault.ui.screens.onboarding.LoginScreen
 import com.example.trustvault.ui.screens.onboarding.RegisterActivity
 import com.example.trustvault.ui.screens.onboarding.LoadingScreenActivity
 import com.example.trustvault.ui.screens.onboarding.SMSAuthActivity
+import com.example.trustvault.ui.screens.onboarding.ThemeSelectionScreen
 
 /**
  * This sealed class represents different screens in the app using data objects.
@@ -76,7 +77,7 @@ fun AppNavHost(
                     navController.navigate(Screen.Login.route)
                 },
                 onRegisterClick = {
-                    navController.navigate(Screen.Register.route)
+                    navController.navigate(Screen.ThemeSelection.route)
                 }
             )
         }
@@ -101,10 +102,33 @@ fun AppNavHost(
                     navController.navigate(Screen.GetStarted.route)
                 },
                 onRegisterClick = {
+                    navController.navigate(Screen.ThemeSelection.route)
+                }
+            )
+        }
+
+        composable(
+            route = Screen.ThemeSelection.route,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700)
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700)
+                )
+            }
+        ) {
+            ThemeSelectionScreen(
+                onContinueClick = {
                     navController.navigate(Screen.Register.route)
                 }
             )
         }
+
         composable(
             route = Screen.Register.route,
             enterTransition = {
@@ -123,10 +147,33 @@ fun AppNavHost(
             RegisterActivity().RegisterScreen(
                 darkTheme = true,
                 onGoBackClick = {
-                    navController.navigate(Screen.GetStarted.route)
+                    navController.navigate(Screen.ThemeSelection.route)
                 },
                 onContinueClick = {
                     navController.navigate(Screen.SMSAuth.route)
+                }
+            )
+        }
+
+        composable (
+            route = Screen.SMSAuth.route,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            },
+            exitTransition = { // when you exit the login screen
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            },
+        ) {
+            SMSAuthActivity().SMSAuthScreen(
+                darkTheme = true,
+                onContinueClick = {
+                    navController.navigate(Screen.LoaderScreen.route)
                 }
             )
         }
@@ -179,49 +226,5 @@ fun AppNavHost(
         ) {
             UserProfile()
         }
-
-
-        composable (
-            route = Screen.SMSAuth.route,
-            enterTransition = {
-                slideIntoContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Left,
-                    tween(700) // can be tween or spring
-                )
-            },
-            exitTransition = { // when you exit the login screen
-                slideOutOfContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Left,
-                    tween(700) // can be tween or spring
-                )
-            },
-        ) {
-            SMSAuthActivity().SMSAuthScreen(
-                darkTheme = true,
-                onContinueClick = {
-                    navController.navigate(Screen.LoaderScreen.route)
-                }
-            )
-        }
-
-//        composable (
-//            route = Screen.ThemeSelection.route,
-//            enterTransition = {
-//                slideIntoContainer(
-//                    AnimatedContentTransitionScope.SlideDirection.Left,
-//                    tween(700) // can be tween or spring
-//                )
-//            },
-//            exitTransition = { // when you exit the login screen
-//                slideOutOfContainer(
-//                    AnimatedContentTransitionScope.SlideDirection.Left,
-//                    tween(700) // can be tween or spring
-//                )
-//            },
-//        ) {
-//            ThemeSelectionActivity().ThemeSelectionScreen(
-//
-//            )
-//        }
     }
 }

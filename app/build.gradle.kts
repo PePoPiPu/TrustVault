@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -56,6 +58,10 @@ dependencies {
     implementation("androidx.compose.material:material:1.7.8") // Material Design en Compose
     implementation("androidx.compose.animation:animation:1.7.8") // Para animaciones
     implementation("androidx.compose.material:material-icons-extended-android:1.7.8")
+    implementation("com.google.dagger:hilt-android:2.51.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1")
+    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -64,4 +70,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+}
+
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
 }

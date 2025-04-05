@@ -3,9 +3,11 @@ package com.example.trustvault.ui.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.trustvault.ui.screens.onboarding.UserPreferencesManager
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * This ViewModel is responsible for managing and toggling the app's theme (dark or light).
@@ -16,7 +18,8 @@ import kotlinx.coroutines.launch
  * @property userPreferencesManager The [UserPreferencesManager] used to load and save theme preferences.
  * @author Alex Sugimoto
  */
-class ThemeSelectionViewModel(private val userPreferencesManager: UserPreferencesManager) : ViewModel() {
+@HiltViewModel
+class ThemeSelectionViewModel @Inject constructor(private val userPreferencesManager: UserPreferencesManager) : ViewModel() {
 
     // MutableLiveData to store the current theme state
     private val _darkTheme = MutableStateFlow(false)

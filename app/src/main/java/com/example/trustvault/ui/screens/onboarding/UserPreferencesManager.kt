@@ -1,5 +1,6 @@
 package com.example.trustvault.ui.screens.onboarding
 
+import android.app.Application
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -11,6 +12,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
+import javax.inject.Inject
+import javax.inject.Singleton
 
 // Defines dataStore property for the current context and saves data in "user_preferences" file
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_preferences")
@@ -46,7 +49,9 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
  * @param context The context used to access the DataStore.
  * @author Alex Álvarez de Sotomayor Sugimoto
  */
-class UserPreferencesManager(private val context: Context) { // Context is needed to access the dataStore instance
+@Singleton
+class UserPreferencesManager @Inject constructor(application: Application) { // Context is needed to access the dataStore instance
+    private val context: Context = application.applicationContext // Use application context
     // Preferences keys
     private val THEME_KEY = booleanPreferencesKey("dark_theme")
     private val LANGUAGE_KEY = stringPreferencesKey("language")
