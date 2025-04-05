@@ -5,6 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.compose.runtime.getValue // This import has to be set manually in order for mutableStateOf to work. IntelliJ doesn't suggest it
 import androidx.compose.runtime.setValue // This import has to be set manually in order for mutableStateOf to work. IntelliJ doesn't suggest it
+import com.example.trustvault.ui.screens.onboarding.UserPreferencesManager
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 /**
  * ViewModel class for managing the state of the Login screen.
@@ -17,11 +20,12 @@ import androidx.compose.runtime.setValue // This import has to be set manually i
  *
  * @author Alex Álvarez de Sotomayor Sugimoto
  */
-class LoginScreenViewModel : ViewModel() {
+@HiltViewModel
+class LoginScreenViewModel @Inject constructor(userPreferencesManager: UserPreferencesManager): ViewModel() {
+    val darkTheme = userPreferencesManager.getCurrentTheme()
     var username by mutableStateOf("")
     var password by mutableStateOf("")
 
     val isFormValid: Boolean
         get() = username.isNotBlank() && password.isNotBlank()
-
 }

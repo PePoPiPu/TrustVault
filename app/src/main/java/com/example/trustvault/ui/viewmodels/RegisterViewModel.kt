@@ -4,8 +4,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import com.example.trustvault.ui.screens.onboarding.UserPreferencesManager
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class RegisterViewModel : ViewModel() {
+@HiltViewModel
+class RegisterViewModel @Inject constructor(private val userPreferencesManager: UserPreferencesManager) : ViewModel() {
+
+    val darkTheme = userPreferencesManager.getCurrentTheme()
+
     var email by mutableStateOf("")
     var username by mutableStateOf("")
     var phone by mutableStateOf("")

@@ -31,6 +31,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.trustvault.R
 import com.example.trustvault.ui.theme.DarkColorScheme
@@ -43,12 +44,11 @@ import com.example.trustvault.ui.viewmodels.RegisterViewModel
 class RegisterActivity {
     @Composable
     fun RegisterScreen(
-        darkTheme: Boolean,
-        viewModel: RegisterViewModel = viewModel(),
+        viewModel: RegisterViewModel = hiltViewModel(),
         onGoBackClick: () -> Unit = {}, // Pass a lambda function with no return as a parameter
         onContinueClick: () -> Unit = {}
     ) {
-
+        val darkTheme = viewModel.darkTheme
         Column (
             modifier = Modifier
                 .fillMaxSize()

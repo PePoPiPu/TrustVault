@@ -34,6 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.trustvault.R
 import com.example.trustvault.ui.theme.DarkColorScheme
@@ -63,11 +64,11 @@ import com.example.trustvault.ui.viewmodels.LoginScreenViewModel
      */
     @Composable // Composable object
     fun LoginScreen(
-        darkTheme: Boolean,
-        viewModel: LoginScreenViewModel = viewModel(),
+        viewModel: LoginScreenViewModel = hiltViewModel(),
         onGoBackClick: () -> Unit = {},
         onRegisterClick: () -> Unit = {}
     ) {
+        val darkTheme = viewModel.darkTheme
         val context = LocalContext.current
         Column (
             modifier = Modifier // Create this column and the attributes

@@ -1,6 +1,5 @@
 package com.example.trustvault.ui.screens.onboarding
 
-import android.os.Bundle
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,38 +20,22 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.trustvault.R
 import com.example.trustvault.ui.theme.DarkColorScheme
 import com.example.trustvault.ui.theme.DarkModePrimaryGradient
 import com.example.trustvault.ui.theme.LightColorScheme
 import com.example.trustvault.ui.theme.LightModePrimaryGradient
-import com.example.trustvault.ui.theme.TrustVaultTheme
+import com.example.trustvault.ui.viewmodels.GetStartedViewModel
 
-class GetStartedActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        setContent{
-            TrustVaultTheme {
-                GetStartedScreen(darkTheme = true)
-            }
-        }
-    }
     /**
      * Displays the login screen with a logo, title, and authentication buttons.
      *
@@ -62,10 +45,11 @@ class GetStartedActivity : ComponentActivity() {
      */
     @Composable // Allows us to create a Composable object
     fun GetStartedScreen(
+        viewModel: GetStartedViewModel = hiltViewModel(),
         onLoginClick: () -> Unit = {},
-        onRegisterClick: () -> Unit = {},
-        darkTheme: Boolean
+        onRegisterClick: () -> Unit = {}
     ) {
+        val darkTheme = viewModel.darkTheme.value ?: false
         Column (
             modifier = Modifier // Defining the attributes for this column
                 .fillMaxSize() // Make the layout fill all available space
@@ -149,13 +133,3 @@ class GetStartedActivity : ComponentActivity() {
 
         }
     }
-
-    @Composable
-    @Preview
-    fun LoginScreenPreview() {
-        var darkTheme by remember { mutableStateOf(false) } // This is to be set in the main activity. Set here for testing
-        GetStartedScreen (
-            darkTheme = !darkTheme
-        )
-    }
-}

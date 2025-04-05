@@ -12,11 +12,11 @@ import com.example.trustvault.ui.screens.home.HomeScreen
 import com.example.trustvault.ui.screens.home.MainScreen
 import com.example.trustvault.ui.screens.home.SearchScreen
 import com.example.trustvault.ui.screens.home.UserProfile
-import com.example.trustvault.ui.screens.onboarding.GetStartedActivity
+import com.example.trustvault.ui.screens.onboarding.GetStartedScreen
+import com.example.trustvault.ui.screens.onboarding.LoaderScreen
 import com.example.trustvault.ui.screens.onboarding.LoginScreen
 import com.example.trustvault.ui.screens.onboarding.RegisterActivity
-import com.example.trustvault.ui.screens.onboarding.LoadingScreenActivity
-import com.example.trustvault.ui.screens.onboarding.SMSAuthActivity
+import com.example.trustvault.ui.screens.onboarding.SMSAuthScreen
 import com.example.trustvault.ui.screens.onboarding.ThemeSelectionScreen
 
 /**
@@ -71,8 +71,7 @@ fun AppNavHost(
                 )
             }
         ) {
-            GetStartedActivity().GetStartedScreen(
-                darkTheme = true,
+            GetStartedScreen(
                 onLoginClick = {
                     navController.navigate(Screen.Login.route)
                 },
@@ -97,7 +96,6 @@ fun AppNavHost(
             },
         ) {
             LoginScreen(
-                darkTheme = true,
                 onGoBackClick = {
                     navController.navigate(Screen.GetStarted.route)
                 },
@@ -145,7 +143,6 @@ fun AppNavHost(
             },
         ) {
             RegisterActivity().RegisterScreen(
-                darkTheme = true,
                 onGoBackClick = {
                     navController.navigate(Screen.ThemeSelection.route)
                 },
@@ -170,8 +167,7 @@ fun AppNavHost(
                 )
             },
         ) {
-            SMSAuthActivity().SMSAuthScreen(
-                darkTheme = true,
+            SMSAuthScreen(
                 onContinueClick = {
                     navController.navigate(Screen.LoaderScreen.route)
                 }
@@ -193,8 +189,7 @@ fun AppNavHost(
                 )
             },
         ) {
-            LoadingScreenActivity().Loader(
-                darkTheme = true,
+            LoaderScreen(
                 goToMainScreenAfterWait = {
                     navController.navigate(Screen.MainScreen.route)
                 }
