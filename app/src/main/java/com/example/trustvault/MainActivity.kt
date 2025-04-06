@@ -7,10 +7,8 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsControllerCompat
-import com.example.trustvault.ui.navigation.AppNavHost
-import com.example.trustvault.ui.theme.TrustVaultTheme
+import com.example.trustvault.presentation.navigation.AppNavHost
+import com.example.trustvault.presentation.theme.TrustVaultTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
