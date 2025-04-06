@@ -35,6 +35,7 @@ import com.example.trustvault.ui.theme.DarkColorScheme
 import com.example.trustvault.ui.theme.DarkModePrimaryGradient
 import com.example.trustvault.ui.theme.LightColorScheme
 import com.example.trustvault.ui.theme.LightModePrimaryGradient
+import com.example.trustvault.ui.utils.SetSystemBarsAppearance
 import com.example.trustvault.ui.viewmodels.ThemeSelectionViewModel
 
 /**
@@ -48,6 +49,8 @@ fun ThemeSelectionScreen(
     onContinueClick: () -> Unit = {}
 ) {
     val darkTheme by viewModel.darkTheme.collectAsState()
+
+    SetSystemBarsAppearance(darkTheme)
 
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
