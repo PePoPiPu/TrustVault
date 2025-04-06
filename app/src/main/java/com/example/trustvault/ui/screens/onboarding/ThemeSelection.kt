@@ -21,11 +21,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.min
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.trustvault.R
@@ -47,6 +49,12 @@ fun ThemeSelectionScreen(
 ) {
     val darkTheme by viewModel.darkTheme.collectAsState()
 
+    val configuration = LocalConfiguration.current
+    val screenHeight = configuration.screenHeightDp.dp
+    val screenWidth = configuration.screenWidthDp.dp
+
+    val imageSize = min(screenHeight, screenWidth) * 0.5f
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -54,7 +62,7 @@ fun ThemeSelectionScreen(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        //Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.weight(0.8f))
 
         // Theme Title
         Text(
@@ -73,16 +81,24 @@ fun ThemeSelectionScreen(
                 .padding(top = 20.dp, start = 20.dp, end = 20.dp)
         )
 
-        //Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.weight(0.5f))
 
         // Theme image
-        Image(
-            painter = if (darkTheme) painterResource(id = R.drawable.img_dark_theme) else painterResource(id = R.drawable.img_light_theme),
-            contentDescription = if (darkTheme) "Dark Mode Illustration" else "Light Mode Illustration",
-            modifier = Modifier.size(350.dp)
-        )
+        Box(
+            modifier = Modifier
+                .size(imageSize),
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                painter = if (darkTheme) painterResource(id = R.drawable.img_dark_theme)
+                else painterResource(id = R.drawable.img_light_theme),
+                contentDescription = if (darkTheme) "Dark Mode Illustration" else "Light Mode Illustration",
+                modifier = Modifier.fillMaxSize() // fills the box while keeping the responsive size
+            )
+        }
 
-        //Spacer(modifier = Modifier.height(40.dp))
+
+        Spacer(modifier = Modifier.weight(0.3f))
 
         // Theme Text
         Text(
@@ -92,7 +108,7 @@ fun ThemeSelectionScreen(
             fontWeight = FontWeight.SemiBold
         )
 
-        //Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.weight(0.3f))
 
         // Theme switcher
         ThemeSwitcher(
@@ -105,7 +121,7 @@ fun ThemeSelectionScreen(
             padding = 5.dp
         )
 
-        //Spacer(modifier = Modifier.height(30.dp))
+        Spacer(modifier = Modifier.weight(0.3f))
 
         // Continue Button
         Button(
@@ -131,6 +147,8 @@ fun ThemeSelectionScreen(
                 Text("Continuar", color = Color.White, fontSize = 16.sp)
             }
         }
+
+        Spacer(modifier = Modifier.weight(0.5f))
     }
 }
 
@@ -172,8 +190,6 @@ fun ThemeSwitcher(
                 .background(if (darkTheme) DarkColorScheme.secondary else LightColorScheme.secondary)
         )
         Row(
-            modifier = Modifier
-                .border(BorderStroke(1.dp, Color(0xFF282D37)))
         ) {
             Box(
                 modifier = Modifier.size(size),

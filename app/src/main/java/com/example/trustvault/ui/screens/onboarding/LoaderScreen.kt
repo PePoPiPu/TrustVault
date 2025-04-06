@@ -21,7 +21,9 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.*
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.min
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.trustvault.R
 import com.example.trustvault.ui.theme.DarkColorScheme
@@ -45,6 +47,12 @@ fun LoaderScreen(
     val darkTheme = viewModel.darkTheme
     val navigateToNextScreen by viewModel.navigateToNextScreen.collectAsState()
 
+    val configuration = LocalConfiguration.current
+    val screenHeight = configuration.screenHeightDp.dp
+    val screenWidth = configuration.screenWidthDp.dp
+
+    val imageSize = min(screenHeight, screenWidth) * 0.8f
+
     // Trigger loading logic when the composable is first launched
     LaunchedEffect(Unit) {
         viewModel.waitForSeconds()
@@ -64,11 +72,14 @@ fun LoaderScreen(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
+        Spacer(modifier = Modifier.height(40.dp))
+
         Image(
             painter = painterResource(id = R.drawable.ok),
             contentDescription = "Successful login/register logo",
             modifier = Modifier
-                .size(400.dp)
+                .size(imageSize)
                 .padding(top = 60.dp)
         )
 
