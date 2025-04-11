@@ -4,7 +4,9 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    id("com.google.gms.google-services")
 }
+
 
 android {
     namespace = "com.example.trustvault"
@@ -54,14 +56,18 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.datastore.preferences)
     implementation("androidx.navigation:navigation-compose:2.8.9")
-    implementation("androidx.compose.ui:ui:1.7.8") // Versión más reciente de Compose UI
-    implementation("androidx.compose.material:material:1.7.8") // Material Design en Compose
-    implementation("androidx.compose.animation:animation:1.7.8") // Para animaciones
+    implementation("androidx.compose.ui:ui:1.7.8") // Compose UI most recent version
+    implementation("androidx.compose.material:material:1.7.8") // Material Design with compose
+    implementation("androidx.compose.animation:animation:1.7.8") // Animations
     implementation("androidx.compose.material:material-icons-extended-android:1.7.8")
     implementation("com.google.dagger:hilt-android:2.51.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1")
     kapt("com.google.dagger:hilt-android-compiler:2.51.1")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    implementation("com.google.firebase:firebase-firestore-ktx:24.1.2")
+    implementation("com.google.firebase:firebase-auth-ktx:21.1.0")
+    implementation(platform("com.google.firebase:firebase-bom:33.12.0"))
+    implementation("com.lambdapioneer.argon2kt:argon2kt:1.6.0") // Argon2 binding
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -71,6 +77,8 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
 }
+
+
 
 // Allow references to generated code
 kapt {

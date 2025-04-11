@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,11 +22,16 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -59,6 +65,9 @@ import com.example.trustvault.presentation.viewmodels.RegisterViewModel
         val focusManager = LocalFocusManager.current // Handles where the current keyboard focus is
         val imeState = rememberImeState()
         val scrollState = rememberScrollState()
+
+        var emailError by remember { mutableStateOf<String?>(null) }
+        var passwordError by remember { mutableStateOf<String?>(null)}
 
         LaunchedEffect(key1= imeState.value) {
             if (imeState.value) {
@@ -125,10 +134,13 @@ import com.example.trustvault.presentation.viewmodels.RegisterViewModel
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceEvenly
             ) {
-                // Email Input
                 OutlinedTextField(
                     value = viewModel.email,
-                    onValueChange = { viewModel.email = it },
+                    onValueChange = {
+                        viewModel.email = it
+                        // Check email validity when it changes
+                        emailError = if (!viewModel.isValidEmail(it)) "Please enter a valid email" else null
+                    },
                     singleLine = true,
                     label = { Text("E-Mail") },
                     modifier = Modifier.fillMaxWidth(0.9f),
@@ -136,14 +148,26 @@ import com.example.trustvault.presentation.viewmodels.RegisterViewModel
                     keyboardActions = KeyboardActions (onNext = {
                         focusManager.moveFocus(FocusDirection.Down)
                     }),
+                    isError = emailError != null, // Show error state if there is an error
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedContainerColor = Color(0xFFF2F2F2),
                         unfocusedContainerColor = Color(0xFFF2F2F2),
                         disabledContainerColor = Color(0xFFF2F2F2),
+                        errorContainerColor = Color(0xFFF2F2F2),
                         focusedLabelColor = if (darkTheme) Color.White else Color.Black
                     ),
                     shape = RoundedCornerShape(12.dp)
                 )
+
+                // Display the error message
+                if (emailError != null) {
+                    Text(
+                        text = emailError!!, // Not null assertion. Tells kotlin this variable cannot be null at this point
+                        color = MaterialTheme.colorScheme.error,
+                        style = TextStyle(fontSize = 12.sp),
+                        modifier = Modifier.padding(start = 16.dp, top = 4.dp)
+                    )
+                }
 
                 // Username Input
                 OutlinedTextField(
@@ -188,7 +212,10 @@ import com.example.trustvault.presentation.viewmodels.RegisterViewModel
                 // Password Input
                 OutlinedTextField(
                     value = viewModel.password,
-                    onValueChange = { viewModel.password = it },
+                    onValueChange = {
+                        viewModel.password = it
+                        passwordError = if (viewModel.validatePassword(it) != null) "Please enter a valid password" else null
+                    },
                     singleLine = true,
                     label = { Text("Contraseña") },
                     visualTransformation = PasswordVisualTransformation(),
@@ -197,14 +224,26 @@ import com.example.trustvault.presentation.viewmodels.RegisterViewModel
                     keyboardActions = KeyboardActions(onNext = {
                         focusManager.moveFocus(FocusDirection.Down)
                     }),
+                    isError = passwordError != null,
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedContainerColor = Color(0xFFF2F2F2),
                         unfocusedContainerColor = Color(0xFFF2F2F2),
                         disabledContainerColor = Color(0xFFF2F2F2),
+                        errorContainerColor = Color(0xFFF2F2F2),
                         focusedLabelColor = if (darkTheme) Color.White else Color.Black
                     ),
                     shape = RoundedCornerShape(12.dp)
                 )
+
+                // Display the error message
+                if (passwordError != null) {
+                    Text(
+                        text = passwordError!!, // Not null assertion. Tells kotlin this variable cannot be null at this point
+                        color = MaterialTheme.colorScheme.error,
+                        style = TextStyle(fontSize = 12.sp),
+                        modifier = Modifier.padding(start = 16.dp, top = 4.dp)
+                    )
+                }
 
                 // Confirm password Input
                 OutlinedTextField(
@@ -233,7 +272,7 @@ import com.example.trustvault.presentation.viewmodels.RegisterViewModel
             // Continue Button
             Button (
                 onClick = {
-                /* TODO: Handle registration logic and go to SMS Auth Activity */
+                    viewModel.register()
                     onContinueClick()
                 },
                 modifier = Modifier

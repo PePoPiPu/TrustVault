@@ -15,6 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        System.setProperty("jna.boot.library.path", applicationContext.filesDir.path + "/lib/arm64-v8a")
 
         // Make the bars transparent (modern way)
         window.setFlags(
