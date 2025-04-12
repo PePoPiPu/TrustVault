@@ -70,6 +70,7 @@ dependencies {
     implementation("com.lambdapioneer.argon2kt:argon2kt:1.6.0") // Argon2 binding
     implementation("androidx.compose.material:material:1.6.0")
     implementation("com.github.arpitkatiyar1999:Country-Picker:2.1.1")
+    implementation("com.googlecode.libphonenumber:libphonenumber:8.13.15")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

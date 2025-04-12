@@ -1,5 +1,6 @@
 package com.example.trustvault.presentation.viewmodels
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
@@ -10,6 +11,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.trustvault.domain.models.User
 import com.example.trustvault.domain.use_cases.RegisterUseCase
 import com.example.trustvault.presentation.screens.onboarding.UserPreferencesManager
+import com.google.i18n.phonenumbers.NumberParseException
+import com.google.i18n.phonenumbers.PhoneNumberUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -76,4 +79,17 @@ class RegisterViewModel @Inject constructor(
         }
     }
 
+    // countryCode: ISO 3166-1 alpha-2 code (e.g., "us", "es", "fr")
+    fun validatePhoneNumber(countryCode: String?, phoneNumber: String) : Boolean {
+        if(phoneNumber.isBlank()) return false
+        val phoneUtil = PhoneNumberUtil.getInstance()
+
+        return try {
+            val parsedNumber = phoneUtil.parse(phoneNumber, countryCode?.uppercase())
+
+            phoneUtil.isValidNumber(parsedNumber)
+        } catch (e: NumberParseException) {
+            false
+        }
+    }
 }

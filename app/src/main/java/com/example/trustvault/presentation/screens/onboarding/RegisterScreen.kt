@@ -60,6 +60,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.arpitkatiyarprojects.countrypicker.CountryPickerOutlinedTextField
 import com.arpitkatiyarprojects.countrypicker.enums.CountryListDisplayType
+import com.arpitkatiyarprojects.countrypicker.models.CountryDetails
+import com.arpitkatiyarprojects.countrypicker.utils.CountryPickerUtils
 import com.example.trustvault.R
 import com.example.trustvault.presentation.theme.DarkColorScheme
 import com.example.trustvault.presentation.theme.DarkModePrimaryGradient
@@ -208,11 +210,19 @@ fun RegisterScreen(
                 shape = RoundedCornerShape(12.dp)
             )
 
+            var selectedCountryState by remember { mutableStateOf<CountryDetails?>(null)}
+            var isMobileCorrect by remember { mutableStateOf(true) }
+
             CountryPickerOutlinedTextField(
-                mobileNumber = viewModel.phone,
-                onMobileNumberChange = { viewModel.phone = it },
-                onCountrySelected = { selectedCountry ->
-                    // Handle country selection here (e.g., update country code or any other related logic)
+                mobileNumber = CountryPickerUtils.getFormattedMobileNumber(
+                    viewModel.phone, selectedCountryState?.countryCode ?: "ES"
+                ),
+                onMobileNumberChange = {
+                    viewModel.phone = it
+                    isMobileCorrect = viewModel.validatePhoneNumber(selectedCountryState?.countryCode, viewModel.phone)
+               },
+                onCountrySelected = {
+                    selectedCountryState = it
                 },
                 singleLine = true,
                 label = { Text("Teléfono") },
@@ -224,7 +234,7 @@ fun RegisterScreen(
                     focusedLabelColor = if (darkTheme) Color.White else Color.Black
                 ),
                 shape = RoundedCornerShape(12.dp),
-                defaultCountryCode = "ES", // Default to +1 (United States)
+                defaultCountryCode = "ES", // Default to Spain
                 countriesList = listOf(
                     "AR", // Argentina
                     "AU", // Australia
@@ -249,7 +259,10 @@ fun RegisterScreen(
                     "US"  // United States
                 ),
                 countryListDisplayType = CountryListDisplayType.BottomSheet, // Adjust the country display type to Dialog or any other style
-                isError = false,
+                isError = !isMobileCorrect,
+                supportingText = if (!isMobileCorrect) {
+                    { Text(text = "El número de teléfono no es válido")}
+                } else null,
                 visualTransformation = VisualTransformation.None,
                 maxLines = 1,
                 minLines = 1,
