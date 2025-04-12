@@ -54,8 +54,9 @@ import com.example.trustvault.presentation.theme.LightColorScheme
 import com.example.trustvault.presentation.theme.LightModePrimaryGradient
 import com.example.trustvault.presentation.utils.rememberImeState
 import com.example.trustvault.presentation.viewmodels.RegisterViewModel
+import kotlinx.coroutines.delay
 
-    @Composable
+@Composable
     fun RegisterScreen(
         viewModel: RegisterViewModel = hiltViewModel(),
         onGoBackClick: () -> Unit = {}, // Pass a lambda function with no return as a parameter
@@ -71,6 +72,7 @@ import com.example.trustvault.presentation.viewmodels.RegisterViewModel
 
         LaunchedEffect(key1= imeState.value) {
             if (imeState.value) {
+                delay(100)
                 scrollState.scrollTo(scrollState.maxValue)
             }
         }
@@ -78,11 +80,12 @@ import com.example.trustvault.presentation.viewmodels.RegisterViewModel
             modifier = Modifier
                 .fillMaxSize()
                 .background(if (darkTheme) DarkColorScheme.surface else LightColorScheme.background)
-                .verticalScroll(scrollState),
+                .verticalScroll(scrollState)
+                .padding(bottom = if(imeState.value) 200.dp else 0.dp),
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(40.dp))
             // Go back icon
             Row (
                 modifier = Modifier
@@ -112,7 +115,7 @@ import com.example.trustvault.presentation.viewmodels.RegisterViewModel
                     )
                 )
             )
-            Spacer(Modifier.height(10.dp))
+            Spacer(Modifier.height(60.dp))
             // Form Title
             Row (
                 modifier = Modifier
@@ -130,7 +133,8 @@ import com.example.trustvault.presentation.viewmodels.RegisterViewModel
             // Form Fields
             Column(
                 modifier = Modifier
-                    .fillMaxHeight(0.5f),
+                    .fillMaxWidth()
+                    .padding(bottom = 100.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceEvenly
             ) {
