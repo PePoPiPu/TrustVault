@@ -136,20 +136,5 @@ import com.example.trustvault.presentation.viewmodels.SMSAuthScreenViewModel
                 }
             }
             Spacer(modifier = Modifier.height(40.dp))
-
-            Row (
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                Text(
-                    text = "Pulsame",
-                    modifier = Modifier
-                        .clickable {
-                            onContinueClick()
-                        }
-                )
-            }
-
-            Spacer(modifier = Modifier.height(40.dp))
         }
     }

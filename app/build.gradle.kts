@@ -68,6 +68,8 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx:21.1.0")
     implementation(platform("com.google.firebase:firebase-bom:33.12.0"))
     implementation("com.lambdapioneer.argon2kt:argon2kt:1.6.0") // Argon2 binding
+    implementation("androidx.compose.material:material:1.6.0")
+    implementation("com.github.arpitkatiyar1999:Country-Picker:2.1.1")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
