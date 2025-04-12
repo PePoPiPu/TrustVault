@@ -227,7 +227,7 @@ fun RegisterScreen(
                 singleLine = true,
                 label = { Text("Teléfono") },
                 modifier = Modifier.fillMaxWidth(0.9f),
-                colors = OutlinedTextFieldDefaults.colors(
+                colors = androidx.compose.material3.TextFieldDefaults.colors(
                     focusedContainerColor = Color(0xFFF2F2F2),
                     unfocusedContainerColor = Color(0xFFF2F2F2),
                     disabledContainerColor = Color(0xFFF2F2F2),
@@ -267,26 +267,6 @@ fun RegisterScreen(
                 maxLines = 1,
                 minLines = 1,
             )
-
-//            // Phone Input
-//            OutlinedTextField(
-//                value = viewModel.phone,
-//                onValueChange = { viewModel.phone = it },
-//                singleLine = true,
-//                label = { Text("Teléfono") },
-//                modifier = Modifier.fillMaxWidth(0.9f),
-//                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
-//                keyboardActions = KeyboardActions(onNext = {
-//                    focusManager.moveFocus(FocusDirection.Down)
-//                }),
-//                colors = OutlinedTextFieldDefaults.colors(
-//                    focusedContainerColor = Color(0xFFF2F2F2),
-//                    unfocusedContainerColor = Color(0xFFF2F2F2),
-//                    disabledContainerColor = Color(0xFFF2F2F2),
-//                    focusedLabelColor = if (darkTheme) Color.White else Color.Black
-//                ),
-//                shape = RoundedCornerShape(12.dp)
-//            )
 
             Spacer(modifier = Modifier.width(8.dp))
 
