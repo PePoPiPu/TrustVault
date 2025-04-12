@@ -214,7 +214,7 @@ import com.example.trustvault.presentation.viewmodels.RegisterViewModel
                     value = viewModel.password,
                     onValueChange = {
                         viewModel.password = it
-                        passwordError = if (viewModel.validatePassword(it) != null) "Please enter a valid password" else null
+                        passwordError = viewModel.validatePassword(it)
                     },
                     singleLine = true,
                     label = { Text("Contraseña") },
