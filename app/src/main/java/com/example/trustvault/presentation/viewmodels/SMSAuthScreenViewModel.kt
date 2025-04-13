@@ -10,4 +10,6 @@ import javax.inject.Inject
 class SMSAuthScreenViewModel @Inject constructor(userPreferencesManager: UserPreferencesManager) : ViewModel(){
     val darkTheme = userPreferencesManager.getCurrentTheme()
     var digits = mutableStateListOf("", "", "", "", "")
+
+
 }
