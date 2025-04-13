@@ -1,5 +1,6 @@
 package com.example.trustvault.presentation.screens.onboarding
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -38,6 +39,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -60,12 +62,14 @@ import com.example.trustvault.presentation.theme.LightColorScheme
 import com.example.trustvault.presentation.theme.LightModePrimaryGradient
 import com.example.trustvault.presentation.utils.rememberImeState
 import com.example.trustvault.presentation.viewmodels.RegisterViewModel
+import com.example.trustvault.presentation.viewmodels.SMSAuthScreenViewModel
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(
     viewModel: RegisterViewModel = hiltViewModel(),
+    smsAuthViewModel: SMSAuthScreenViewModel = hiltViewModel(),
     onGoBackClick: () -> Unit = {}, // Pass a lambda function with no return as a parameter
     onContinueClick: () -> Unit = {}
 ) {
@@ -206,6 +210,29 @@ fun RegisterScreen(
 
             var selectedCountryState by remember { mutableStateOf<CountryDetails?>(null)}
             var isMobileCorrect by remember { mutableStateOf(true) }
+            val countryDialingCodes = mapOf(
+                "AR" to "+54",  // Argentina
+                "AU" to "+61",  // Australia
+                "BR" to "+55",  // Brazil
+                "CA" to "+1",   // Canada
+                "CN" to "+86",  // China
+                "FR" to "+33",  // France
+                "DE" to "+49",  // Germany
+                "IN" to "+91",  // India
+                "ID" to "+62",  // Indonesia
+                "IT" to "+39",  // Italy
+                "JP" to "+81",  // Japan
+                "MX" to "+52",  // Mexico
+                "NL" to "+31",  // Netherlands
+                "NG" to "+234", // Nigeria
+                "PL" to "+48",  // Poland
+                "RU" to "+7",   // Russia
+                "ZA" to "+27",  // South Africa
+                "KR" to "+82",  // South Korea
+                "ES" to "+34",  // Spain
+                "GB" to "+44",  // United Kingdom
+                "US" to "+1"    // United States
+            )
 
             CountryPickerOutlinedTextField(
                 mobileNumber = CountryPickerUtils.getFormattedMobileNumber(
@@ -213,6 +240,11 @@ fun RegisterScreen(
                 ),
                 onMobileNumberChange = {
                     viewModel.phone = it
+                    smsAuthViewModel.phone = it
+                    var parsedPhoneNumber = countryDialingCodes.getValue(selectedCountryState?.countryCode.toString().uppercase()) + it
+                    smsAuthViewModel.parsedPhoneNumber = parsedPhoneNumber
+                    Log.d("PARSED PHONE NUMBER", parsedPhoneNumber)
+                    Log.d("COUNTRY CODE", selectedCountryState?.countryCode.toString())
                     isMobileCorrect = viewModel.validatePhoneNumber(selectedCountryState?.countryCode, viewModel.phone)
                },
                 onCountrySelected = {
@@ -324,10 +356,13 @@ fun RegisterScreen(
 
         Spacer(modifier = Modifier.height(40.dp))
 
+        val context = LocalContext.current
+
         // Continue Button
         Button (
             onClick = {
                 viewModel.register()
+                smsAuthViewModel.authorizeUser(context, smsAuthViewModel.phone)
                 onContinueClick()
             },
             modifier = Modifier

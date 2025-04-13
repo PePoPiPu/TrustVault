@@ -24,6 +24,7 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -45,6 +46,7 @@ import com.example.trustvault.presentation.viewmodels.SMSAuthScreenViewModel
         onContinueClick: () -> Unit = {}
     ) {
         val darkTheme = viewModel.darkTheme
+
         Column (
             modifier = Modifier
                 .fillMaxSize()
@@ -104,7 +106,7 @@ import com.example.trustvault.presentation.viewmodels.SMSAuthScreenViewModel
                 modifier = Modifier
                     .fillMaxWidth(0.8f),
                 horizontalArrangement = Arrangement.SpaceEvenly
-            ) { repeat(5) { index ->
+            ) { repeat(6) { index ->
                 // Repeat allows us to paint x times the elements that are inside the statement. Avoids code repetition
                 // Gradient brush to call it from the Canvas
                 val gradientBrush = if (darkTheme) {

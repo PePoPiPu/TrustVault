@@ -1,6 +1,8 @@
 package com.example.trustvault.di
 
+import com.example.trustvault.data.repositories.SMSRepositoryImpl
 import com.example.trustvault.data.repositories.UserRepositoryImpl
+import com.example.trustvault.domain.repositories.SMSRepository
 import com.example.trustvault.domain.repositories.UserRepository
 import dagger.Binds
 import dagger.Module
@@ -12,4 +14,6 @@ import dagger.hilt.components.SingletonComponent
 abstract class RepositoryModule {
     @Binds
     abstract fun bindUserRepository(userRepositoryImpl: UserRepositoryImpl): UserRepository
+    @Binds
+    abstract fun bindSmsRepository(smsRepositoryImpl: SMSRepositoryImpl) : SMSRepository
 }
