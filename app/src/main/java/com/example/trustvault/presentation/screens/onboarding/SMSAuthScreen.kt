@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
@@ -30,6 +29,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -104,7 +104,8 @@ import com.example.trustvault.presentation.viewmodels.SMSAuthScreenViewModel
                 modifier = Modifier
                     .fillMaxWidth(0.8f),
                 horizontalArrangement = Arrangement.SpaceEvenly
-            ) { repeat(5) { // Repeat allows us to paint x times the elements that are inside the statement. Avoids code repetition
+            ) { repeat(5) { index ->
+                // Repeat allows us to paint x times the elements that are inside the statement. Avoids code repetition
                 // Gradient brush to call it from the Canvas
                 val gradientBrush = if (darkTheme) {
                     Brush.linearGradient(
@@ -140,14 +141,17 @@ import com.example.trustvault.presentation.viewmodels.SMSAuthScreenViewModel
 
                     // Text field for the code digits
                     BasicTextField(
-                        value = viewModel.digit,
+                        value = viewModel.digits[index],
                         onValueChange = {
-                            viewModel.digit = it
+                            if (it.length <= 1 && it.all { char -> char.isDigit() }) {
+                                viewModel.digits[index] = it
+                            }
                         },
                         textStyle = TextStyle(
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Color.Black
+                            color = Color.Black,
+                            textAlign = TextAlign.Center
                         ),
                         singleLine = true,
                         keyboardOptions = KeyboardOptions.Default.copy(
