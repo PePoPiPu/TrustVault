@@ -104,7 +104,7 @@ import com.example.trustvault.presentation.viewmodels.SMSAuthScreenViewModel
                 modifier = Modifier
                     .fillMaxWidth(0.8f),
                 horizontalArrangement = Arrangement.SpaceEvenly
-            ) { repeat(5) { index ->
+            ) { repeat(6) { index ->
                 // Repeat allows us to paint x times the elements that are inside the statement. Avoids code repetition
                 // Gradient brush to call it from the Canvas
                 val gradientBrush = if (darkTheme) {
@@ -141,10 +141,10 @@ import com.example.trustvault.presentation.viewmodels.SMSAuthScreenViewModel
 
                     // Text field for the code digits
                     BasicTextField(
-                        value = viewModel.digits[index],
+                        value = viewModel.code[index],
                         onValueChange = {
                             if (it.length <= 1 && it.all { char -> char.isDigit() }) {
-                                viewModel.digits[index] = it
+                                viewModel.code[index] = it
                             }
                         },
                         textStyle = TextStyle(
