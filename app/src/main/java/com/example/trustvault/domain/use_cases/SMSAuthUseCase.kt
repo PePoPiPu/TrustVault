@@ -5,8 +5,8 @@ import com.example.trustvault.domain.repositories.SMSRepository
 import javax.inject.Inject
 
 class SMSAuthUseCase @Inject constructor(private val smsRepository: SMSRepository){
-    suspend fun execute(context: Context, phoneNumber: String): Result<String> {
-        return smsRepository.verifyPhone(context, phoneNumber)
+    suspend fun executeCodeSend(context: Context, phoneNumber: String): Result<String> {
+        return smsRepository.sendCode(context, phoneNumber)
     }
 
     suspend fun executeVerification(verificationId: String, code: String, context: Context): Result<Unit> {

@@ -23,7 +23,7 @@ class SMSRepositoryImpl @Inject constructor(
 
     // Sends Verification code
     @OptIn(ExperimentalCoroutinesApi::class)
-    override suspend fun verifyPhone(context: Context, phoneNumber: String): Result<String> {
+    override suspend fun sendCode(context: Context, phoneNumber: String): Result<String> {
         return suspendCancellableCoroutine { continuation ->
             val options = PhoneAuthOptions.newBuilder(firebaseAuth)
                 .setPhoneNumber(phoneNumber)

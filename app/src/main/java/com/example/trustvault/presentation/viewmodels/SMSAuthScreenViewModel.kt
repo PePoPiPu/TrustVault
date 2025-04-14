@@ -33,7 +33,7 @@ class SMSAuthScreenViewModel @Inject constructor(
 
     fun authorizeUser(context: Context, phoneNumber: String) {
         viewModelScope.launch {
-            val result = smsAuthUseCase.execute(context, parsedPhoneNumber)
+            val result = smsAuthUseCase.executeCodeSend(context, parsedPhoneNumber)
             if(result.isSuccess) {
                 storedVerificationId = result.getOrNull().toString()
             }else {

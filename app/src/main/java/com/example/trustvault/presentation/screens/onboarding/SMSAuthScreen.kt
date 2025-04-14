@@ -111,7 +111,7 @@ import kotlinx.coroutines.launch
 
             // Message
             Text(
-                text = "El código ha sido enviado al ${viewModel.parsedPhoneNumber}", // TODO: Bring phone number from the previous form/saved number from the user
+                text = "El código ha sido enviado al ${viewModel.parsedPhoneNumber}",
                 fontSize = 18.sp,
                 color = if (darkTheme) DarkColorScheme.onBackground else LightColorScheme.onBackground,
                 textAlign = TextAlign.Center
@@ -122,6 +122,7 @@ import kotlinx.coroutines.launch
             // Resend code button
             Text(
                 text = "Reenviar el código en 00:30", // TODO: Start a 30 sec countdown, replace with a resend button once it finishes
+                // text = if (countDownFinished) text "reenviar"
                 fontSize = 18.sp,
                 color = if (darkTheme) DarkColorScheme.onBackground else LightColorScheme.onBackground
             )
@@ -247,7 +248,7 @@ import kotlinx.coroutines.launch
             val verificationResult = viewModel.verificationResult.value
             if(verificationResult != null) {
                 Log.d("VERRESULT", verificationResult.toString())
-                if (verificationResult == true) {
+                if (verificationResult == true) { // == true because it's a stable
                     onContinueClick()
                 } else {
                     Toast.makeText(context, "¡Código incorrecto!", Toast.LENGTH_LONG).show()
