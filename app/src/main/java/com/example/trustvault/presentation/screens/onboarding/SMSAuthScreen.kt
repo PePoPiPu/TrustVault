@@ -187,7 +187,7 @@ import kotlinx.coroutines.launch
                             textAlign = TextAlign.Center
                         ),
                         singleLine = true,
-                        keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardOptions = KeyboardOptions.Default.copy( // TODO: Jump automatically on text fill
                             keyboardType = KeyboardType.Number,
                             imeAction = if (index == 5) ImeAction.Done else ImeAction.Next
                         ),
