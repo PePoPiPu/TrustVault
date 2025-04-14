@@ -2,6 +2,7 @@ package com.example.trustvault.presentation.viewmodels
 
 import android.content.Context
 import android.util.Log
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -23,11 +24,39 @@ class SMSAuthScreenViewModel @Inject constructor(
     var code = mutableStateListOf("", "", "", "", "", "")
     var phone by mutableStateOf("")
     var parsedPhoneNumber by mutableStateOf("")
+
+    fun isFormValid(): Boolean {
+        return code.all { it.isNotBlank() }
+    }
+
+    var storedVerificationId: String? = null
+
     fun authorizeUser(context: Context, phoneNumber: String) {
         viewModelScope.launch {
-            // Log.d("SMSVIEWMODEL", parsedPhoneNumber)
-            smsAuthUseCase.execute(context, parsedPhoneNumber)
-            smsAuthUseCase.executeVerification(context, code.toString())
+            val result = smsAuthUseCase.execute(context, parsedPhoneNumber)
+            if(result.isSuccess) {
+                storedVerificationId = result.getOrNull().toString()
+            }else {
+                // Handle failure in sending the SMS
+                Log.e("TAG", "SMS sending failed: ${result.exceptionOrNull()}")
+            }
+        }
+    }
+
+    private val _verificationResult = mutableStateOf<Boolean?>(null)
+    val verificationResult: State<Boolean?> = _verificationResult
+
+    fun verifyCode(context: Context) {
+        viewModelScope.launch {
+            if (storedVerificationId != null) {
+                Log.d("VERID", storedVerificationId.toString())
+                Log.d("CODE", code.joinToString(""))
+                // code.toString() ->  SnapshotStateList(value=[1, 2, 3, 4, 5, 6])@152215220
+                val result = smsAuthUseCase.executeVerification(storedVerificationId!!, code.joinToString(""), context)
+                _verificationResult.value = result.isSuccess
+            } else {
+                Log.e("TAG", "Verification ID is null!")
+            }
         }
     }
 }

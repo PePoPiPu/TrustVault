@@ -1,5 +1,6 @@
 package com.example.trustvault.presentation.screens.onboarding
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -49,7 +50,9 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.ComponentActivity
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModelStoreOwner
 import com.arpitkatiyarprojects.countrypicker.CountryPickerOutlinedTextField
 import com.arpitkatiyarprojects.countrypicker.enums.CountryListDisplayType
 import com.arpitkatiyarprojects.countrypicker.models.CountryDetails
@@ -65,11 +68,11 @@ import com.example.trustvault.presentation.viewmodels.RegisterViewModel
 import com.example.trustvault.presentation.viewmodels.SMSAuthScreenViewModel
 import kotlinx.coroutines.delay
 
+@SuppressLint("RestrictedApi")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(
     viewModel: RegisterViewModel = hiltViewModel(),
-    smsAuthViewModel: SMSAuthScreenViewModel = hiltViewModel(),
     onGoBackClick: () -> Unit = {}, // Pass a lambda function with no return as a parameter
     onContinueClick: () -> Unit = {}
 ) {
@@ -77,6 +80,10 @@ fun RegisterScreen(
     val focusManager = LocalFocusManager.current // Handles where the current keyboard focus is
     val imeState = rememberImeState()
     val scrollState = rememberScrollState()
+
+    // Shared ViewModel to allow persistance of data between register and auth screen
+    val activity = LocalContext.current as ComponentActivity
+    val smsAuthViewModel: SMSAuthScreenViewModel = hiltViewModel(activity as ViewModelStoreOwner)
 
     var emailError by remember { mutableStateOf<String?>(null) } // remember will "remember" the value after recomposition
     // The by clause is syntactic sugar for:
