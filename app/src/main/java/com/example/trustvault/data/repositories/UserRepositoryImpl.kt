@@ -7,6 +7,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.lambdapioneer.argon2kt.Argon2Kt
 import com.lambdapioneer.argon2kt.Argon2KtResult
 import com.lambdapioneer.argon2kt.Argon2Mode
+import de.mkammerer.argon2.Argon2Factory
 import kotlinx.coroutines.tasks.await
 import java.security.SecureRandom
 import javax.inject.Inject
@@ -16,7 +17,30 @@ class UserRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
         username: String,
         password: String
     ): Result<User> {
-        TODO("Not yet implemented")
+        return try {
+            val databaseUser = firestore.collection("users")
+                .whereEqualTo("username", username)
+                .get()
+                .await()
+
+            if (databaseUser.isEmpty) {
+                Result.failure(Exception("User not found"))
+            } else {
+                val document = databaseUser.documents.first()
+                val storedHash = document.getString("password") ?: ""
+
+                if (verifyPassword(password, storedHash)) {
+
+                    val user = document.toObject(User::class.java)
+                    Result.success(user!!)
+                } else {
+                    Result.failure(Exception("Wrong password"))
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Result.failure(e)
+        }
     }
 
     override suspend fun registerUser(
@@ -145,5 +169,14 @@ class UserRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
         salt.fill(0)
 
         return salt
+    }
+    fun verifyPassword(inputPassword: String, storedEncodedHash: String): Boolean {
+        val argon2 = Argon2Factory.create()
+
+        return try {
+            argon2.verify(storedEncodedHash, inputPassword.toCharArray())
+        } finally {
+            argon2.wipeArray(inputPassword.toCharArray())
+        }
     }
 }

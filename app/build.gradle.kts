@@ -68,6 +68,7 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx:21.1.0")
     implementation(platform("com.google.firebase:firebase-bom:33.12.0"))
     implementation("com.lambdapioneer.argon2kt:argon2kt:1.6.0") // Argon2 binding
+    implementation("de.mkammerer:argon2-jvm:2.11")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
