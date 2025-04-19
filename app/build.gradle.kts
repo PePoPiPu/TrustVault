@@ -71,6 +71,7 @@ dependencies {
     implementation("androidx.compose.material:material:1.6.0")
     implementation("com.github.arpitkatiyar1999:Country-Picker:2.1.1")
     implementation("com.googlecode.libphonenumber:libphonenumber:8.13.15")
+    implementation("com.airbnb.android:lottie-compose:6.0.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
