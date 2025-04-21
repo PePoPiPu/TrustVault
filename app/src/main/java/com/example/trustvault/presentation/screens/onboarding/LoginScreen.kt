@@ -65,7 +65,8 @@ import com.example.trustvault.presentation.viewmodels.LoginScreenViewModel
     fun LoginScreen(
         viewModel: LoginScreenViewModel = hiltViewModel(),
         onGoBackClick: () -> Unit = {},
-        onRegisterClick: () -> Unit = {}
+        onRegisterClick: () -> Unit = {},
+        onContinueClick: () -> Unit = {}
     ) {
         val darkTheme = viewModel.darkTheme
         val context = LocalContext.current
@@ -161,8 +162,9 @@ import com.example.trustvault.presentation.viewmodels.LoginScreenViewModel
 
             Button (
                 onClick = {
-                /* TODO: Search for user in the database, login and show home screen */
+                    viewModel.loginUser()
                     Toast.makeText(context, "Logged in user", Toast.LENGTH_SHORT).show()
+                    onContinueClick()
                 },
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
