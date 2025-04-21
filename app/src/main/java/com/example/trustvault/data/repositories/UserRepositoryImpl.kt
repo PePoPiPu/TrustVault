@@ -36,6 +36,7 @@ class UserRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
 
             Result.success(Unit)
         } catch (e: Exception) {
+            Log.d("ERROR: ", e.toString())
             Result.failure(e)
         }
     }
