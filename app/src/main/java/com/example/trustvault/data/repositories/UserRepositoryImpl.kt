@@ -161,7 +161,7 @@ class UserRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
         return encodedHashResult
     }
 
-    fun generateSalt(length: Int = 32) : ByteArray{
+    private fun generateSalt(length: Int = 32) : ByteArray{
         val salt = ByteArray(length)
         SecureRandom().nextBytes(salt)
 
@@ -170,7 +170,7 @@ class UserRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
 
         return salt
     }
-    fun verifyPassword(inputPassword: String, storedEncodedHash: String): Boolean {
+    private fun verifyPassword(inputPassword: String, storedEncodedHash: String): Boolean {
         val argon2 = Argon2Factory.create()
 
         return try {

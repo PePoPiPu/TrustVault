@@ -111,6 +111,9 @@ fun AppNavHost(
                 },
                 onRegisterClick = {
                     navController.navigate(Screen.ThemeSelection.route)
+                },
+                onContinueClick = {
+                    navController.navigate(Screen.MainScreen.route)
                 }
             )
         }
