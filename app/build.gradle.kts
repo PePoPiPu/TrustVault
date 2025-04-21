@@ -68,6 +68,10 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx:21.1.0")
     implementation(platform("com.google.firebase:firebase-bom:33.12.0"))
     implementation("com.lambdapioneer.argon2kt:argon2kt:1.6.0") // Argon2 binding
+    implementation("androidx.compose.material:material:1.6.0")
+    implementation("com.github.arpitkatiyar1999:Country-Picker:2.1.1")
+    implementation("com.googlecode.libphonenumber:libphonenumber:8.13.15")
+    implementation("com.airbnb.android:lottie-compose:6.0.0")
     implementation("de.mkammerer:argon2-jvm:2.11")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -59,7 +59,7 @@ fun ThemeSelectionScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(if (darkTheme) DarkColorScheme.background else LightColorScheme.background),
+            .background(if (darkTheme) DarkColorScheme.surface else LightColorScheme.background),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

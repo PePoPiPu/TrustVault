@@ -140,7 +140,7 @@ class UserRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
 
     private fun hashPassword(password: String): String {
         val argon2Kt = Argon2Kt()
-        // Since strings are immutable and cannot be wiped from memory in a secure manne
+        // Since strings are immutable and cannot be wiped from memory in a secure manner
         // we have to transform the string into a byteArray to prevent memory dumps attack and have
         // the string lying around garbage memory
         val passwordByteArray = password.toByteArray(Charsets.UTF_8)

@@ -15,9 +15,14 @@ import com.example.trustvault.presentation.screens.home.UserProfile
 import com.example.trustvault.presentation.screens.onboarding.GetStartedScreen
 import com.example.trustvault.presentation.screens.onboarding.LoaderScreen
 import com.example.trustvault.presentation.screens.onboarding.LoginScreen
+import com.example.trustvault.presentation.screens.onboarding.OnboardingCTA
+import com.example.trustvault.presentation.screens.onboarding.OnboardingStep1
+import com.example.trustvault.presentation.screens.onboarding.OnboardingStep2
+import com.example.trustvault.presentation.screens.onboarding.OnboardingStep3
 import com.example.trustvault.presentation.screens.onboarding.RegisterScreen
 import com.example.trustvault.presentation.screens.onboarding.SMSAuthScreen
 import com.example.trustvault.presentation.screens.onboarding.ThemeSelectionScreen
+import com.example.trustvault.presentation.screens.onboarding.WelcomeScreen
 
 /**
  * This sealed class represents different screens in the app using data objects.
@@ -34,6 +39,11 @@ sealed class Screen(val route: String) {
     data object MainScreen : Screen("MainScreen")
     data object LoaderScreen : Screen("LoadingScreenActivity")
     data object ThemeSelection : Screen("ThemeSelectionActivity")
+    data object WelcomeScreen : Screen("WelcomeScreen")
+    data object OnBoardingStep1: Screen("OnBoardingStep1")
+    data object OnBoardingStep2: Screen("OnBoardingStep2")
+    data object OnBoardingStep3: Screen("OnBoardingStep3")
+    data object OnBoardingCTA: Screen("OnBoardingCTA")
     data object SMSAuth : Screen("SMSAuthScreen")
 
 }
@@ -121,6 +131,121 @@ fun AppNavHost(
             }
         ) {
             ThemeSelectionScreen(
+                onContinueClick = {
+                    navController.navigate(Screen.WelcomeScreen.route)
+                }
+            )
+        }
+
+        composable (
+            route = Screen.WelcomeScreen.route,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700)
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700)
+                )
+            },
+        )
+        {
+            WelcomeScreen(
+                onContinueClick = {
+                    navController.navigate(Screen.OnBoardingStep1.route)
+                }
+            )
+        }
+
+        composable (
+            route = Screen.OnBoardingStep1.route,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700)
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700)
+                )
+            },
+        )
+        {
+            OnboardingStep1(
+                onContinueClick = {
+                    navController.navigate(Screen.OnBoardingStep2.route)
+                }
+            )
+        }
+
+        composable (
+            route = Screen.OnBoardingStep2.route,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700)
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700)
+                )
+            },
+        )
+        {
+            OnboardingStep2(
+                onContinueClick = {
+                    navController.navigate(Screen.OnBoardingStep3.route)
+                }
+            )
+        }
+
+        composable (
+            route = Screen.OnBoardingStep3.route,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700)
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700)
+                )
+            },
+        )
+        {
+            OnboardingStep3(
+                onContinueClick = {
+                    navController.navigate(Screen.OnBoardingCTA.route)
+                }
+            )
+        }
+
+        composable (
+            route = Screen.OnBoardingCTA.route,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700)
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700)
+                )
+            },
+        )
+        {
+            OnboardingCTA(
                 onContinueClick = {
                     navController.navigate(Screen.Register.route)
                 }
