@@ -44,7 +44,8 @@ import com.example.trustvault.presentation.viewmodels.ThemeSelectionViewModel
 @Composable
 fun ThemeSelectionScreen(
     viewModel: ThemeSelectionViewModel = hiltViewModel(),
-    onContinueClick: () -> Unit = {}
+    onContinueClick: () -> Unit = {},
+    onGoBackClick: () -> Unit = {}
 ) {
     val darkTheme by viewModel.darkTheme.collectAsState()
 
@@ -64,7 +65,23 @@ fun ThemeSelectionScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.weight(0.8f))
-
+        Spacer(modifier = Modifier.height(10.dp))
+        // Go back icon
+        Row (
+            modifier = Modifier
+                .fillMaxWidth(0.9f),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Image(
+                painter = if (darkTheme) painterResource(id = R.drawable.ic_go_back) else painterResource(id = R.drawable.ic_go_back_black),
+                contentDescription = "Go Back Button",
+                modifier = Modifier
+                    .size(25.dp)
+                    .clickable {
+                        onGoBackClick()
+                    }
+            )
+        }
         // Theme Title
         Text(
             text = "Elige un modo",
