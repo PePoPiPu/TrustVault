@@ -1,6 +1,8 @@
 package com.example.trustvault.data.repositories
 
 import android.util.Log
+import com.example.trustvault.domain.exceptions.UserNotFoundException
+import com.example.trustvault.domain.exceptions.WrongPasswordException
 import com.example.trustvault.domain.models.User
 import com.example.trustvault.domain.repositories.UserRepository
 import com.google.firebase.firestore.FirebaseFirestore
@@ -24,7 +26,7 @@ class UserRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
                 .await()
 
             if (databaseUser.isEmpty) {
-                Result.failure(Exception("User not found"))
+                Result.failure(UserNotFoundException())
             } else {
                 val document = databaseUser.documents.first()
                 val storedHash = document.getString("password") ?: ""
@@ -34,7 +36,7 @@ class UserRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
                     val user = document.toObject(User::class.java)
                     Result.success(user!!)
                 } else {
-                    Result.failure(Exception("Wrong password"))
+                    Result.failure(WrongPasswordException())
                 }
             }
         } catch (e: Exception) {
@@ -75,7 +77,7 @@ class UserRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
                 val user = querySnapshot.documents[0].toObject(User::class.java)
                 Result.success(user!!)
             } else {
-                Result.failure(Exception("User not found"))
+                Result.failure(UserNotFoundException())
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -90,7 +92,7 @@ class UserRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
                 .await()
 
             if(querySnapshot.isEmpty) {
-                return Result.failure(Exception("User not found"))
+                return Result.failure(UserNotFoundException())
             }
 
             val documentSnapshot = querySnapshot.documents[0]
@@ -122,7 +124,7 @@ class UserRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
                 .await()
 
             if (querySnapshot.isEmpty) {
-                return Result.failure(Exception("User not found"))
+                return Result.failure(UserNotFoundException())
             }
 
             val documentSnapshot = querySnapshot.documents[0]
