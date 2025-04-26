@@ -3,6 +3,7 @@ package com.example.trustvault.data.repositories
 import android.util.Log
 import com.example.trustvault.domain.models.User
 import com.example.trustvault.domain.repositories.UserRepository
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.lambdapioneer.argon2kt.Argon2Kt
 import com.lambdapioneer.argon2kt.Argon2KtResult
@@ -13,6 +14,9 @@ import java.security.SecureRandom
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(private val firestore: FirebaseFirestore) : UserRepository {
+
+    val auth = FirebaseAuth.getInstance()
+
     override suspend fun loginUser(
         username: String,
         password: String
@@ -51,15 +55,20 @@ class UserRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
 
             val userWithHashedPassword = user.copy(password = encodedArgon2String)
 
-            firestore.collection("users")
-                .document()
+            // Register the user first in Firebase Auth
+            val authResult = auth.createUserWithEmailAndPassword(userWithHashedPassword.email, userWithHashedPassword.password).await()
+            // Check if the userId exists
+            val userId = authResult.user?.uid ?: throw Exception("User ID not found after registration")
+
+            FirebaseFirestore.getInstance()
+                .collection("users")
+                .document(userId)
                 .set(userWithHashedPassword)
                 .await()
 
-            Log.d("Message: " , "Registering user!")
-
             Result.success(Unit)
         } catch (e: Exception) {
+            Log.d("ERROR: ", e.toString())
             Result.failure(e)
         }
     }
