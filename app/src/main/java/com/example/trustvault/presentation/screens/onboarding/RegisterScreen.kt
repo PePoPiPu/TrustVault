@@ -64,8 +64,8 @@ import com.example.trustvault.presentation.theme.DisabledButtonGradient
 import com.example.trustvault.presentation.theme.LightColorScheme
 import com.example.trustvault.presentation.theme.LightModePrimaryGradient
 import com.example.trustvault.presentation.utils.rememberImeState
-import com.example.trustvault.presentation.viewmodels.RegisterViewModel
-import com.example.trustvault.presentation.viewmodels.SMSAuthScreenViewModel
+import com.example.trustvault.presentation.viewmodels.onboarding.RegisterViewModel
+import com.example.trustvault.presentation.viewmodels.onboarding.SMSAuthScreenViewModel
 import kotlinx.coroutines.delay
 
 @SuppressLint("RestrictedApi")

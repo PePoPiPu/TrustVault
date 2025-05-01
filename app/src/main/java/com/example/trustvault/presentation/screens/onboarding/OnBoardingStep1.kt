@@ -42,7 +42,7 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.trustvault.R
 import com.example.trustvault.presentation.theme.DarkColorScheme
 import com.example.trustvault.presentation.theme.LightColorScheme
-import com.example.trustvault.presentation.viewmodels.RegisterViewModel
+import com.example.trustvault.presentation.viewmodels.onboarding.RegisterViewModel
 
 @Composable
 fun OnboardingStep1(

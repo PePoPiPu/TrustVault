@@ -1,5 +1,6 @@
-package com.example.trustvault.presentation.viewmodels
+package com.example.trustvault.presentation.viewmodels.onboarding
 
+import android.util.Patterns
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
@@ -63,7 +64,7 @@ class RegisterViewModel @Inject constructor(
 
     // Email validation function
     fun isValidEmail(email: String): Boolean {
-        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
     // Password validation function

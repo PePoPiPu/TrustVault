@@ -1,4 +1,4 @@
-package com.example.trustvault.presentation.viewmodels
+package com.example.trustvault.presentation.viewmodels.onboarding
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

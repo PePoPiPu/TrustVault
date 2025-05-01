@@ -41,7 +41,7 @@ import com.example.trustvault.presentation.theme.DarkModePrimaryGradient
 import com.example.trustvault.presentation.theme.DisabledButtonGradient
 import com.example.trustvault.presentation.theme.LightColorScheme
 import com.example.trustvault.presentation.theme.LightModePrimaryGradient
-import com.example.trustvault.presentation.viewmodels.LoginScreenViewModel
+import com.example.trustvault.presentation.viewmodels.onboarding.LoginScreenViewModel
 
     /**
      * Function that represents the Login Screen

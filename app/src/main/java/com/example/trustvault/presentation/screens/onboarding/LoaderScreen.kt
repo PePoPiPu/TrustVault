@@ -28,7 +28,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.trustvault.R
 import com.example.trustvault.presentation.theme.DarkColorScheme
 import com.example.trustvault.presentation.theme.LightColorScheme
-import com.example.trustvault.presentation.viewmodels.LoaderScreenViewModel
+import com.example.trustvault.presentation.viewmodels.onboarding.LoaderScreenViewModel
 
 /**
  * LoaderScreen is a composable that shows a loading animation and a success message

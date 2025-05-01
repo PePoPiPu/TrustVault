@@ -34,7 +34,7 @@ import com.example.trustvault.presentation.theme.DarkColorScheme
 import com.example.trustvault.presentation.theme.DarkModePrimaryGradient
 import com.example.trustvault.presentation.theme.LightColorScheme
 import com.example.trustvault.presentation.theme.LightModePrimaryGradient
-import com.example.trustvault.presentation.viewmodels.GetStartedViewModel
+import com.example.trustvault.presentation.viewmodels.onboarding.GetStartedViewModel
 
     /**
      * Displays the login screen with a logo, title, and authentication buttons.

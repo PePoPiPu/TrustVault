@@ -54,8 +54,7 @@ import com.example.trustvault.presentation.theme.DarkModePrimaryGradient
 import com.example.trustvault.presentation.theme.DisabledButtonGradient
 import com.example.trustvault.presentation.theme.LightColorScheme
 import com.example.trustvault.presentation.theme.LightModePrimaryGradient
-import com.example.trustvault.presentation.viewmodels.SMSAuthScreenViewModel
-import kotlinx.coroutines.coroutineScope
+import com.example.trustvault.presentation.viewmodels.onboarding.SMSAuthScreenViewModel
 import kotlinx.coroutines.launch
 
 @SuppressLint("RestrictedApi")

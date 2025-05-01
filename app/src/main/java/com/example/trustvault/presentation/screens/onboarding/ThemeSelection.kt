@@ -34,7 +34,7 @@ import com.example.trustvault.presentation.theme.DarkModePrimaryGradient
 import com.example.trustvault.presentation.theme.LightColorScheme
 import com.example.trustvault.presentation.theme.LightModePrimaryGradient
 import com.example.trustvault.presentation.utils.SetSystemBarsAppearance
-import com.example.trustvault.presentation.viewmodels.ThemeSelectionViewModel
+import com.example.trustvault.presentation.viewmodels.onboarding.ThemeSelectionViewModel
 
 /**
  * This composable function displays a screen allowing users to choose between light and dark modes
