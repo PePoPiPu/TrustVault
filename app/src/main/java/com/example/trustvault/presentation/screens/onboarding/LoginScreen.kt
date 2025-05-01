@@ -123,6 +123,7 @@ import com.example.trustvault.presentation.viewmodels.LoginScreenViewModel
                 // Username Input
                 OutlinedTextField(
                     value = viewModel.username,
+                    singleLine = true,
                     onValueChange = { viewModel.username = it },
                     label = { Text("Usuario") },
                     modifier = Modifier.fillMaxWidth(0.9f),
@@ -144,6 +145,7 @@ import com.example.trustvault.presentation.viewmodels.LoginScreenViewModel
                 // Password Input
                 OutlinedTextField(
                     value = viewModel.password,
+                    singleLine = true,
                     onValueChange = { viewModel.password = it },
                     label = { Text("Contraseña") },
                     visualTransformation = PasswordVisualTransformation(),
