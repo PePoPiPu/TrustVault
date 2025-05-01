@@ -45,7 +45,15 @@ class LoginScreenViewModel @Inject constructor(
     fun loginUser() {
         viewModelScope.launch {
             val result = loginUseCase.execute(username, password)
-            _loginResult.value = result
+
+            if(result.isSuccess) {
+                _loginResult.value = result
+            } else {
+                val exception = result.exceptionOrNull()
+                val errorMsg = exception?.message ?: "Unknown error"
+                _loginResult.value = Result.failure(Exception(errorMsg))
+            }
+
         }
     }
 }
