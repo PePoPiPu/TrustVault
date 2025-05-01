@@ -251,11 +251,7 @@ fun AppNavHost(
             OnboardingCTA(
                 onContinueClick = {
                     navController.navigate(Screen.Register.route)
-                },
-                onGoBackClick = {
-                    navController.navigate(Screen.GetStarted.route)
-                },
-
+                }
             )
         }
 
