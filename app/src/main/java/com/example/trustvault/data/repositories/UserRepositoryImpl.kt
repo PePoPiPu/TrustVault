@@ -20,29 +20,30 @@ class UserRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
     val auth = FirebaseAuth.getInstance()
 
     override suspend fun loginUser(
-        username: String,
+        email: String,
         password: String
     ): Result<User> {
         return try {
-            val databaseUser = firestore.collection("users")
-                .whereEqualTo("username", username)
+            if (auth.currentUser != null) {
+                auth.signOut()
+            }
+
+            val authResult = auth.signInWithEmailAndPassword(email, password).await()
+            val firebaseUser = authResult.user ?: throw Exception("User not found after login")
+            Log.d("LOGGED IN NEW USER", firebaseUser.uid)
+
+            val userDoc = firestore.collection("users")
+                .document(firebaseUser.uid)
                 .get()
                 .await()
 
-            if (databaseUser.isEmpty) {
+            if (!userDoc.exists()) {
                 Result.failure(UserNotFoundException())
             } else {
-                val document = databaseUser.documents.first()
-                val storedHash = document.getString("password") ?: ""
-
-                if (verifyPassword(password, storedHash)) {
-
-                    val user = document.toObject(User::class.java)
-                    Result.success(user!!)
-                } else {
-                    Result.failure(WrongPasswordException())
-                }
+                val user = userDoc.toObject(User::class.java)
+                Result.success(user!!)
             }
+
         } catch (e: Exception) {
             e.printStackTrace()
             Result.failure(e)
@@ -58,7 +59,7 @@ class UserRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
             val userWithHashedPassword = user.copy(password = encodedArgon2String)
 
             // Register the user first in Firebase Auth
-            val authResult = auth.createUserWithEmailAndPassword(userWithHashedPassword.email, userWithHashedPassword.password).await()
+            val authResult = auth.createUserWithEmailAndPassword(user.email, user.password).await()
             // Check if the userId exists
             val userId = authResult.user?.uid ?: throw Exception("User ID not found after registration")
 

@@ -1,7 +1,9 @@
 package com.example.trustvault.data.repositories
 
+import android.util.Log
 import com.example.trustvault.domain.models.StoredAccount
 import com.example.trustvault.domain.repositories.StoredAccountRepository
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -18,6 +20,7 @@ class StoredAccountRepositoryImpl @Inject constructor(private val firestore: Fir
 
     override suspend fun getAccounts(userId: String): Result<List<StoredAccount>> {
         return try {
+            Log.d("CURRENT USER", FirebaseAuth.getInstance().currentUser?.uid.toString())
             val snapshot = FirebaseFirestore.getInstance()
                 .collection("users")
                 .document(userId)

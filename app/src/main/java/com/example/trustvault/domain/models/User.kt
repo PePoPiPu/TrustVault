@@ -6,4 +6,6 @@ data class User(
     val email: String,
     val password: String,
     val phone: String
-)
+) {
+    constructor() : this ("", "", "", "", "") // Empty constructor to de-serialize objects in Firebase
+}
