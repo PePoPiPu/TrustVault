@@ -52,6 +52,9 @@ class UserRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
     override suspend fun registerUser(
         user: User
     ): Result<Unit> {
+
+        val db = FirebaseFirestore.getInstance()
+
         return try {
             val encodedArgon2String = hashPassword(user.password)
 
@@ -62,10 +65,21 @@ class UserRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
             // Check if the userId exists
             val userId = authResult.user?.uid ?: throw Exception("User ID not found after registration")
 
-            FirebaseFirestore.getInstance()
-                .collection("users")
+            db.collection("users")
                 .document(userId)
                 .set(userWithHashedPassword)
+                .await()
+
+            val newAccountData = hashMapOf(
+                "platformName" to "TrustVault",
+                "storedEmail" to user.email,
+                "storedPassword" to userWithHashedPassword.password
+            )
+
+            db.collection("users")
+                .document(userId)
+                .collection("accounts")
+                .add(newAccountData)
                 .await()
 
             Result.success(Unit)

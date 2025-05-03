@@ -1,5 +1,6 @@
 package com.example.trustvault.presentation.viewmodels.onboarding
 
+import android.accounts.Account
 import android.util.Patterns
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
@@ -8,6 +9,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.trustvault.domain.models.StoredAccount
 import com.example.trustvault.domain.models.User
 import com.example.trustvault.domain.use_cases.RegisterUseCase
 import com.example.trustvault.presentation.screens.onboarding.UserPreferencesManager
@@ -48,11 +50,10 @@ class RegisterViewModel @Inject constructor(
         }
 
         val user = User(
-            id = null,
             email = email,
             username = username,
             phone = phone,
-            password = password // password will be hashed in the data layer
+            password = password
         )
 
         viewModelScope.launch {
