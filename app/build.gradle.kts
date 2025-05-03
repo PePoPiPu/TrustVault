@@ -73,6 +73,7 @@ dependencies {
     implementation("com.googlecode.libphonenumber:libphonenumber:8.13.15")
     implementation("com.airbnb.android:lottie-compose:6.0.0")
     implementation("de.mkammerer:argon2-jvm:2.11")
+    implementation("androidx.compose.runtime:runtime-livedata:1.8.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

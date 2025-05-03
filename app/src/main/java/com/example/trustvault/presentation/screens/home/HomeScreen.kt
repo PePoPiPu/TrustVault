@@ -1,5 +1,6 @@
 package com.example.trustvault.presentation.screens.home
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,12 +31,13 @@ fun HomeScreen(
 ) {
 
     val darkTheme = viewModel.darkTheme
-    var getAccountResult = viewModel.getAccountsResult
+    var getAccountResult = viewModel.getAccountsResult.value
 
     // We use launchedEffect(Unit) because it will only run the first time the composable
     // is composed
     LaunchedEffect(Unit) {
         viewModel.getAccounts()
+        Log.d("Accounts", getAccountResult.toString())
     }
 
     Column (

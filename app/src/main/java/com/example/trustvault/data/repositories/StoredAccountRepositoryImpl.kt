@@ -20,16 +20,19 @@ class StoredAccountRepositoryImpl @Inject constructor(private val firestore: Fir
 
     override suspend fun getAccounts(userId: String): Result<List<StoredAccount>> {
         return try {
-            Log.d("CURRENT USER", FirebaseAuth.getInstance().currentUser?.uid.toString())
-            val snapshot = FirebaseFirestore.getInstance()
-                .collection("users")
-                .document(userId)
-                .collection("accounts")
-                .get()
-                .await()
+            if (FirebaseAuth.getInstance().uid != null) {
+                val snapshot = FirebaseFirestore.getInstance()
+                    .collection("users")
+                    .document(userId)
+                    .collection("accounts")
+                    .get()
+                    .await()
 
-            val accounts = snapshot.documents.mapNotNull { it.toObject(StoredAccount::class.java)!! }
-            Result.success(accounts)
+                val accounts = snapshot.documents.mapNotNull { it.toObject(StoredAccount::class.java)!! }
+                Result.success(accounts)
+            } else {
+                throw Exception("User is not logged in")
+            }
         } catch (e: Exception) {
             Result.failure(e)
         }

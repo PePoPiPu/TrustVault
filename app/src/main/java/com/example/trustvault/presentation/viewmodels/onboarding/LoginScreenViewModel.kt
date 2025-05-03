@@ -1,5 +1,6 @@
 package com.example.trustvault.presentation.viewmodels.onboarding
 
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.compose.runtime.getValue // This import has to be set manually in order for mutableStateOf to work. IntelliJ doesn't suggest it
@@ -36,8 +37,8 @@ class LoginScreenViewModel @Inject constructor(
     var username by mutableStateOf("")
     var password by mutableStateOf("")
 
-    private val _loginResult = MutableLiveData<Result<User>?>()
-    val loginResult: LiveData<Result<User>?> = _loginResult
+    private val _loginResult = mutableStateOf<Boolean?>(null)
+    val loginResult: State<Boolean?> = _loginResult
 
     val isFormValid: Boolean
         get() = username.isNotBlank() && password.isNotBlank()
@@ -47,11 +48,11 @@ class LoginScreenViewModel @Inject constructor(
             val result = loginUseCase.execute(username, password)
 
             if(result.isSuccess) {
-                _loginResult.value = result
+                _loginResult.value = result.isSuccess
             } else {
                 val exception = result.exceptionOrNull()
                 val errorMsg = exception?.message ?: "Unknown error"
-                _loginResult.value = Result.failure(Exception(errorMsg))
+                _loginResult.value = result.isFailure
             }
 
         }

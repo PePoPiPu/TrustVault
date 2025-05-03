@@ -247,7 +247,7 @@ import kotlinx.coroutines.launch
             val verificationResult = viewModel.verificationResult.value
             if(verificationResult != null) {
                 Log.d("VERRESULT", verificationResult.toString())
-                if (verificationResult == true) { // == true because it's a stable
+                if (verificationResult == true) { // == true because it's a state
                     onContinueClick()
                 } else {
                     Toast.makeText(context, "¡Código incorrecto!", Toast.LENGTH_LONG).show()

@@ -30,7 +30,6 @@ class UserRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
 
             val authResult = auth.signInWithEmailAndPassword(email, password).await()
             val firebaseUser = authResult.user ?: throw Exception("User not found after login")
-            Log.d("LOGGED IN NEW USER", firebaseUser.uid)
 
             val userDoc = firestore.collection("users")
                 .document(firebaseUser.uid)

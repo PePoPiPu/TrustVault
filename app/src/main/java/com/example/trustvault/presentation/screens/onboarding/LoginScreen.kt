@@ -1,5 +1,6 @@
 package com.example.trustvault.presentation.screens.onboarding
 
+import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -23,6 +24,13 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -36,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.trustvault.R
+import com.example.trustvault.domain.models.User
 import com.example.trustvault.presentation.theme.DarkColorScheme
 import com.example.trustvault.presentation.theme.DarkModePrimaryGradient
 import com.example.trustvault.presentation.theme.DisabledButtonGradient
@@ -61,6 +70,7 @@ import com.example.trustvault.presentation.viewmodels.onboarding.LoginScreenView
      *
      * @author David Pires Manzanares
      */
+
     @Composable // Composable object
     fun LoginScreen(
         viewModel: LoginScreenViewModel = hiltViewModel(),
@@ -70,6 +80,7 @@ import com.example.trustvault.presentation.viewmodels.onboarding.LoginScreenView
     ) {
         val darkTheme = viewModel.darkTheme
         val context = LocalContext.current
+
         Column (
             modifier = Modifier // Create this column and the attributes
                 .fillMaxSize()
@@ -162,11 +173,24 @@ import com.example.trustvault.presentation.viewmodels.onboarding.LoginScreenView
 
             Spacer(modifier = Modifier.height(40.dp))
 
+            // Check if the login was successful before going to the next screen
+            // Avoids issues with asynchronous operations firing after
+            // and not grabbing the userId in the StoredAccountRepositoryImpl
+            LaunchedEffect(viewModel.loginResult.value) {
+                val result = viewModel.loginResult.value
+
+                if(result != null) {
+                    if(result == true) {
+                        onContinueClick()
+                    } else {
+                        Toast.makeText(context, "El usuario o la contraseña son incorrectos", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+
             Button (
                 onClick = {
                     viewModel.loginUser()
-                    Toast.makeText(context, "Logged in user", Toast.LENGTH_SHORT).show()
-                    onContinueClick()
                 },
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
@@ -232,6 +256,20 @@ import com.example.trustvault.presentation.viewmodels.onboarding.LoginScreenView
                             Toast.makeText(context, "Te pasa por cafre, cacho mamón.", Toast.LENGTH_SHORT).show()
                         }
                 )
+            }
+        }
+    }
+
+    @Composable
+    fun ValidateLogin(loginResult: Result<User>, context: Context, onLoginSuccess: (Boolean) -> Unit) {
+        LaunchedEffect(loginResult) {
+            val result = loginResult
+            if(result.isSuccess ) {
+                Toast.makeText(context, "Inicio de sesión realizado con éxito", Toast.LENGTH_SHORT).show()
+                onLoginSuccess(true)
+            } else {
+                Toast.makeText(context, "El usuario o la contraseña son incorrectos", Toast.LENGTH_SHORT).show()
+                onLoginSuccess(false)
             }
         }
     }
