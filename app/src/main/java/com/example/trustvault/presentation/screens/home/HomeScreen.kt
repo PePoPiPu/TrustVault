@@ -37,7 +37,6 @@ fun HomeScreen(
     // is composed
     LaunchedEffect(Unit) {
         viewModel.getAccounts()
-        Log.d("Accounts", getAccountResult.toString())
     }
 
     Column (
