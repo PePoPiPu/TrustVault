@@ -41,6 +41,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.trustvault.presentation.utils.GradientTrackSwitch
+import com.example.trustvault.presentation.utils.RatingDialog
 import com.example.trustvault.presentation.viewmodels.home.user_profile_menu.SettingsScreenViewModel
 import com.example.trustvault.presentation.viewmodels.onboarding.ThemeSelectionViewModel
 
@@ -149,10 +150,21 @@ fun SettingSwitchItem(
 
 @Composable
 fun SettingItem(icon: ImageVector, title: String) {
+
+    var showDialog by remember { mutableStateOf(false) }
+
+    if(showDialog && icon == Icons.Default.Star){
+        RatingDialog(onDismissRequest = { showDialog = false })
+    }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { /* Navigate */ }
+            .clickable {
+                if (icon == Icons.Default.Star) {
+                    showDialog = true
+                }
+            }
             .padding(vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
