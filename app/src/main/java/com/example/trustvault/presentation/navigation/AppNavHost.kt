@@ -12,6 +12,11 @@ import com.example.trustvault.presentation.screens.home.HomeScreen
 import com.example.trustvault.presentation.screens.home.MainScreen
 import com.example.trustvault.presentation.screens.home.SearchScreen
 import com.example.trustvault.presentation.screens.home.UserProfile
+import com.example.trustvault.presentation.screens.home.user_profile_menu.DarkWebSettingsScreen
+import com.example.trustvault.presentation.screens.home.user_profile_menu.SettingsScreen
+import com.example.trustvault.presentation.screens.home.user_profile_menu.FavoritesScreen
+import com.example.trustvault.presentation.screens.home.user_profile_menu.SupportScreen
+import com.example.trustvault.presentation.screens.home.user_profile_menu.TrashScreen
 import com.example.trustvault.presentation.screens.onboarding.GetStartedScreen
 import com.example.trustvault.presentation.screens.onboarding.LoaderScreen
 import com.example.trustvault.presentation.screens.onboarding.LoginScreen
@@ -45,6 +50,13 @@ sealed class Screen(val route: String) {
     data object OnBoardingStep3: Screen("OnBoardingStep3")
     data object OnBoardingCTA: Screen("OnBoardingCTA")
     data object SMSAuth : Screen("SMSAuthScreen")
+
+    // UserProfile
+    data object FavoritesScreen : Screen("FavoritesScreen")
+    data object TrashScreen : Screen("TrashScreen")
+    data object SupportScreen : Screen("SupportScreen")
+    data object SettingsScreen : Screen("SettingsScreen")
+    data object DarkWebSettingsScreen : Screen("DarkWebSettingsScreen")
 
 }
 
@@ -347,7 +359,118 @@ fun AppNavHost(
         composable(
             route = NavScreen.UserProfileScreen.name
         ) {
-            UserProfile()
+            UserProfile(
+                onFavoritesClick = {
+                    navController.navigate(Screen.FavoritesScreen.route)
+                },
+                onTrashClick = {
+                    navController.navigate(Screen.TrashScreen.route)
+                },
+                onSupportClick = {
+                    navController.navigate(Screen.SupportScreen.route)
+                },
+                onSettingsClick = {
+                    navController.navigate(Screen.SettingsScreen.route)
+                },
+                onDarkWebClick = {
+                    navController.navigate(Screen.DarkWebSettingsScreen.route)
+                }
+            )
+        }
+
+        composable(
+            route = Screen.FavoritesScreen.route,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            },
+            exitTransition = { // when you exit the login screen
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            }
+
+        ) {
+            FavoritesScreen()
+        }
+
+        composable(
+            route = Screen.TrashScreen.route,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            },
+            exitTransition = { // when you exit the login screen
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            }
+
+        ) {
+            TrashScreen()
+        }
+
+        composable(
+            route = Screen.SupportScreen.route,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            },
+            exitTransition = { // when you exit the login screen
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            }
+
+        ) {
+            SupportScreen()
+        }
+
+        composable(
+            route = Screen.SettingsScreen.route,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            },
+            exitTransition = { // when you exit the login screen
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            }
+
+        ) {
+            SettingsScreen()
+        }
+
+        composable(
+            route = Screen.DarkWebSettingsScreen.route,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            },
+            exitTransition = { // when you exit the login screen
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            }
+
+        ) {
+            DarkWebSettingsScreen()
         }
     }
 }

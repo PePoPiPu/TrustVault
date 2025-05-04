@@ -43,7 +43,12 @@ import com.example.trustvault.R
 
 @Composable
 fun UserProfile(
-    viewModel: UserProfileViewModel = hiltViewModel()
+    viewModel: UserProfileViewModel = hiltViewModel(),
+    onFavoritesClick: () -> Unit = {},
+    onTrashClick: () -> Unit = {},
+    onSupportClick: () -> Unit = {},
+    onSettingsClick: () -> Unit = {},
+    onDarkWebClick: () -> Unit = {}
 ) {
 
     val darkTheme = viewModel.darkTheme
@@ -106,7 +111,15 @@ fun UserProfile(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { /* Navigate */ }
+                    .clickable {
+                        when(index) {
+                            0 -> onFavoritesClick()
+                            1 -> onTrashClick()
+                            2 -> onSupportClick()
+                            3 -> onSettingsClick()
+                            4 -> onDarkWebClick()
+                        }
+                    }
                     .padding(vertical = 12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
