@@ -51,6 +51,7 @@ fun BottomNavBar(
         containerColor = DarkColorScheme.background,
         modifier = Modifier
             .fillMaxWidth()
+            .background(DarkColorScheme.surface)
             .clip(RoundedCornerShape(35.dp, 35.dp, 0.dp, 0.dp))
     ) {
         menuItems.forEach { item ->
