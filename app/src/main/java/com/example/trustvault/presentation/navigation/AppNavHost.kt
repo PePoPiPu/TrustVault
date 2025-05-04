@@ -15,6 +15,7 @@ import com.example.trustvault.presentation.screens.home.UserProfile
 import com.example.trustvault.presentation.screens.home.user_profile_menu.DarkWebSettingsScreen
 import com.example.trustvault.presentation.screens.home.user_profile_menu.SettingsScreen
 import com.example.trustvault.presentation.screens.home.user_profile_menu.FavoritesScreen
+import com.example.trustvault.presentation.screens.home.user_profile_menu.PrivacyPolicyScreen
 import com.example.trustvault.presentation.screens.home.user_profile_menu.SupportScreen
 import com.example.trustvault.presentation.screens.home.user_profile_menu.TrashScreen
 import com.example.trustvault.presentation.screens.onboarding.GetStartedScreen
@@ -58,6 +59,9 @@ sealed class Screen(val route: String) {
     data object SettingsScreen : Screen("SettingsScreen")
     data object DarkWebSettingsScreen : Screen("DarkWebSettingsScreen")
 
+    // Settings
+    data object PrivacyPolicyScreen : Screen("PrivacyPolicyScreen")
+    data object TermsAndConditionsScreen : Screen("TermsAndConditions")
 }
 
 /**
@@ -451,7 +455,30 @@ fun AppNavHost(
             }
 
         ) {
-            SettingsScreen()
+            SettingsScreen(
+                onPrivacyPolicyClick = {
+                    navController.navigate(Screen.PrivacyPolicyScreen.route)
+                }
+            )
+        }
+
+        composable(
+            route = Screen.PrivacyPolicyScreen.route,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            },
+            exitTransition = { // when you exit the login screen
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            }
+
+        ) {
+            PrivacyPolicyScreen()
         }
 
         composable(
