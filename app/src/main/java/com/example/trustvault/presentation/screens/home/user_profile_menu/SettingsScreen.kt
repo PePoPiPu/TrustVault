@@ -1,5 +1,6 @@
 package com.example.trustvault.presentation.screens.home.user_profile_menu
 
+import android.content.Intent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,6 +21,7 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -38,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.trustvault.presentation.utils.GradientTrackSwitch
@@ -152,10 +155,24 @@ fun SettingSwitchItem(
 fun SettingItem(icon: ImageVector, title: String) {
 
     var showDialog by remember { mutableStateOf(false) }
+    var showSharesheet by remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
     if(showDialog && icon == Icons.Default.Star){
         RatingDialog(onDismissRequest = { showDialog = false })
     }
+
+    if(showSharesheet && icon == Icons.Default.Share) {
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, "Este dialogo nos deja compartir la app") // TODO: Modify later to send the app or beta in google play
+            type = "text/plain"
+        }
+
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        context.startActivity(shareIntent)
+    }
+
 
     Row(
         modifier = Modifier
@@ -163,6 +180,8 @@ fun SettingItem(icon: ImageVector, title: String) {
             .clickable {
                 if (icon == Icons.Default.Star) {
                     showDialog = true
+                } else if(icon == Icons.Default.Share) {
+                    showSharesheet = true
                 }
             }
             .padding(vertical = 12.dp),
