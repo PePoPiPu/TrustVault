@@ -1,5 +1,7 @@
 package com.example.trustvault.presentation.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
@@ -17,6 +19,7 @@ import com.example.trustvault.presentation.screens.home.user_profile_menu.Settin
 import com.example.trustvault.presentation.screens.home.user_profile_menu.FavoritesScreen
 import com.example.trustvault.presentation.screens.home.user_profile_menu.PrivacyPolicyScreen
 import com.example.trustvault.presentation.screens.home.user_profile_menu.SupportScreen
+import com.example.trustvault.presentation.screens.home.user_profile_menu.TermsAndConditionsScreen
 import com.example.trustvault.presentation.screens.home.user_profile_menu.TrashScreen
 import com.example.trustvault.presentation.screens.onboarding.GetStartedScreen
 import com.example.trustvault.presentation.screens.onboarding.LoaderScreen
@@ -53,6 +56,7 @@ sealed class Screen(val route: String) {
     data object SMSAuth : Screen("SMSAuthScreen")
 
     // UserProfile
+    data object UserProfile : Screen("UserProfile")
     data object FavoritesScreen : Screen("FavoritesScreen")
     data object TrashScreen : Screen("TrashScreen")
     data object SupportScreen : Screen("SupportScreen")
@@ -73,6 +77,7 @@ sealed class Screen(val route: String) {
  *
  * @author Alex Álvarez de Sotomayor Sugimoto
  */
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppNavHost(
     navController: NavHostController = rememberNavController(),
@@ -456,8 +461,14 @@ fun AppNavHost(
 
         ) {
             SettingsScreen(
+                onGoBackClick = {
+                    navController.navigate(NavScreen.UserProfileScreen.name)
+                },
                 onPrivacyPolicyClick = {
                     navController.navigate(Screen.PrivacyPolicyScreen.route)
+                },
+                onTermsConditionsClick = {
+                    navController.navigate(Screen.TermsAndConditionsScreen.route)
                 }
             )
         }
@@ -478,7 +489,34 @@ fun AppNavHost(
             }
 
         ) {
-            PrivacyPolicyScreen()
+            PrivacyPolicyScreen(
+                onBack = {
+                    navController.navigate(Screen.SettingsScreen.route)
+                }
+            )
+        }
+
+        composable(
+            route = Screen.TermsAndConditionsScreen.route,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            },
+            exitTransition = { // when you exit the login screen
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            }
+
+        ) {
+            TermsAndConditionsScreen(
+                onBack = {
+                    navController.navigate(Screen.SettingsScreen.route)
+                }
+            )
         }
 
         composable(

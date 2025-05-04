@@ -1,9 +1,5 @@
 package com.example.trustvault.presentation.screens.home.user_profile_menu
 
-import android.content.Context
-import android.os.Build
-import androidx.annotation.RawRes
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -36,16 +32,16 @@ import com.mikepenz.markdown.m3.Markdown
 import com.mikepenz.markdown.m3.markdownColor
 import com.mikepenz.markdown.m3.markdownTypography
 
-@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PrivacyPolicyScreen(onBack: () -> Unit = {}) {
-
+fun TermsAndConditionsScreen(
+    onBack: () -> Unit = {}
+) {
     val context = LocalContext.current
-    var privacyPolicy by remember { mutableStateOf("") }
+    var termsAndConditions by remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) {
-        privacyPolicy = loadMarkdown(context, R.raw.privacy_policy)
+        termsAndConditions = loadMarkdown(context, R.raw.terms_and_conditions)
     }
 
     Scaffold (
@@ -74,25 +70,18 @@ fun PrivacyPolicyScreen(onBack: () -> Unit = {}) {
                 .verticalScroll(rememberScrollState())
         ) {
             Markdown(
-                content = privacyPolicy,
+                content = termsAndConditions,
                 modifier = Modifier.fillMaxWidth(),
                 colors = markdownColor(
                     text = Color.White
                 ),
                 typography = markdownTypography(
                     h1 = TextStyle(fontSize = 18.sp, color = Color.White, fontWeight = FontWeight.Bold),
-                    h2 = TextStyle(fontSize = 16.sp, color = Color.White, fontWeight = FontWeight.SemiBold),
-                    h3 = TextStyle(fontSize = 14.sp, color = Color.White, fontWeight = FontWeight.SemiBold),
+                    h2 = TextStyle(fontSize = 16.sp, color = Color.White, fontWeight = FontWeight.Bold),
                     text = TextStyle(fontSize = 12.sp, color = Color.White),
                     list = TextStyle(fontSize = 12.sp, color = Color.White)
                 )
             )
         }
     }
-}
-
-fun loadMarkdown(context: Context, @RawRes rawResId: Int) :String {
-    return context.resources.openRawResource(rawResId)
-        .bufferedReader()
-        .use { it.readText() }
 }

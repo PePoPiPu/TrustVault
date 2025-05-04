@@ -67,7 +67,7 @@ fun SettingsScreen(
             TopAppBar(
                 title = { Text("Ajustes") },
                 navigationIcon = {
-                    IconButton(onClick = { /* Back action */ }) {
+                    IconButton(onClick = { onGoBackClick() }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Back")
                     }
                 },
@@ -109,7 +109,7 @@ fun SettingsScreen(
             SettingItem(Icons.Default.Star, "Calificar App")
             SettingItem(Icons.Default.Share, "Compartir App")
             SettingItem(Icons.Default.Lock, "Política de privacidad", onPrivacyPolicyClick)
-            SettingItem(Icons.Default.Description, "Términos y Condiciones")
+            SettingItem(Icons.Default.Description, "Términos y Condiciones", onTermsConditionsClick)
             SettingItem(Icons.Default.Email, "Contacto")
 
             Spacer(modifier = Modifier.weight(1f))
@@ -188,6 +188,8 @@ fun SettingItem(icon: ImageVector, title: String, lambda: () -> Unit = {}) {
                 } else if(icon == Icons.Default.Share) {
                     showSharesheet = true
                 } else if (icon == Icons.Default.Lock) {
+                    lambda()
+                } else if (icon == Icons.Default.Description) {
                     lambda()
                 }
             }
