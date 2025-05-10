@@ -76,7 +76,8 @@ import com.example.trustvault.presentation.viewmodels.onboarding.LoginScreenView
         viewModel: LoginScreenViewModel = hiltViewModel(),
         onGoBackClick: () -> Unit = {},
         onRegisterClick: () -> Unit = {},
-        onContinueClick: () -> Unit = {}
+        onContinueClick: () -> Unit = {},
+        onForgotPasswordClick: () -> Unit = {}
     ) {
         val darkTheme = viewModel.darkTheme
         val context = LocalContext.current
@@ -93,7 +94,8 @@ import com.example.trustvault.presentation.viewmodels.onboarding.LoginScreenView
             // Go back icon
             Row (
                 modifier = Modifier
-                    .fillMaxWidth(0.9f),
+                    .fillMaxWidth(0.9f)
+                    .padding(top = 32.dp, start = 16.dp),
                 horizontalArrangement = Arrangement.Start
             ) {
                 Image(
@@ -252,7 +254,7 @@ import com.example.trustvault.presentation.viewmodels.onboarding.LoginScreenView
                     modifier = Modifier
                         .padding(bottom = 32.dp)
                         .clickable {
-                            /* TODO: Go to Lost password activity */
+                            onForgotPasswordClick()
                             Toast.makeText(context, "Te pasa por cafre, cacho mamón.", Toast.LENGTH_SHORT).show()
                         }
                 )
