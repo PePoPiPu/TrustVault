@@ -370,6 +370,9 @@ fun AppNavHost(
             ForgotPassword(
                 onGoBackClick = {
                     navController.navigate(Screen.Login.route)
+                },
+                onContinueClick = {
+                    navController.navigate(Screen.Login.route)
                 }
             )
         }

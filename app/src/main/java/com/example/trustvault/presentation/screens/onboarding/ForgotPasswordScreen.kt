@@ -133,6 +133,7 @@ fun ForgotPassword(
             if(result != null) {
                 if(result == true) {
                     onContinueClick()
+                    Toast.makeText(context, "Email sent!", Toast.LENGTH_LONG).show()
                 } else {
                     Toast.makeText(context, "Email doesn't exist", Toast.LENGTH_LONG).show()
                 }
