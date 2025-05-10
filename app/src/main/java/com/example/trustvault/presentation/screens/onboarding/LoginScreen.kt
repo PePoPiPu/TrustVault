@@ -1,5 +1,6 @@
 package com.example.trustvault.presentation.screens.onboarding
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -42,7 +43,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.ComponentActivity
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModelStoreOwner
 import com.example.trustvault.R
 import com.example.trustvault.domain.models.User
 import com.example.trustvault.presentation.theme.DarkColorScheme
@@ -50,6 +53,7 @@ import com.example.trustvault.presentation.theme.DarkModePrimaryGradient
 import com.example.trustvault.presentation.theme.DisabledButtonGradient
 import com.example.trustvault.presentation.theme.LightColorScheme
 import com.example.trustvault.presentation.theme.LightModePrimaryGradient
+import com.example.trustvault.presentation.viewmodels.home.HomeScreenViewModel
 import com.example.trustvault.presentation.viewmodels.onboarding.LoginScreenViewModel
 
     /**
@@ -71,6 +75,7 @@ import com.example.trustvault.presentation.viewmodels.onboarding.LoginScreenView
      * @author David Pires Manzanares
      */
 
+    @SuppressLint("RestrictedApi")
     @Composable // Composable object
     fun LoginScreen(
         viewModel: LoginScreenViewModel = hiltViewModel(),
@@ -78,6 +83,10 @@ import com.example.trustvault.presentation.viewmodels.onboarding.LoginScreenView
         onRegisterClick: () -> Unit = {},
         onContinueClick: () -> Unit = {}
     ) {
+        // Shared viewModel between LoginScreen and HomeScreen
+        val activity = LocalContext.current as ComponentActivity
+        val homeViewModel: HomeScreenViewModel = hiltViewModel(activity as ViewModelStoreOwner)
+
         val darkTheme = viewModel.darkTheme
         val context = LocalContext.current
 
@@ -181,6 +190,7 @@ import com.example.trustvault.presentation.viewmodels.onboarding.LoginScreenView
 
                 if(result != null) {
                     if(result == true) {
+                        homeViewModel.getAccounts()
                         onContinueClick()
                     } else {
                         Toast.makeText(context, "El usuario o la contraseña son incorrectos", Toast.LENGTH_LONG).show()

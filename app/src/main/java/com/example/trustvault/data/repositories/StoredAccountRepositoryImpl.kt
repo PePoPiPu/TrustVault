@@ -30,7 +30,7 @@ class StoredAccountRepositoryImpl @Inject constructor(private val firestore: Fir
                     .await()
 
                 val accounts = snapshot.documents.mapNotNull { it.toObject(StoredAccount::class.java)!! }
-                Log.d("Accounts", accounts.first().toString())
+                Log.d("Accounts", accounts.first().platformName.toString())
                 Result.success(accounts)
             } else {
                 throw Exception("User is not logged in")
