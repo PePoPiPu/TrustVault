@@ -164,6 +164,15 @@ class UserRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
         }
     }
 
+    override suspend fun forgotPassword(email: String): Result<Unit> {
+        return try {
+            auth.sendPasswordResetEmail(email).await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     private fun hashPassword(password: String): String {
         val argon2Kt = Argon2Kt()
         // Since strings are immutable and cannot be wiped from memory in a secure manner

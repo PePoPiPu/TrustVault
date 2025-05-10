@@ -1,5 +1,6 @@
 package com.example.trustvault.presentation.screens.onboarding
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,6 +23,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,11 +45,11 @@ import com.example.trustvault.presentation.theme.DarkModePrimaryGradient
 import com.example.trustvault.presentation.theme.DisabledButtonGradient
 import com.example.trustvault.presentation.theme.LightColorScheme
 import com.example.trustvault.presentation.theme.LightModePrimaryGradient
-import com.example.trustvault.presentation.viewmodels.onboarding.LoginScreenViewModel
+import com.example.trustvault.presentation.viewmodels.onboarding.ForgotPasswordViewModel
 
 @Composable
 fun ForgotPassword(
-    viewModel: LoginScreenViewModel = hiltViewModel(),
+    viewModel: ForgotPasswordViewModel = hiltViewModel(),
     onGoBackClick: () -> Unit = {},
     onContinueClick: () -> Unit = {}
 ) {
@@ -109,11 +111,9 @@ fun ForgotPassword(
         ) {
             // Username Input
             OutlinedTextField(
-                //value = viewModel.email,
-                value = email,
+                value = viewModel.email,
                 singleLine = true,
-                //onValueChange = { viewModel.email = it },
-                onValueChange = { email = it },
+                onValueChange = { viewModel.email = it },
                 label = { Text("Correo electrónico") },
                 modifier = Modifier.fillMaxWidth(0.9f),
                 colors = OutlinedTextFieldDefaults.colors(
@@ -127,9 +127,20 @@ fun ForgotPassword(
         }
         Spacer(modifier = Modifier.height(40.dp))
 
+        LaunchedEffect(viewModel.senPassResult.value) {
+            val result = viewModel.senPassResult.value
+
+            if(result != null) {
+                if(result == true) {
+                    onContinueClick()
+                } else {
+                    Toast.makeText(context, "Email doesn't exist", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
         Button (
             onClick = {
-                viewModel.loginUser()
+                viewModel.sendPasswordEmail()
             },
             modifier = Modifier
                 .fillMaxWidth(0.9f)
