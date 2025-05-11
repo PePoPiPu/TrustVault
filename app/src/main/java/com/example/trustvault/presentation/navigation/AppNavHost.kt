@@ -12,6 +12,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.trustvault.presentation.screens.home.DarkWebMonitor
 import com.example.trustvault.presentation.screens.home.HomeScreen
 import com.example.trustvault.presentation.screens.home.MainScreen
+import com.example.trustvault.presentation.screens.home.NewPasswordScreen
 import com.example.trustvault.presentation.screens.home.SearchScreen
 import com.example.trustvault.presentation.screens.home.UserProfile
 import com.example.trustvault.presentation.screens.home.user_profile_menu.DarkWebSettingsScreen
@@ -54,6 +55,7 @@ sealed class Screen(val route: String) {
     data object OnBoardingStep3: Screen("OnBoardingStep3")
     data object OnBoardingCTA: Screen("OnBoardingCTA")
     data object SMSAuth : Screen("SMSAuthScreen")
+    data object NewPasswordScreen : Screen("NewPasswordScreen")
 
     // UserProfile
     data object UserProfile : Screen("UserProfile")
@@ -353,7 +355,11 @@ fun AppNavHost(
         composable(
             route = NavScreen.HomeScreen.name
         ) {
-            HomeScreen()
+            HomeScreen(
+                onAddClick = {
+                    navController.navigate(Screen.NewPasswordScreen.route)
+                }
+            )
         }
         composable(
             route = NavScreen.SearchScreen.name
@@ -383,6 +389,32 @@ fun AppNavHost(
                 },
                 onDarkWebClick = {
                     navController.navigate(Screen.DarkWebSettingsScreen.route)
+                }
+            )
+        }
+
+        composable(
+            route = Screen.NewPasswordScreen.route,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            },
+            exitTransition = { // when you exit the login screen
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            }
+
+        ) {
+            NewPasswordScreen(
+                onBackClick = {
+                    navController.navigate(NavScreen.HomeScreen.name)
+                },
+                onContinueClick = {
+                    navController.navigate(NavScreen.HomeScreen.name)
                 }
             )
         }
