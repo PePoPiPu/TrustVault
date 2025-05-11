@@ -11,11 +11,23 @@ import javax.inject.Inject
 class StoredAccountRepositoryImpl @Inject constructor(private val firestore: FirebaseFirestore) : StoredAccountRepository {
     override suspend fun addAccount(
         userId: String,
-        accountName: String,
-        accountEmail: String,
-        accountPassword: String
+        newAccount: StoredAccount
     ): Result<Unit> {
-        TODO("Not yet implemented")
+        return try {
+            if (FirebaseAuth.getInstance().currentUser?.uid != null) {
+                val snapshot = FirebaseFirestore.getInstance()
+                    .collection("users")
+                    .document(userId)
+                    .collection("accounts")
+                    .add(newAccount)
+                    .await()
+                Result.success(Unit)
+            } else {
+                throw Exception("User is not logged in")
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
     override suspend fun getAccounts(userId: String): Result<List<StoredAccount>> {

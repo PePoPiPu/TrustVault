@@ -1,8 +1,6 @@
 package com.example.trustvault.presentation.screens.home
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -33,7 +31,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -46,7 +43,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.trustvault.presentation.theme.DarkColorScheme
 import com.example.trustvault.presentation.theme.DarkModePrimaryGradient
-import com.example.trustvault.presentation.theme.DisabledButtonGradient
 import com.example.trustvault.presentation.theme.LightColorScheme
 import com.example.trustvault.presentation.theme.LightModePrimaryGradient
 import com.example.trustvault.presentation.utils.rememberImeState
@@ -115,8 +111,8 @@ fun NewPasswordScreen(
 
                 // Input Fields
                 OutlinedTextField(
-                    value = platform,
-                    onValueChange = { platform = it },
+                    value = viewModel.platformName,
+                    onValueChange = { viewModel.platformName = it },
                     singleLine = true,
                     label = { Text("Plataforma") },
                     modifier = Modifier
@@ -137,8 +133,8 @@ fun NewPasswordScreen(
                 )
 
                 OutlinedTextField(
-                    value = email,
-                    onValueChange = { email = it },
+                    value = viewModel.email,
+                    onValueChange = { viewModel.email = it },
                     label = { Text("Email") },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -158,8 +154,8 @@ fun NewPasswordScreen(
                 )
 
                 OutlinedTextField(
-                    value = password,
-                    onValueChange = { password = it },
+                    value = viewModel.password,
+                    onValueChange = { viewModel.password = it },
                     label = { Text("Contraseña") },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -184,6 +180,7 @@ fun NewPasswordScreen(
                 // Continue Button
                 Button (
                     onClick = {
+                        viewModel.addAccount()
                         onContinueClick()
                     },
                     modifier = Modifier
