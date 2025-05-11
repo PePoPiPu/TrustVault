@@ -26,12 +26,6 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -83,9 +77,6 @@ import com.example.trustvault.presentation.viewmodels.onboarding.LoginScreenView
         onRegisterClick: () -> Unit = {},
         onContinueClick: () -> Unit = {}
     ) {
-        // Shared viewModel between LoginScreen and HomeScreen
-        val activity = LocalContext.current as ComponentActivity
-        val homeViewModel: HomeScreenViewModel = hiltViewModel(activity as ViewModelStoreOwner)
 
         val darkTheme = viewModel.darkTheme
         val context = LocalContext.current
@@ -190,7 +181,6 @@ import com.example.trustvault.presentation.viewmodels.onboarding.LoginScreenView
 
                 if(result != null) {
                     if(result == true) {
-                        homeViewModel.getAccounts()
                         onContinueClick()
                     } else {
                         Toast.makeText(context, "El usuario o la contraseña son incorrectos", Toast.LENGTH_LONG).show()

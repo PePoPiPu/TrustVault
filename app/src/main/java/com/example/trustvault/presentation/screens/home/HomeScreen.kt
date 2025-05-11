@@ -16,18 +16,17 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.app.ComponentActivity
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModelStoreOwner
 import com.example.trustvault.presentation.theme.DarkColorScheme
 import com.example.trustvault.presentation.theme.LightColorScheme
 import com.example.trustvault.presentation.utils.AccountCard
@@ -41,21 +40,14 @@ fun HomeScreen(
     onAddClick: () -> Unit = {}
 ) {
 
-    // Shared viewModel between LoginScreen and HomeScreen
-    val activity = LocalContext.current as ComponentActivity
-    val viewModel: HomeScreenViewModel = hiltViewModel(activity as ViewModelStoreOwner)
-
     val darkTheme = viewModel.darkTheme
-    var getAccountsResult = viewModel.getAccountsResult.value
+    val getAccountsResult by viewModel.getAccountsResult.observeAsState()
 
     // We use launchedEffect(Unit) because it will only run the first time the composable
     // is composed
     LaunchedEffect(Unit) {
         viewModel.getAccounts()
-        getAccountsResult = viewModel.getAccountsResult.value
     }
-
-
 
     Column (
         modifier = Modifier
