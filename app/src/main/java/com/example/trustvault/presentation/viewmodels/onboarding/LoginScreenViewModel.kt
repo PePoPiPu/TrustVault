@@ -33,6 +33,7 @@ class LoginScreenViewModel @Inject constructor(
     ): ViewModel() {
 
     val darkTheme = userPreferencesManager.getCurrentTheme()
+    val registrationStatus = userPreferencesManager.getCurrentRegistrationStatus()
 
     var username by mutableStateOf("")
     var password by mutableStateOf("")
@@ -57,4 +58,6 @@ class LoginScreenViewModel @Inject constructor(
 
         }
     }
+
+
 }

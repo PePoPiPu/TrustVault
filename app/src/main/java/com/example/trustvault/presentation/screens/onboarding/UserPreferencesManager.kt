@@ -57,6 +57,7 @@ class UserPreferencesManager @Inject constructor(application: Application) { // 
     private val LANGUAGE_KEY = stringPreferencesKey("language")
     private val NOTIFICATIONS_KEY = booleanPreferencesKey("notifications_enabled")
     private val AUTH_TYPE_KEY = booleanPreferencesKey("biometric_auth_enabled")
+    private val IS_REGISTERED_KEY = booleanPreferencesKey("is_registered")
 
     /**
      * A flow that emits the current value of the dark theme preference.
@@ -94,6 +95,10 @@ class UserPreferencesManager @Inject constructor(application: Application) { // 
     val authTypeFlow: Flow<Boolean> = context.dataStore.data.map { preferences ->
         preferences[AUTH_TYPE_KEY] ?: true
     }
+
+    val isRegisteredFlow: Flow<Boolean> = context.dataStore.data.map { preferences ->
+        preferences[IS_REGISTERED_KEY] ?: true // SET TO FALSE WHEN NOT TESTING!!!!!
+    }
     // Save preferences
     // I/O operations should always be done asynchronously
     // A suspend function can pause its execution at certain points and resume later.
@@ -110,8 +115,11 @@ class UserPreferencesManager @Inject constructor(application: Application) { // 
         context.dataStore.edit { preferences -> preferences[NOTIFICATIONS_KEY] = enabled }
     }
 
-    suspend fun saveAuthType(enabled: Boolean) {
-        context.dataStore.edit { preferences -> preferences[AUTH_TYPE_KEY] = enabled }
+    suspend fun saveAuthType(isBiometric: Boolean) {
+        context.dataStore.edit { preferences -> preferences[AUTH_TYPE_KEY] = isBiometric }
+    }
+    suspend fun saveIsRegistered(isRegistered: Boolean) {
+        context.dataStore.edit { preferences -> preferences[IS_REGISTERED_KEY] = isRegistered }
     }
 
     // Synchronous way to get values (for initialization in UI)
@@ -119,4 +127,5 @@ class UserPreferencesManager @Inject constructor(application: Application) { // 
     fun getCurrentLanguage(): String = runBlocking { languageFlow.first() }
     fun getCurrentNotifications(): Boolean = runBlocking { notificationsFlow.first() }
     fun getCurrentAuthType() : Boolean = runBlocking { authTypeFlow.first() }
+    fun getCurrentRegistrationStatus() : Boolean = runBlocking { isRegisteredFlow.first() }
 }

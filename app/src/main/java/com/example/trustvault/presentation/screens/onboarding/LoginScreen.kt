@@ -79,9 +79,12 @@ import com.example.trustvault.presentation.viewmodels.onboarding.LoginScreenView
     ) {
 
         val darkTheme = viewModel.darkTheme
+        val isRegistered = viewModel.registrationStatus
         val context = LocalContext.current
 
-        // check userPreferencesManager from the viewModel if biometric login is enabled
+       if(isRegistered) {
+           BiometricLoginScreen()
+       }
 
         Column (
             modifier = Modifier // Create this column and the attributes
