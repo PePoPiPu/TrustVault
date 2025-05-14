@@ -9,7 +9,9 @@ import java.security.SecureRandom
 import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
+import javax.inject.Singleton
 
+@Singleton
 object EncryptionManager {
     private const val IV_LENGTH = 12
     private const val SALT_LENGTH = 16
@@ -27,7 +29,7 @@ object EncryptionManager {
     }
 
     // Derives an encryption key from the master password.
-    fun deriveKeyFromMaster(password: String, salt: ByteArray): ByteArray {
+    fun deriveKeyFromMaster(password: String): ByteArray {
         val argon2Kt = Argon2Kt()
 
         val hash : Argon2KtResult = argon2Kt.hash(
@@ -44,7 +46,7 @@ object EncryptionManager {
         // Transfer bytes from the buffer to destination byteArray
         byteBuffer.get(byteArray)
         // Sliced sub-array return to ensure we get only the first 32 bytes (argon2 hash might be longer)
-        return byteArray.sliceArray(0 until 32)
+        return byteArray.sliceArray(0 until 32) // 256 bit encryption key
     }
 
     fun encrypt (plaintextPassword: String, key: ByteArray) : EncryptedData {

@@ -1,5 +1,7 @@
 package com.example.trustvault.presentation.screens.onboarding
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,6 +22,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,6 +46,7 @@ import com.example.trustvault.presentation.viewmodels.onboarding.GetStartedViewM
      *
      * @author Alex Sugimoto
      */
+    @RequiresApi(Build.VERSION_CODES.R)
     @Composable // Allows us to create a Composable object
     fun GetStartedScreen(
         viewModel: GetStartedViewModel = hiltViewModel(),
@@ -50,6 +54,9 @@ import com.example.trustvault.presentation.viewmodels.onboarding.GetStartedViewM
         onRegisterClick: () -> Unit = {}
     ) {
         val darkTheme = viewModel.darkTheme.value ?: true
+        LaunchedEffect(Unit) {
+            viewModel.checkKey()
+        }
         Column (
             modifier = Modifier // Defining the attributes for this column
                 .fillMaxSize() // Make the layout fill all available space

@@ -27,14 +27,8 @@ class PasswordViewModel @Inject constructor(
     var password by mutableStateOf("")
 
     fun addAccount() {
-        val newAccount = StoredAccount(
-            platformName = platformName,
-            storedEmail = email,
-            storedPassword = password
-        )
-
         viewModelScope.launch {
-            val result = addAccountUseCase.addNewAccount(currentUserId, newAccount)
+            val result = addAccountUseCase.addNewAccount(currentUserId, platformName, email, password)
         }
     }
 }

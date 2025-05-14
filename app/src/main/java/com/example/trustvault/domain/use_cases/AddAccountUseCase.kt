@@ -5,7 +5,7 @@ import com.example.trustvault.domain.repositories.StoredAccountRepository
 import javax.inject.Inject
 
 class AddAccountUseCase @Inject constructor(private val storedAccountRepository: StoredAccountRepository) {
-    suspend fun addNewAccount(userId: String, newAccount: StoredAccount) : Result<Unit> {
-        return storedAccountRepository.addAccount(userId, newAccount)
+    suspend fun addNewAccount(userId: String, platformName: String, email: String, password: String) : Result<Unit> {
+        return storedAccountRepository.addAccount(userId, platformName, email, password)
     }
 }

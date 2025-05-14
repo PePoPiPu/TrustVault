@@ -81,6 +81,8 @@ import com.example.trustvault.presentation.viewmodels.onboarding.LoginScreenView
         val darkTheme = viewModel.darkTheme
         val context = LocalContext.current
 
+        // check userPreferencesManager from the viewModel if biometric login is enabled
+
         Column (
             modifier = Modifier // Create this column and the attributes
                 .fillMaxSize()

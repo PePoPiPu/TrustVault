@@ -1,6 +1,7 @@
 package com.example.trustvault.data.repositories
 
 import android.util.Log
+import com.example.trustvault.data.encryption.EncryptionManager
 import com.example.trustvault.domain.exceptions.UserNotFoundException
 import com.example.trustvault.domain.exceptions.WrongPasswordException
 import com.example.trustvault.domain.models.User
@@ -57,6 +58,9 @@ class UserRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
         val db = FirebaseFirestore.getInstance()
 
         return try {
+
+            val masterKey = EncryptionManager.deriveKeyFromMaster(user.password) // Returns a 256 bit array as an AES encryption key
+
             val encodedArgon2String = hashPassword(user.password)
 
             val userWithHashedPassword = user.copy(password = encodedArgon2String)
