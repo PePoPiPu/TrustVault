@@ -3,9 +3,9 @@ package com.example.trustvault.data.repositories
 import android.util.Log
 import com.example.trustvault.data.encryption.EncryptionManager
 import com.example.trustvault.domain.exceptions.UserNotFoundException
-import com.example.trustvault.domain.exceptions.WrongPasswordException
 import com.example.trustvault.domain.models.User
 import com.example.trustvault.domain.repositories.UserRepository
+import com.example.trustvault.presentation.utils.SecureCredentialStore
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.lambdapioneer.argon2kt.Argon2Kt
@@ -14,9 +14,13 @@ import com.lambdapioneer.argon2kt.Argon2Mode
 import de.mkammerer.argon2.Argon2Factory
 import kotlinx.coroutines.tasks.await
 import java.security.SecureRandom
+import javax.crypto.Cipher
 import javax.inject.Inject
 
-class UserRepositoryImpl @Inject constructor(private val firestore: FirebaseFirestore) : UserRepository {
+class UserRepositoryImpl @Inject constructor(
+    private val firestore: FirebaseFirestore,
+    private val credentialStore: SecureCredentialStore
+    ) : UserRepository {
 
     val auth = FirebaseAuth.getInstance()
 
@@ -52,19 +56,39 @@ class UserRepositoryImpl @Inject constructor(private val firestore: FirebaseFire
     }
 
     override suspend fun registerUser(
-        user: User
+        user: User,
+        cipher: Cipher?
     ): Result<Unit> {
 
         val db = FirebaseFirestore.getInstance()
 
         return try {
 
+            // Create master key by deriving user plain text password through a KDF (Key Derivation Function)
             val masterKey = EncryptionManager.deriveKeyFromMaster(user.password) // Returns a 256 bit array as an AES encryption key
 
+            // Encrypt password with master key and save email + password + IV
+            val encryptedData = EncryptionManager.encrypt(user.password, masterKey)
+
+            credentialStore.saveIv(encryptedData.iv)
+            credentialStore.saveEncryptedPassword(encryptedData.cipherText)
+
+            // Encrypt master key with device key from KeyStore
+
+
+
+
+            val encryptedMasterKeyData = EncryptionManager.encryptMasterKey(masterKey, cipher) // TODO: AQUI PETA
+
+            val masterKeyBase64 = android.util.Base64.encodeToString(encryptedMasterKeyData.cipherText, android.util.Base64.DEFAULT)
+            val ivBase64 = android.util.Base64.encodeToString(encryptedMasterKeyData.iv, android.util.Base64.DEFAULT)
+            // Hash password
             val encodedArgon2String = hashPassword(user.password)
 
-            val userWithHashedPassword = user.copy(password = encodedArgon2String)
+            var userWithHashedPassword = user.copy(password = encodedArgon2String)
 
+            userWithHashedPassword.encryptedKey = masterKeyBase64
+            userWithHashedPassword.iv = ivBase64
             // Register the user first in Firebase Auth
             val authResult = auth.createUserWithEmailAndPassword(user.email, user.password).await()
             // Check if the userId exists

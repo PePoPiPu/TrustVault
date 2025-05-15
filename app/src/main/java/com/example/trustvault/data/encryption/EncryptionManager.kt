@@ -7,6 +7,7 @@ import com.lambdapioneer.argon2kt.Argon2Mode
 import java.nio.ByteBuffer
 import java.security.SecureRandom
 import javax.crypto.Cipher
+import javax.crypto.SecretKey
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 import javax.inject.Singleton
@@ -63,6 +64,20 @@ object EncryptionManager {
         cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivSpec)
 
         val encryptedBytes = cipher.doFinal(plaintextPassword.toByteArray(Charsets.UTF_8))
+
+        return EncryptedData(cipherText = encryptedBytes, iv = iv)
+    }
+
+    fun createCipher(key: SecretKey?): Cipher {
+        val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding", "AndroidKeyStoreBCWorkaround")
+
+        cipher.init(Cipher.ENCRYPT_MODE, key)
+        return cipher
+    }
+
+    fun encryptMasterKey(masterKey: ByteArray, cipher: Cipher?): EncryptedData {
+        val iv = cipher?.iv
+        val encryptedBytes = cipher?.doFinal(masterKey)
 
         return EncryptedData(cipherText = encryptedBytes, iv = iv)
     }

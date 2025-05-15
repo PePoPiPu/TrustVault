@@ -1,6 +1,7 @@
 package com.example.trustvault.presentation.screens.onboarding
 
 import android.annotation.SuppressLint
+import android.hardware.biometrics.BiometricPrompt
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -80,6 +81,7 @@ fun RegisterScreen(
     val focusManager = LocalFocusManager.current // Handles where the current keyboard focus is
     val imeState = rememberImeState()
     val scrollState = rememberScrollState()
+    val showBiometricPrompt = remember { mutableStateOf(false) }
 
     // Shared ViewModel to allow persistance of data between register and auth screen
     val activity = LocalContext.current as ComponentActivity
@@ -368,9 +370,7 @@ fun RegisterScreen(
         // Continue Button
         Button (
             onClick = {
-                viewModel.register()
-                smsAuthViewModel.authorizeUser(context, smsAuthViewModel.phone)
-                onContinueClick()
+                showBiometricPrompt.value = true
             },
             modifier = Modifier
                 .fillMaxWidth(0.9f)
@@ -395,6 +395,19 @@ fun RegisterScreen(
             ) {
                 Text("Continuar", color = Color.White, fontSize = 16.sp)
             }
+        }
+        if(showBiometricPrompt.value) {
+            val cipher = remember { viewModel.initializeCipher() }
+            BiometricRegisterScreen(
+                cryptoObject = androidx.biometric.BiometricPrompt.CryptoObject(cipher),
+                onSuccess = { authorizedCipher ->
+                    viewModel.register(authorizedCipher)
+                    smsAuthViewModel.authorizeUser(context, smsAuthViewModel.phone)
+                    onContinueClick()
+                    showBiometricPrompt.value = false }
+            )
+            smsAuthViewModel.authorizeUser(context, smsAuthViewModel.phone)
+            onContinueClick()
         }
         Spacer(modifier = Modifier.height(20.dp))
     }

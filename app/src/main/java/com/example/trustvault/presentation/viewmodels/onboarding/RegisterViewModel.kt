@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.trustvault.data.encryption.EncryptionManager
 import com.example.trustvault.domain.models.StoredAccount
 import com.example.trustvault.domain.models.User
 import com.example.trustvault.domain.use_cases.RegisterUseCase
@@ -17,15 +18,31 @@ import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.security.KeyStore
+import javax.crypto.Cipher
 import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
     private val userPreferencesManager: UserPreferencesManager,
-    private val registerUseCase: RegisterUseCase
+    private val registerUseCase: RegisterUseCase,
+    private val encryptionManager: EncryptionManager
     ) : ViewModel() {
 
     val darkTheme = userPreferencesManager.getCurrentTheme()
+
+    val keyStore = KeyStore.getInstance("AndroidKeyStore").apply {
+        load(null)
+    }
+
+    val alias = "biometric_protected_key"
+    val keyEntry = keyStore.getEntry(alias, null) as? KeyStore.SecretKeyEntry
+
+    val secretKey = keyEntry?.secretKey
+
+    fun initializeCipher(): Cipher {
+        return encryptionManager.createCipher(secretKey)
+    }
 
     var email by mutableStateOf("")
     var username by mutableStateOf("")
@@ -38,7 +55,7 @@ class RegisterViewModel @Inject constructor(
     val isFormValid: Boolean
         get() = email.isNotBlank() && username.isNotBlank() && phone.isNotBlank() && password.isNotBlank() && confirmPassword.isNotBlank()
 
-    fun register() {
+    fun register(cipher: Cipher) {
         if(!isFormValid) {
             _registrationResult.value = Result.failure(Exception("All fields are required"))
             return
@@ -53,11 +70,13 @@ class RegisterViewModel @Inject constructor(
             email = email,
             username = username,
             phone = phone,
-            password = password
+            password = password,
+            encryptedKey = null,
+            iv =  null
         )
 
         viewModelScope.launch {
-            val result = registerUseCase.execute(user)
+            val result = registerUseCase.execute(user, cipher)
             _registrationResult.value = result
         }
 

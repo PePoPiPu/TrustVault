@@ -37,8 +37,8 @@ class GetStartedViewModel @Inject constructor(
                 "biometric_protected_key",
                 KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
             ).run {
-                setBlockModes(KeyProperties.BLOCK_MODE_GCM)
-                setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
+                setBlockModes(KeyProperties.BLOCK_MODE_CBC)
+                setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
                 setUserAuthenticationRequired(true) // requires biometric authentication
                 setUserAuthenticationParameters(0, KeyProperties.AUTH_BIOMETRIC_STRONG) // requires biometricAuthentication everytime the key is used
                 build()
@@ -49,8 +49,8 @@ class GetStartedViewModel @Inject constructor(
                 "biometric_protected_key",
                 KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
             ).run {
-                setBlockModes(KeyProperties.BLOCK_MODE_GCM)
-                setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
+                setBlockModes(KeyProperties.BLOCK_MODE_CBC)
+                setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
                 setUserAuthenticationRequired(true) // requires biometric authentication
                 setUserAuthenticationParameters(0, KeyProperties.AUTH_DEVICE_CREDENTIAL) // requires biometricAuthentication everytime the key is used
                 build()
@@ -71,6 +71,13 @@ class GetStartedViewModel @Inject constructor(
         keyStore.load(null)
         return keyStore.containsAlias("biometric_protected_key")
     }
+
+//    fun deleteKey() {
+//        val keyStore = KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
+//        if (keyStore.containsAlias("biometric_protected_key")) {
+//            keyStore.deleteEntry("biometric_protected_key")
+//        }
+//    }
 
     @RequiresApi(Build.VERSION_CODES.R)
     fun checkKey() {
