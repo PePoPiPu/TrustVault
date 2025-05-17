@@ -20,9 +20,7 @@ class StoredAccountRepositoryImpl @Inject constructor(
         email: String,
         password: String
     ): Result<Unit> {
-
-        val firebase = FirebaseFirestore.getInstance()
-        val usersRef = firebase.collection("users")
+        val usersRef = firestore.collection("users")
         // Retrieve TrustVault ArgonID hash for current user
         val snapshot = usersRef.whereEqualTo("platformName", "TrustVault")
             .get()
