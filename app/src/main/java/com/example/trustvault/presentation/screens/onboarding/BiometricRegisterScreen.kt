@@ -9,15 +9,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.trustvault.presentation.viewmodels.onboarding.RegisterViewModel
 import javax.crypto.Cipher
 
 @SuppressLint("RestrictedApi")
 @Composable
 fun BiometricRegisterScreen(
     onSuccess: (Cipher) -> Unit = {},
-    viewModel: RegisterViewModel = hiltViewModel(),
     cryptoObject: BiometricPrompt.CryptoObject
 ){
     val context = LocalContext.current

@@ -68,10 +68,17 @@ object EncryptionManager {
         return EncryptedData(cipherText = encryptedBytes, iv = iv)
     }
 
-    fun createCipher(key: SecretKey?): Cipher {
+    fun createEncryptionCipher(key: SecretKey?): Cipher {
         val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding", "AndroidKeyStoreBCWorkaround")
 
         cipher.init(Cipher.ENCRYPT_MODE, key)
+        return cipher
+    }
+
+    fun createDecryptionCipher(key: SecretKey?, iv: ByteArray?): Cipher {
+        val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding", "AndroidKeyStoreBCWorkaround")
+        val ivSpec = IvParameterSpec(iv)
+        cipher.init(Cipher.DECRYPT_MODE, key, ivSpec)
         return cipher
     }
 
@@ -80,6 +87,10 @@ object EncryptionManager {
         val encryptedBytes = cipher?.doFinal(masterKey)
 
         return EncryptedData(cipherText = encryptedBytes, iv = iv)
+    }
+
+    fun decryptMasterKey(masterKey: ByteArray, cipher: Cipher): ByteArray {
+        return cipher.doFinal(masterKey)
     }
 
     fun decrypt(encryptedData: ByteArray, key: ByteArray, iv: ByteArray): String {

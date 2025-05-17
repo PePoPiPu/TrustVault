@@ -406,8 +406,8 @@ fun RegisterScreen(
                     onContinueClick()
                     showBiometricPrompt.value = false }
             )
-            smsAuthViewModel.authorizeUser(context, smsAuthViewModel.phone)
-            onContinueClick()
+//            smsAuthViewModel.authorizeUser(context, smsAuthViewModel.phone)
+//            onContinueClick()
         }
         Spacer(modifier = Modifier.height(20.dp))
     }

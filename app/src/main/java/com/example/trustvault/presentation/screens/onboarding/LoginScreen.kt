@@ -3,6 +3,7 @@ package com.example.trustvault.presentation.screens.onboarding
 import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.Toast
+import androidx.biometric.BiometricPrompt
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -26,6 +27,7 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -37,9 +39,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.app.ComponentActivity
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModelStoreOwner
 import com.example.trustvault.R
 import com.example.trustvault.domain.models.User
 import com.example.trustvault.presentation.theme.DarkColorScheme
@@ -47,7 +47,6 @@ import com.example.trustvault.presentation.theme.DarkModePrimaryGradient
 import com.example.trustvault.presentation.theme.DisabledButtonGradient
 import com.example.trustvault.presentation.theme.LightColorScheme
 import com.example.trustvault.presentation.theme.LightModePrimaryGradient
-import com.example.trustvault.presentation.viewmodels.home.HomeScreenViewModel
 import com.example.trustvault.presentation.viewmodels.onboarding.LoginScreenViewModel
 
     /**
@@ -78,12 +77,32 @@ import com.example.trustvault.presentation.viewmodels.onboarding.LoginScreenView
         onContinueClick: () -> Unit = {}
     ) {
 
+        LaunchedEffect(Unit) {
+            viewModel.getUserIv()
+        }
         val darkTheme = viewModel.darkTheme
         val isRegistered = viewModel.registrationStatus
         val context = LocalContext.current
+        val userIv = viewModel.userIv.value
+        val cipher = remember(userIv) {
+            if(userIv != null && userIv.isNotEmpty()) {
+                viewModel.initializeCipher()
+            } else {
+                null
+            }
+        }
 
-       if(isRegistered) {
-           BiometricLoginScreen()
+
+       if(isRegistered && cipher != null) {
+           BiometricLoginScreen(
+               cryptoObject = BiometricPrompt.CryptoObject(cipher),
+               onSuccess = {authorizedCipher ->
+                   viewModel.loginUserWithBiometrics(authorizedCipher)
+                   if(viewModel.loginResult.value == true) { // Mandatory == true because of MutableState Boolean
+                       onContinueClick()
+                   }
+               }
+           )
        }
 
         Column (

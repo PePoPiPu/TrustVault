@@ -1,5 +1,6 @@
 package com.example.trustvault.data.repositories
 
+import android.util.Base64
 import android.util.Log
 import com.example.trustvault.data.encryption.EncryptionManager
 import com.example.trustvault.domain.exceptions.UserNotFoundException
@@ -15,11 +16,13 @@ import de.mkammerer.argon2.Argon2Factory
 import kotlinx.coroutines.tasks.await
 import java.security.SecureRandom
 import javax.crypto.Cipher
+import javax.crypto.SecretKey
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
     private val firestore: FirebaseFirestore,
-    private val credentialStore: SecureCredentialStore
+    private val credentialStore: SecureCredentialStore,
+    private val encryptionManager: EncryptionManager
     ) : UserRepository {
 
     val auth = FirebaseAuth.getInstance()
@@ -55,11 +58,74 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getUserIv(): Result<ByteArray> {
+        return try {
+            // Get credentials from dataStore
+            val userEmail = credentialStore.getEmail()
+
+            // Get user that has current stored email
+            val querySnapshot = firestore.collection("users")
+                .whereEqualTo("email", userEmail)
+                .get()
+                .await()
+
+            if(!querySnapshot.isEmpty) {
+                val user = querySnapshot.documents[0].toObject(User::class.java)
+
+                val encodedIv = user?.iv
+                val decodedIv = Base64.decode(encodedIv, Base64.DEFAULT)
+
+                return Result.success(decodedIv)
+            } else {
+                return Result.failure(UserNotFoundException())
+            }
+
+        } catch (e: Exception) {
+            Log.d("BIOMETRIC LOGIN ERROR: ", e.toString())
+            return Result.failure(e)
+        }
+    }
+
+    override suspend fun loginBiometricUser(cipher: Cipher, secretKey: SecretKey?): Result<Unit> {
+        return try {
+            // Get credentials from dataStore
+            val userEmail = credentialStore.getEmail()
+            val encodedUserIv = credentialStore.getIv()
+            val encryptedUserPassword = credentialStore.getEncryptedPassword()
+
+            // Get user that has current stored email
+            val querySnapshot = firestore.collection("users")
+                .whereEqualTo("email", userEmail)
+                .get()
+                .await()
+
+            if(!querySnapshot.isEmpty) {
+                val user = querySnapshot.documents[0].toObject(User::class.java)
+
+                val encodedMasterKey = user?.encryptedKey
+                val decodedMasterKey = Base64.decode(encodedMasterKey, Base64.DEFAULT)
+                val masterKey = encryptionManager.decryptMasterKey(decodedMasterKey, cipher)
+                val decodedUserIv = Base64.decode(encodedUserIv, Base64.DEFAULT)
+                val decodedEncryptedUserPassword = Base64.decode(encryptedUserPassword, Base64.DEFAULT)
+                val userPassword = encryptionManager.decrypt(decodedEncryptedUserPassword, masterKey, decodedUserIv)
+
+                loginUser(userEmail, userPassword)
+
+                return Result.success(Unit)
+            } else {
+                return Result.failure(UserNotFoundException())
+            }
+
+        } catch (e: Exception) {
+            Log.d("BIOMETRIC LOGIN ERROR: ", e.toString())
+            return Result.failure(e)
+        }
+    }
+
     override suspend fun registerUser(
         user: User,
         cipher: Cipher?
     ): Result<Unit> {
-
         val db = FirebaseFirestore.getInstance()
 
         return try {

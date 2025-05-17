@@ -1,6 +1,5 @@
 package com.example.trustvault.presentation.viewmodels.onboarding
 
-import android.accounts.Account
 import android.util.Patterns
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
@@ -10,7 +9,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.trustvault.data.encryption.EncryptionManager
-import com.example.trustvault.domain.models.StoredAccount
 import com.example.trustvault.domain.models.User
 import com.example.trustvault.domain.use_cases.RegisterUseCase
 import com.example.trustvault.presentation.screens.onboarding.UserPreferencesManager
@@ -41,7 +39,7 @@ class RegisterViewModel @Inject constructor(
     val secretKey = keyEntry?.secretKey
 
     fun initializeCipher(): Cipher {
-        return encryptionManager.createCipher(secretKey)
+        return encryptionManager.createEncryptionCipher(secretKey)
     }
 
     var email by mutableStateOf("")
