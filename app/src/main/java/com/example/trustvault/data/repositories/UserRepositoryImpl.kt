@@ -71,14 +71,11 @@ class UserRepositoryImpl @Inject constructor(
             val encryptedData = EncryptionManager.encrypt(user.password, masterKey)
 
             credentialStore.saveIv(encryptedData.iv)
+            credentialStore.saveEmail(user.email)
             credentialStore.saveEncryptedPassword(encryptedData.cipherText)
 
             // Encrypt master key with device key from KeyStore
-
-
-
-
-            val encryptedMasterKeyData = EncryptionManager.encryptMasterKey(masterKey, cipher) // TODO: AQUI PETA
+            val encryptedMasterKeyData = EncryptionManager.encryptMasterKey(masterKey, cipher)
 
             val masterKeyBase64 = android.util.Base64.encodeToString(encryptedMasterKeyData.cipherText, android.util.Base64.DEFAULT)
             val ivBase64 = android.util.Base64.encodeToString(encryptedMasterKeyData.iv, android.util.Base64.DEFAULT)

@@ -20,11 +20,16 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 class SecureCredentialStore @Inject constructor(application: Application) {
     private val context: Context = application.applicationContext
     private val IV_KEY = stringPreferencesKey("iv")
+    private val EMAIL_KEY = stringPreferencesKey("email")
     private val ENCRYPTED_PASS_KEY = stringPreferencesKey("encryptedPassword")
 
 
     val ivFlow: Flow<String> = context.dataStore.data.map { preferences ->
         preferences[IV_KEY] ?: ""
+    }
+
+    val emailFlow: Flow<String> = context.dataStore.data.map { preferences ->
+        preferences[EMAIL_KEY] ?: ""
     }
 
     val encryptedPassFlow: Flow<String> = context.dataStore.data.map { preferences ->
@@ -35,6 +40,10 @@ class SecureCredentialStore @Inject constructor(application: Application) {
         context.dataStore.edit { preferences -> preferences[IV_KEY] = iv?.toBase64().toString() }
     }
 
+    suspend fun saveEmail(email: String) {
+        context.dataStore.edit { preferences -> preferences[EMAIL_KEY] = email }
+    }
+
     suspend fun saveEncryptedPassword(encryptedPassword: ByteArray?) {
        context.dataStore.edit { preferences -> preferences[ENCRYPTED_PASS_KEY] =
            encryptedPassword?.toBase64().toString()
@@ -42,6 +51,7 @@ class SecureCredentialStore @Inject constructor(application: Application) {
     }
 
     suspend fun getIv(): String = ivFlow.first()
+    suspend fun getEmail(): String = emailFlow.first()
     suspend fun getEncryptedPassword(): String = encryptedPassFlow.first()
 
     // Saving a ByteArray as a base64 string allows for safe saving (safe as in no data corruption)
