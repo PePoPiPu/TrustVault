@@ -1,13 +1,16 @@
 package com.example.trustvault.data.repositories
 
+import android.util.Base64
 import android.util.Log
 import com.example.trustvault.data.encryption.EncryptionManager
 import com.example.trustvault.domain.models.StoredAccount
+import com.example.trustvault.domain.models.User
 import com.example.trustvault.domain.repositories.StoredAccountRepository
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
+import javax.crypto.Cipher
 import javax.inject.Inject
 
 class StoredAccountRepositoryImpl @Inject constructor(
@@ -18,31 +21,43 @@ class StoredAccountRepositoryImpl @Inject constructor(
         userId: String,
         platformName: String,
         email: String,
-        password: String
+        password: String,
+        cipher: Cipher
     ): Result<Unit> {
-        val usersRef = firestore.collection("users")
-        // Retrieve TrustVault ArgonID hash for current user
-        val snapshot = usersRef.whereEqualTo("platformName", "TrustVault")
+
+        // retrieve master key for current user
+        val currentUser = FirebaseAuth.getInstance().currentUser?.uid
+
+        val docSnapshot = firestore.collection("users")
+            .document(currentUser.toString()) // to non-nullable string
             .get()
             .await()
 
-        val encodedHash = snapshot.documents.mapNotNull { it.toObject(String::class.java) }
-        // extract salt + password
-
-        // Derive that hash (master key)
-
-        // Store derived key in shared preferences or something
-
-        // Encrypt password
-
-        // Construct StoredAccount object
-
+        val user = docSnapshot.toObject(User::class.java)
+        val encryptedMasterKey = Base64.decode(user?.encryptedKey, Base64.DEFAULT)
+        val decryptedMasterKey = String(encryptionManager.decryptMasterKey(encryptedMasterKey, cipher), Charsets.UTF_8)
+        // Create new derived key from master
+        val derivedKey = encryptionManager.deriveKeyFromMaster(decryptedMasterKey)
+        // encrypt password string with derived key
+        val encryptedPasswordData = encryptionManager.encrypt(password, derivedKey)
+        // encode to Base64 encrypted password + iv bytearrays
+        val encryptedCipherText = Base64.encodeToString(encryptedPasswordData.cipherText, Base64.DEFAULT)
+        val encryptedIv = Base64.encodeToString(encryptedPasswordData.iv, Base64.DEFAULT)
+        // upload both the encoded and encrypted iv + ciphertext to firebase
+        val newAccount = StoredAccount(
+            platformName,
+            email,
+            encryptedCipherText,
+            encryptedIv
+        )
         return try {
-            if (FirebaseAuth.getInstance().currentUser?.uid != null) {
+            if (currentUser != null) {
                 val snapshot = FirebaseFirestore.getInstance()
                     .collection("users")
                     .document(userId)
                     .collection("accounts")
+                    .add(newAccount)
+                    .await()
 
                 Result.success(Unit)
             } else {

@@ -1,5 +1,6 @@
 package com.example.trustvault.presentation.screens.home
 
+import androidx.biometric.BiometricPrompt
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -41,6 +42,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.trustvault.presentation.screens.onboarding.GenericBiometricScreen
 import com.example.trustvault.presentation.theme.DarkColorScheme
 import com.example.trustvault.presentation.theme.DarkModePrimaryGradient
 import com.example.trustvault.presentation.theme.LightColorScheme
@@ -62,6 +64,7 @@ fun NewPasswordScreen(
     var platform by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    val showBiometricPrompt = remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -180,8 +183,7 @@ fun NewPasswordScreen(
                 // Continue Button
                 Button (
                     onClick = {
-                        viewModel.addAccount()
-                        onContinueClick()
+                        showBiometricPrompt.value = true
                     },
                     modifier = Modifier
                         .fillMaxWidth(0.9f)
@@ -201,6 +203,19 @@ fun NewPasswordScreen(
                     ) {
                         Text("Continuar", color = Color.White, fontSize = 16.sp)
                     }
+                }
+                if(showBiometricPrompt.value) {
+                    val cipher = remember { viewModel.initializeCipher() }
+                    GenericBiometricScreen(
+                        cryptoObject = BiometricPrompt.CryptoObject(cipher),
+                        onSuccess = {authorizedCipher ->
+                            viewModel.addAccount(authorizedCipher)
+                            onContinueClick()
+                            showBiometricPrompt.value = false
+                        },
+                        title = "Encripta tu contraseña",
+                        subtitle = "Necesitamos tu huella para poder encriptar tu contraseña."
+                    )
                 }
             }
         }

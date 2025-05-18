@@ -51,7 +51,7 @@ class HomeScreenViewModel @Inject constructor(
                 iconResId = platform.iconResId,
                 name = account.platformName,
                 email = account.storedEmail,
-                password = account.storedPassword
+                password = account.encryptedIv // Decrypt to show
             )
         accountItems.add(accItem)
         }

@@ -5,18 +5,21 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.trustvault.domain.models.StoredAccount
+import com.example.trustvault.data.encryption.EncryptionManager
 import com.example.trustvault.domain.use_cases.AddAccountUseCase
 import com.example.trustvault.presentation.screens.onboarding.UserPreferencesManager
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.security.KeyStore
+import javax.crypto.Cipher
 import javax.inject.Inject
 
 @HiltViewModel
 class PasswordViewModel @Inject constructor(
     private val userPreferencesManager: UserPreferencesManager,
-    private val addAccountUseCase: AddAccountUseCase
+    private val addAccountUseCase: AddAccountUseCase,
+    private val encryptionManager: EncryptionManager
 ) : ViewModel() {
     val darkTheme = userPreferencesManager.getCurrentTheme()
     val currentUserId = FirebaseAuth.getInstance().currentUser?.uid.toString()
@@ -26,9 +29,22 @@ class PasswordViewModel @Inject constructor(
     var email by mutableStateOf("")
     var password by mutableStateOf("")
 
-    fun addAccount() {
+    val keyStore = KeyStore.getInstance("AndroidKeyStore").apply {
+        load(null)
+    }
+
+    val alias = "biometric_protected_key"
+    val keyEntry = keyStore.getEntry(alias, null) as? KeyStore.SecretKeyEntry
+
+    val secretKey = keyEntry?.secretKey
+
+    fun initializeCipher(): Cipher {
+        return encryptionManager.createEncryptionCipher(secretKey)
+    }
+
+    fun addAccount(cipher: Cipher) {
         viewModelScope.launch {
-            val result = addAccountUseCase.addNewAccount(currentUserId, platformName, email, password)
+            val result = addAccountUseCase.addNewAccount(currentUserId, platformName, email, password, cipher)
         }
     }
 }
