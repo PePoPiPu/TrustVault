@@ -78,6 +78,7 @@ dependencies {
     implementation("com.mikepenz:multiplatform-markdown-renderer-m3:0.33.0")
     implementation("androidx.security:security-crypto:1.1.0-alpha03")
     implementation("androidx.biometric:biometric:1.1.0")
+    implementation("androidx.compose.ui:ui-graphics:1.4.0") // for background blur effect
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

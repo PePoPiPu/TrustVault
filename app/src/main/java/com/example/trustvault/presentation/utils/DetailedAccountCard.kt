@@ -17,24 +17,22 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import com.example.trustvault.presentation.models.AccountItem
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.trustvault.presentation.models.AccountItem
 
 @Composable
-fun AccountCard(
-    account: AccountItem,
-    openDetailedAccountCard: () -> Unit = {}
-    ) {
+fun DetailedAccountCard(
+    onBackClick: () -> Unit,
+    accountDetails: AccountItem
+) {
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .aspectRatio(1f) // Keep it square
-            .clickable { openDetailedAccountCard() },
+            .fillMaxWidth(),
         colors = CardDefaults.cardColors(Color(0xFF1C1C2A)),
         shape = RoundedCornerShape(20.dp),
         elevation = CardDefaults.cardElevation(8.dp)
@@ -45,13 +43,14 @@ fun AccountCard(
             verticalArrangement = Arrangement.Center
         ) {
             Image(
-                painter = painterResource(id = account.iconResId),
+                painter = painterResource(id = accountDetails.iconResId),
                 contentDescription = null,
                 modifier = Modifier.size(40.dp)
             )
             Spacer(modifier = Modifier.height(12.dp))
-            Text(account.name, color = Color.White, fontWeight = FontWeight.Bold)
-            Text(account.email, color = Color.White.copy(alpha = 0.7f), fontSize = 12.sp, textAlign = TextAlign.Center)
+            Text(accountDetails.name, color = Color.White, fontWeight = FontWeight.Bold)
+            Text(accountDetails.email, color = Color.White.copy(alpha = 0.7f), fontSize = 12.sp, textAlign = TextAlign.Center)
+            Text(accountDetails.password, color = Color.White.copy(alpha = 0.7f), fontSize = 12.sp, textAlign = TextAlign.Center)
         }
     }
 }
