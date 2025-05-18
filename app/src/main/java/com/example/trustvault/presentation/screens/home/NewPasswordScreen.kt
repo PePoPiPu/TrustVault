@@ -26,6 +26,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
@@ -65,6 +66,10 @@ fun NewPasswordScreen(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val showBiometricPrompt = remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        viewModel.getUserIv()
+    }
 
     Box(
         modifier = Modifier

@@ -37,7 +37,7 @@ class StoredAccountRepositoryImpl @Inject constructor(
 
         val user = docSnapshot.toObject(User::class.java)
         val encryptedMasterKey = Base64.decode(user?.encryptedKey, Base64.DEFAULT)
-        val decryptedMasterKey = String(encryptionManager.decryptMasterKey(encryptedMasterKey, cipher), Charsets.UTF_8)
+        val decryptedMasterKey = String(encryptionManager.decryptMasterKey(encryptedMasterKey, cipher), Charsets.UTF_8) // TODO: ¡¡¡¡DECRYPTS DIFFERENT FOR EACH RUN!!!!
         credentialStore.saveMasterKey(decryptedMasterKey)
         // Create new derived key from master
         val derivedKey = encryptionManager.deriveKeyFromMaster(decryptedMasterKey, null)
