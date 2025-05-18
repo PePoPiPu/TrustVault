@@ -32,6 +32,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -60,7 +61,7 @@ fun SettingsScreen(
     var notificationsEnabled by remember { mutableStateOf(true) }
     var darkModeEnabled by remember { mutableStateOf(true) }
 
-    var darkTheme = viewModel.darkTheme
+    val darkTheme by themeViewModel.darkTheme.collectAsState()
 
     Scaffold (
         topBar = {
@@ -100,8 +101,11 @@ fun SettingsScreen(
             SettingSwitchItem(
                 icon = Icons.Default.Brightness6,
                 title = "Modo Oscuro/Claro",
-                checked = darkModeEnabled,
-                onCheckedChange = { darkModeEnabled = it }
+                checked = darkTheme,
+                onCheckedChange = {
+                    themeViewModel.toggleTheme()
+                    darkModeEnabled = !darkModeEnabled
+                }
             )
 
             Spacer(modifier = Modifier.height(16.dp))

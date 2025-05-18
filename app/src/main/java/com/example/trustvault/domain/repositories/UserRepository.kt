@@ -12,4 +12,5 @@ interface UserRepository {
     suspend fun getUser(userId: String): Result<User>
     suspend fun updateUser(user: User): Result<Unit>
     suspend fun deleteUser(user: User): Result<Unit>
+    suspend fun forgotPassword(email: String): Result<Unit>
 }

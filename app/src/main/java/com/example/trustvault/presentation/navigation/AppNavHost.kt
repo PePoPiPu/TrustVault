@@ -22,6 +22,7 @@ import com.example.trustvault.presentation.screens.home.user_profile_menu.Privac
 import com.example.trustvault.presentation.screens.home.user_profile_menu.SupportScreen
 import com.example.trustvault.presentation.screens.home.user_profile_menu.TermsAndConditionsScreen
 import com.example.trustvault.presentation.screens.home.user_profile_menu.TrashScreen
+import com.example.trustvault.presentation.screens.onboarding.ForgotPassword
 import com.example.trustvault.presentation.screens.onboarding.GetStartedScreen
 import com.example.trustvault.presentation.screens.onboarding.LoaderScreen
 import com.example.trustvault.presentation.screens.onboarding.LoginScreen
@@ -45,6 +46,7 @@ sealed class Screen(val route: String) {
     data object GetStarted : Screen("GetStartedActivity")
     data object Login : Screen("Login")
     data object Register : Screen("RegisterActivity")
+    data object ForgotPass : Screen("ForgotPasswordScreen")
 
     data object MainScreen : Screen("MainScreen")
     data object LoaderScreen : Screen("LoadingScreenActivity")
@@ -137,7 +139,12 @@ fun AppNavHost(
                 },
                 onContinueClick = {
                     navController.navigate(Screen.MainScreen.route)
+                },
+                onForgotPasswordClick = {
+                    navController.navigate(Screen.ForgotPass.route)
                 }
+
+
             )
         }
 
@@ -159,6 +166,9 @@ fun AppNavHost(
             ThemeSelectionScreen(
                 onContinueClick = {
                     navController.navigate(Screen.WelcomeScreen.route)
+                },
+                onGoBackClick = {
+                    navController.navigate(Screen.GetStarted.route)
                 }
             )
         }
@@ -343,6 +353,30 @@ fun AppNavHost(
             LoaderScreen(
                 goToMainScreenAfterWait = {
                     navController.navigate(Screen.MainScreen.route)
+                }
+            )
+        }
+        composable (
+            route = Screen.ForgotPass.route,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            },
+            exitTransition = { // when you exit the login screen
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            },
+        ) {
+            ForgotPassword(
+                onGoBackClick = {
+                    navController.navigate(Screen.Login.route)
+                },
+                onContinueClick = {
+                    navController.navigate(Screen.Login.route)
                 }
             )
         }

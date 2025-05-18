@@ -91,7 +91,8 @@ fun ThemeSelectionScreen(
 
         // Theme description
         Text(
-            text = "Presentamos el modo oscuro: \nuna interfaz elegante y amigable para la vista.",
+            text = if (darkTheme) "Presentamos el modo oscuro: \nuna interfaz elegante y amigable para la vista."
+                    else "Presentamos el modo claro: \nuna presentación brillante y pulcra para su interfaz.",
             fontSize = 20.sp,
             color = if (darkTheme) DarkColorScheme.onBackground else LightColorScheme.onBackground,
             textAlign = TextAlign.Center,
