@@ -34,7 +34,7 @@ import com.example.trustvault.presentation.theme.DarkModePrimaryGradient
 import com.example.trustvault.presentation.theme.LightColorScheme
 import com.example.trustvault.presentation.theme.LightModePrimaryGradient
 import com.example.trustvault.presentation.utils.SetSystemBarsAppearance
-import com.example.trustvault.presentation.viewmodels.ThemeSelectionViewModel
+import com.example.trustvault.presentation.viewmodels.onboarding.ThemeSelectionViewModel
 
 /**
  * This composable function displays a screen allowing users to choose between light and dark modes
@@ -44,7 +44,8 @@ import com.example.trustvault.presentation.viewmodels.ThemeSelectionViewModel
 @Composable
 fun ThemeSelectionScreen(
     viewModel: ThemeSelectionViewModel = hiltViewModel(),
-    onContinueClick: () -> Unit = {}
+    onContinueClick: () -> Unit = {},
+    onGoBackClick: () -> Unit = {}
 ) {
     val darkTheme by viewModel.darkTheme.collectAsState()
 
@@ -64,7 +65,23 @@ fun ThemeSelectionScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.weight(0.8f))
-
+        Spacer(modifier = Modifier.height(10.dp))
+        // Go back icon
+        Row (
+            modifier = Modifier
+                .fillMaxWidth(0.9f),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Image(
+                painter = if (darkTheme) painterResource(id = R.drawable.ic_go_back) else painterResource(id = R.drawable.ic_go_back_black),
+                contentDescription = "Go Back Button",
+                modifier = Modifier
+                    .size(25.dp)
+                    .clickable {
+                        onGoBackClick()
+                    }
+            )
+        }
         // Theme Title
         Text(
             text = "Elige un modo",
@@ -74,7 +91,8 @@ fun ThemeSelectionScreen(
 
         // Theme description
         Text(
-            text = "Presentamos el modo oscuro: \nuna interfaz elegante y amigable para la vista.",
+            text = if (darkTheme) "Presentamos el modo oscuro: \nuna interfaz elegante y amigable para la vista."
+                    else "Presentamos el modo claro: \nuna presentación brillante y pulcra para su interfaz.",
             fontSize = 20.sp,
             color = if (darkTheme) DarkColorScheme.onBackground else LightColorScheme.onBackground,
             textAlign = TextAlign.Center,

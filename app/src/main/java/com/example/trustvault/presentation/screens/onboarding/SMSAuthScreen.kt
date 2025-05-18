@@ -54,8 +54,7 @@ import com.example.trustvault.presentation.theme.DarkModePrimaryGradient
 import com.example.trustvault.presentation.theme.DisabledButtonGradient
 import com.example.trustvault.presentation.theme.LightColorScheme
 import com.example.trustvault.presentation.theme.LightModePrimaryGradient
-import com.example.trustvault.presentation.viewmodels.SMSAuthScreenViewModel
-import kotlinx.coroutines.coroutineScope
+import com.example.trustvault.presentation.viewmodels.onboarding.SMSAuthScreenViewModel
 import kotlinx.coroutines.launch
 
 @SuppressLint("RestrictedApi")
@@ -248,7 +247,7 @@ import kotlinx.coroutines.launch
             val verificationResult = viewModel.verificationResult.value
             if(verificationResult != null) {
                 Log.d("VERRESULT", verificationResult.toString())
-                if (verificationResult == true) { // == true because it's a stable
+                if (verificationResult == true) { // == true because it's a state
                     onContinueClick()
                 } else {
                     Toast.makeText(context, "¡Código incorrecto!", Toast.LENGTH_LONG).show()

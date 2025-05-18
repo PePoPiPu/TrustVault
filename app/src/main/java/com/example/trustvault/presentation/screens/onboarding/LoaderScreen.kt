@@ -20,15 +20,21 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.min
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.trustvault.R
 import com.example.trustvault.presentation.theme.DarkColorScheme
 import com.example.trustvault.presentation.theme.LightColorScheme
-import com.example.trustvault.presentation.viewmodels.LoaderScreenViewModel
+import com.example.trustvault.presentation.viewmodels.onboarding.LoaderScreenViewModel
 
 /**
  * LoaderScreen is a composable that shows a loading animation and a success message
@@ -53,6 +59,12 @@ fun LoaderScreen(
 
     val imageSize = min(screenHeight, screenWidth) * 0.8f
 
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.ok_animation))
+    val progress by animateLottieCompositionAsState(
+        composition,
+        iterations = LottieConstants.IterateForever
+    )
+
     // Trigger loading logic when the composable is first launched
     LaunchedEffect(Unit) {
         viewModel.waitForSeconds()
@@ -73,14 +85,14 @@ fun LoaderScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(100.dp))
 
-        Image(
-            painter = painterResource(id = R.drawable.ok),
-            contentDescription = "Successful login/register logo",
+        LottieAnimation(
+            composition = composition,
+            progress = { progress },
             modifier = Modifier
-                .size(imageSize)
-                .padding(top = 60.dp)
+                .size(250.dp)
+                .scale(1.5f)
         )
 
         Row(

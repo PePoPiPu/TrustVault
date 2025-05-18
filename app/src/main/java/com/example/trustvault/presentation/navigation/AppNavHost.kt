@@ -1,5 +1,7 @@
 package com.example.trustvault.presentation.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
@@ -10,8 +12,17 @@ import androidx.navigation.compose.rememberNavController
 import com.example.trustvault.presentation.screens.home.DarkWebMonitor
 import com.example.trustvault.presentation.screens.home.HomeScreen
 import com.example.trustvault.presentation.screens.home.MainScreen
+import com.example.trustvault.presentation.screens.home.NewPasswordScreen
 import com.example.trustvault.presentation.screens.home.SearchScreen
 import com.example.trustvault.presentation.screens.home.UserProfile
+import com.example.trustvault.presentation.screens.home.user_profile_menu.DarkWebSettingsScreen
+import com.example.trustvault.presentation.screens.home.user_profile_menu.SettingsScreen
+import com.example.trustvault.presentation.screens.home.user_profile_menu.FavoritesScreen
+import com.example.trustvault.presentation.screens.home.user_profile_menu.PrivacyPolicyScreen
+import com.example.trustvault.presentation.screens.home.user_profile_menu.SupportScreen
+import com.example.trustvault.presentation.screens.home.user_profile_menu.TermsAndConditionsScreen
+import com.example.trustvault.presentation.screens.home.user_profile_menu.TrashScreen
+import com.example.trustvault.presentation.screens.onboarding.ForgotPassword
 import com.example.trustvault.presentation.screens.onboarding.GetStartedScreen
 import com.example.trustvault.presentation.screens.onboarding.LoaderScreen
 import com.example.trustvault.presentation.screens.onboarding.LoginScreen
@@ -35,6 +46,7 @@ sealed class Screen(val route: String) {
     data object GetStarted : Screen("GetStartedActivity")
     data object Login : Screen("Login")
     data object Register : Screen("RegisterActivity")
+    data object ForgotPass : Screen("ForgotPasswordScreen")
 
     data object MainScreen : Screen("MainScreen")
     data object LoaderScreen : Screen("LoadingScreenActivity")
@@ -45,7 +57,19 @@ sealed class Screen(val route: String) {
     data object OnBoardingStep3: Screen("OnBoardingStep3")
     data object OnBoardingCTA: Screen("OnBoardingCTA")
     data object SMSAuth : Screen("SMSAuthScreen")
+    data object NewPasswordScreen : Screen("NewPasswordScreen")
 
+    // UserProfile
+    data object UserProfile : Screen("UserProfile")
+    data object FavoritesScreen : Screen("FavoritesScreen")
+    data object TrashScreen : Screen("TrashScreen")
+    data object SupportScreen : Screen("SupportScreen")
+    data object SettingsScreen : Screen("SettingsScreen")
+    data object DarkWebSettingsScreen : Screen("DarkWebSettingsScreen")
+
+    // Settings
+    data object PrivacyPolicyScreen : Screen("PrivacyPolicyScreen")
+    data object TermsAndConditionsScreen : Screen("TermsAndConditions")
 }
 
 /**
@@ -57,6 +81,7 @@ sealed class Screen(val route: String) {
  *
  * @author Alex Álvarez de Sotomayor Sugimoto
  */
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppNavHost(
     navController: NavHostController = rememberNavController(),
@@ -114,7 +139,12 @@ fun AppNavHost(
                 },
                 onContinueClick = {
                     navController.navigate(Screen.MainScreen.route)
+                },
+                onForgotPasswordClick = {
+                    navController.navigate(Screen.ForgotPass.route)
                 }
+
+
             )
         }
 
@@ -136,6 +166,9 @@ fun AppNavHost(
             ThemeSelectionScreen(
                 onContinueClick = {
                     navController.navigate(Screen.WelcomeScreen.route)
+                },
+                onGoBackClick = {
+                    navController.navigate(Screen.GetStarted.route)
                 }
             )
         }
@@ -323,6 +356,30 @@ fun AppNavHost(
                 }
             )
         }
+        composable (
+            route = Screen.ForgotPass.route,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            },
+            exitTransition = { // when you exit the login screen
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            },
+        ) {
+            ForgotPassword(
+                onGoBackClick = {
+                    navController.navigate(Screen.Login.route)
+                },
+                onContinueClick = {
+                    navController.navigate(Screen.Login.route)
+                }
+            )
+        }
 
         composable(
             route = Screen.MainScreen.route
@@ -332,7 +389,11 @@ fun AppNavHost(
         composable(
             route = NavScreen.HomeScreen.name
         ) {
-            HomeScreen()
+            HomeScreen(
+                onAddClick = {
+                    navController.navigate(Screen.NewPasswordScreen.route)
+                }
+            )
         }
         composable(
             route = NavScreen.SearchScreen.name
@@ -347,7 +408,200 @@ fun AppNavHost(
         composable(
             route = NavScreen.UserProfileScreen.name
         ) {
-            UserProfile()
+            UserProfile(
+                onFavoritesClick = {
+                    navController.navigate(Screen.FavoritesScreen.route)
+                },
+                onTrashClick = {
+                    navController.navigate(Screen.TrashScreen.route)
+                },
+                onSupportClick = {
+                    navController.navigate(Screen.SupportScreen.route)
+                },
+                onSettingsClick = {
+                    navController.navigate(Screen.SettingsScreen.route)
+                },
+                onDarkWebClick = {
+                    navController.navigate(Screen.DarkWebSettingsScreen.route)
+                }
+            )
+        }
+
+        composable(
+            route = Screen.NewPasswordScreen.route,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            },
+            exitTransition = { // when you exit the login screen
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            }
+
+        ) {
+            NewPasswordScreen(
+                onBackClick = {
+                    navController.navigate(NavScreen.HomeScreen.name)
+                },
+                onContinueClick = {
+                    navController.navigate(NavScreen.HomeScreen.name)
+                }
+            )
+        }
+
+        composable(
+            route = Screen.FavoritesScreen.route,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            },
+            exitTransition = { // when you exit the login screen
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            }
+
+        ) {
+            FavoritesScreen()
+        }
+
+        composable(
+            route = Screen.TrashScreen.route,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            },
+            exitTransition = { // when you exit the login screen
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            }
+
+        ) {
+            TrashScreen()
+        }
+
+        composable(
+            route = Screen.SupportScreen.route,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            },
+            exitTransition = { // when you exit the login screen
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            }
+
+        ) {
+            SupportScreen()
+        }
+
+        composable(
+            route = Screen.SettingsScreen.route,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            },
+            exitTransition = { // when you exit the login screen
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            }
+
+        ) {
+            SettingsScreen(
+                onGoBackClick = {
+                    navController.navigate(NavScreen.UserProfileScreen.name)
+                },
+                onPrivacyPolicyClick = {
+                    navController.navigate(Screen.PrivacyPolicyScreen.route)
+                },
+                onTermsConditionsClick = {
+                    navController.navigate(Screen.TermsAndConditionsScreen.route)
+                }
+            )
+        }
+
+        composable(
+            route = Screen.PrivacyPolicyScreen.route,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            },
+            exitTransition = { // when you exit the login screen
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            }
+
+        ) {
+            PrivacyPolicyScreen(
+                onBack = {
+                    navController.navigate(Screen.SettingsScreen.route)
+                }
+            )
+        }
+
+        composable(
+            route = Screen.TermsAndConditionsScreen.route,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            },
+            exitTransition = { // when you exit the login screen
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            }
+
+        ) {
+            TermsAndConditionsScreen(
+                onBack = {
+                    navController.navigate(Screen.SettingsScreen.route)
+                }
+            )
+        }
+
+        composable(
+            route = Screen.DarkWebSettingsScreen.route,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            },
+            exitTransition = { // when you exit the login screen
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(700) // can be tween or spring
+                )
+            }
+
+        ) {
+            DarkWebSettingsScreen()
         }
     }
 }

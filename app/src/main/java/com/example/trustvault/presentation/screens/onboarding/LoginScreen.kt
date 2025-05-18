@@ -1,6 +1,9 @@
 package com.example.trustvault.presentation.screens.onboarding
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.widget.Toast
+import androidx.biometric.BiometricPrompt
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -23,6 +26,8 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -36,12 +41,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.trustvault.R
+import com.example.trustvault.domain.models.User
 import com.example.trustvault.presentation.theme.DarkColorScheme
 import com.example.trustvault.presentation.theme.DarkModePrimaryGradient
 import com.example.trustvault.presentation.theme.DisabledButtonGradient
 import com.example.trustvault.presentation.theme.LightColorScheme
 import com.example.trustvault.presentation.theme.LightModePrimaryGradient
-import com.example.trustvault.presentation.viewmodels.LoginScreenViewModel
+import com.example.trustvault.presentation.viewmodels.onboarding.LoginScreenViewModel
 
     /**
      * Function that represents the Login Screen
@@ -61,15 +67,44 @@ import com.example.trustvault.presentation.viewmodels.LoginScreenViewModel
      *
      * @author David Pires Manzanares
      */
+
+    @SuppressLint("RestrictedApi")
     @Composable // Composable object
     fun LoginScreen(
         viewModel: LoginScreenViewModel = hiltViewModel(),
         onGoBackClick: () -> Unit = {},
         onRegisterClick: () -> Unit = {},
-        onContinueClick: () -> Unit = {}
+        onContinueClick: () -> Unit = {},
+        onForgotPasswordClick: () -> Unit = {}
     ) {
+
+        LaunchedEffect(Unit) {
+            viewModel.getUserIv()
+        }
         val darkTheme = viewModel.darkTheme
+        val isRegistered = viewModel.registrationStatus
         val context = LocalContext.current
+        val userIv = viewModel.userIv.value
+        val cipher = remember(userIv) {
+            if(userIv != null && userIv.isNotEmpty()) {
+                viewModel.initializeCipher()
+            } else {
+                null
+            }
+        }
+
+       if(isRegistered && cipher != null) {
+           BiometricLoginScreen(
+               cryptoObject = BiometricPrompt.CryptoObject(cipher),
+               onSuccess = {authorizedCipher ->
+                   viewModel.loginUserWithBiometrics(authorizedCipher)
+                   if(viewModel.loginResult.value == true) { // Mandatory == true because of MutableState Boolean
+                       onContinueClick()
+                   }
+               }
+           )
+       }
+
         Column (
             modifier = Modifier // Create this column and the attributes
                 .fillMaxSize()
@@ -82,7 +117,8 @@ import com.example.trustvault.presentation.viewmodels.LoginScreenViewModel
             // Go back icon
             Row (
                 modifier = Modifier
-                    .fillMaxWidth(0.9f),
+                    .fillMaxWidth(0.9f)
+                    .padding(top = 32.dp, start = 16.dp),
                 horizontalArrangement = Arrangement.Start
             ) {
                 Image(
@@ -123,6 +159,7 @@ import com.example.trustvault.presentation.viewmodels.LoginScreenViewModel
                 // Username Input
                 OutlinedTextField(
                     value = viewModel.username,
+                    singleLine = true,
                     onValueChange = { viewModel.username = it },
                     label = { Text("Usuario") },
                     modifier = Modifier.fillMaxWidth(0.9f),
@@ -144,6 +181,7 @@ import com.example.trustvault.presentation.viewmodels.LoginScreenViewModel
                 // Password Input
                 OutlinedTextField(
                     value = viewModel.password,
+                    singleLine = true,
                     onValueChange = { viewModel.password = it },
                     label = { Text("Contraseña") },
                     visualTransformation = PasswordVisualTransformation(),
@@ -160,11 +198,24 @@ import com.example.trustvault.presentation.viewmodels.LoginScreenViewModel
 
             Spacer(modifier = Modifier.height(40.dp))
 
+            // Check if the login was successful before going to the next screen
+            // Avoids issues with asynchronous operations firing after
+            // and not grabbing the userId in the StoredAccountRepositoryImpl
+            LaunchedEffect(viewModel.loginResult.value) {
+                val result = viewModel.loginResult.value
+
+                if(result != null) {
+                    if(result == true) {
+                        onContinueClick()
+                    } else {
+                        Toast.makeText(context, "El usuario o la contraseña son incorrectos", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+
             Button (
                 onClick = {
                     viewModel.loginUser()
-                    Toast.makeText(context, "Logged in user", Toast.LENGTH_SHORT).show()
-                    onContinueClick()
                 },
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
@@ -226,10 +277,24 @@ import com.example.trustvault.presentation.viewmodels.LoginScreenViewModel
                     modifier = Modifier
                         .padding(bottom = 32.dp)
                         .clickable {
-                            /* TODO: Go to Lost password activity */
+                            onForgotPasswordClick()
                             Toast.makeText(context, "Te pasa por cafre, cacho mamón.", Toast.LENGTH_SHORT).show()
                         }
                 )
+            }
+        }
+    }
+
+    @Composable
+    fun ValidateLogin(loginResult: Result<User>, context: Context, onLoginSuccess: (Boolean) -> Unit) {
+        LaunchedEffect(loginResult) {
+            val result = loginResult
+            if(result.isSuccess ) {
+                Toast.makeText(context, "Inicio de sesión realizado con éxito", Toast.LENGTH_SHORT).show()
+                onLoginSuccess(true)
+            } else {
+                Toast.makeText(context, "El usuario o la contraseña son incorrectos", Toast.LENGTH_SHORT).show()
+                onLoginSuccess(false)
             }
         }
     }
