@@ -24,7 +24,6 @@ class PasswordViewModel @Inject constructor(
     val darkTheme = userPreferencesManager.getCurrentTheme()
     val currentUserId = FirebaseAuth.getInstance().currentUser?.uid.toString()
 
-
     var platformName by mutableStateOf("")
     var email by mutableStateOf("")
     var password by mutableStateOf("")

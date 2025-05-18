@@ -131,17 +131,17 @@ class UserRepositoryImpl @Inject constructor(
         return try {
 
             // Create master key by deriving user plain text password through a KDF (Key Derivation Function)
-            val masterKey = EncryptionManager.deriveKeyFromMaster(user.password) // Returns a 256 bit array as an AES encryption key
+            val masterKey = EncryptionManager.deriveKeyFromMaster(user.password, null) // Returns a 256 bit array as an AES encryption key
 
             // Encrypt password with master key and save email + password + IV
-            val encryptedData = EncryptionManager.encrypt(user.password, masterKey)
+            val encryptedData = EncryptionManager.encrypt(user.password, masterKey.derivedKey)
 
             credentialStore.saveIv(encryptedData.iv)
             credentialStore.saveEmail(user.email)
             credentialStore.saveEncryptedPassword(encryptedData.cipherText)
 
             // Encrypt master key with device key from KeyStore
-            val encryptedMasterKeyData = EncryptionManager.encryptMasterKey(masterKey, cipher)
+            val encryptedMasterKeyData = EncryptionManager.encryptMasterKey(masterKey.derivedKey, cipher)
 
             val masterKeyBase64 = android.util.Base64.encodeToString(encryptedMasterKeyData.cipherText, android.util.Base64.DEFAULT)
             val ivBase64 = android.util.Base64.encodeToString(encryptedMasterKeyData.iv, android.util.Base64.DEFAULT)

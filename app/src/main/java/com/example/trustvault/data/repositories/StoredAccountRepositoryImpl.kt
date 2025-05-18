@@ -6,6 +6,7 @@ import com.example.trustvault.data.encryption.EncryptionManager
 import com.example.trustvault.domain.models.StoredAccount
 import com.example.trustvault.domain.models.User
 import com.example.trustvault.domain.repositories.StoredAccountRepository
+import com.example.trustvault.presentation.utils.SecureCredentialStore
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -15,7 +16,8 @@ import javax.inject.Inject
 
 class StoredAccountRepositoryImpl @Inject constructor(
     private val firestore: FirebaseFirestore,
-    private val encryptionManager: EncryptionManager
+    private val encryptionManager: EncryptionManager,
+    private val credentialStore: SecureCredentialStore
 ) : StoredAccountRepository {
     override suspend fun addAccount(
         userId: String,
@@ -36,10 +38,12 @@ class StoredAccountRepositoryImpl @Inject constructor(
         val user = docSnapshot.toObject(User::class.java)
         val encryptedMasterKey = Base64.decode(user?.encryptedKey, Base64.DEFAULT)
         val decryptedMasterKey = String(encryptionManager.decryptMasterKey(encryptedMasterKey, cipher), Charsets.UTF_8)
+        credentialStore.saveMasterKey(decryptedMasterKey)
         // Create new derived key from master
-        val derivedKey = encryptionManager.deriveKeyFromMaster(decryptedMasterKey)
+        val derivedKey = encryptionManager.deriveKeyFromMaster(decryptedMasterKey, null)
         // encrypt password string with derived key
-        val encryptedPasswordData = encryptionManager.encrypt(password, derivedKey)
+        val encryptedPasswordData = encryptionManager.encrypt(password, derivedKey.derivedKey)
+        val derivedKeySalt = Base64.encodeToString(derivedKey.salt, Base64.DEFAULT)
         // encode to Base64 encrypted password + iv bytearrays
         val encryptedCipherText = Base64.encodeToString(encryptedPasswordData.cipherText, Base64.DEFAULT)
         val encryptedIv = Base64.encodeToString(encryptedPasswordData.iv, Base64.DEFAULT)
@@ -48,6 +52,7 @@ class StoredAccountRepositoryImpl @Inject constructor(
             platformName,
             email,
             encryptedCipherText,
+            derivedKeySalt,
             encryptedIv
         )
         return try {

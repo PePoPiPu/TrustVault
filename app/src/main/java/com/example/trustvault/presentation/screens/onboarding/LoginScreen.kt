@@ -92,7 +92,6 @@ import com.example.trustvault.presentation.viewmodels.onboarding.LoginScreenView
             }
         }
 
-
        if(isRegistered && cipher != null) {
            BiometricLoginScreen(
                cryptoObject = BiometricPrompt.CryptoObject(cipher),

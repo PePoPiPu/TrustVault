@@ -1,5 +1,6 @@
 package com.example.trustvault.data.encryption
 
+import com.example.trustvault.domain.models.DerivedKey
 import com.example.trustvault.domain.models.EncryptedData
 import com.lambdapioneer.argon2kt.Argon2Kt
 import com.lambdapioneer.argon2kt.Argon2KtResult
@@ -30,24 +31,51 @@ object EncryptionManager {
     }
 
     // Derives an encryption key from the master password.
-    fun deriveKeyFromMaster(password: String): ByteArray {
+    fun deriveKeyFromMaster(password: String, salt: ByteArray?): DerivedKey {
         val argon2Kt = Argon2Kt()
 
-        val hash : Argon2KtResult = argon2Kt.hash(
-            mode = Argon2Mode.ARGON2_ID,
-            password = password.toByteArray(),
-            salt = generateSalt(),
-            tCostInIterations = 6,
-            mCostInKibibyte = 65526
-        )
+        if(salt == null) {
+            val generatedSalt = generateSalt()
+            val hash : Argon2KtResult = argon2Kt.hash(
+                mode = Argon2Mode.ARGON2_ID,
+                password = password.toByteArray(),
+                salt = generatedSalt,
+                tCostInIterations = 6,
+                mCostInKibibyte = 65526
+            )
 
-        val byteBuffer: ByteBuffer = hash.rawHash
-        // Creates a new byteArray with size = to remaining bytes to be read in the bytebuffer
-        val byteArray = ByteArray(byteBuffer.remaining())
-        // Transfer bytes from the buffer to destination byteArray
-        byteBuffer.get(byteArray)
-        // Sliced sub-array return to ensure we get only the first 32 bytes (argon2 hash might be longer)
-        return byteArray.sliceArray(0 until 32) // 256 bit encryption key
+            val byteBuffer: ByteBuffer = hash.rawHash
+            // Creates a new byteArray with size = to remaining bytes to be read in the bytebuffer
+            val byteArray = ByteArray(byteBuffer.remaining())
+            // Transfer bytes from the buffer to destination byteArray
+            byteBuffer.get(byteArray)
+            // Sliced sub-array return to ensure we get only the first 32 bytes (argon2 hash might be longer)
+            val derivedKey = DerivedKey(
+                derivedKey = byteArray.sliceArray(0 until 32), // 256 bit encryption key
+                salt = generatedSalt
+            )
+            return derivedKey
+        } else {
+            val hash : Argon2KtResult = argon2Kt.hash(
+                mode = Argon2Mode.ARGON2_ID,
+                password = password.toByteArray(),
+                salt = salt,
+                tCostInIterations = 6,
+                mCostInKibibyte = 65526
+            )
+
+            val byteBuffer: ByteBuffer = hash.rawHash
+            // Creates a new byteArray with size = to remaining bytes to be read in the bytebuffer
+            val byteArray = ByteArray(byteBuffer.remaining())
+            // Transfer bytes from the buffer to destination byteArray
+            byteBuffer.get(byteArray)
+            // Sliced sub-array return to ensure we get only the first 32 bytes (argon2 hash might be longer)
+            val derivedKey = DerivedKey(
+                derivedKey = byteArray.sliceArray(0 until 32), // 256 bit encryption key
+                salt = null
+            )
+            return derivedKey
+        }
     }
 
     fun encrypt (plaintextPassword: String, key: ByteArray) : EncryptedData {
