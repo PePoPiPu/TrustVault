@@ -24,15 +24,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.trustvault.presentation.viewmodels.home.HomeScreenViewModel
 
 @Composable
-fun PasswordHealthCard(percentage: Float, lastChecked: String) {
+fun PasswordHealthCard(
+    viewModel: HomeScreenViewModel = hiltViewModel(),
+    percentage: Float,
+    lastChecked: String) {
+    val darkTheme = viewModel.darkTheme
     Card (
         modifier = Modifier
             .padding(top = 30.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)
             .fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFF1C1C2A)
+            containerColor = if (darkTheme) Color(0xFF1E1E1E) else Color(0xFF5F74FF)
         ),
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(
@@ -51,12 +57,12 @@ fun PasswordHealthCard(percentage: Float, lastChecked: String) {
                 Text("Salud general", color = Color.White, fontWeight = FontWeight.Bold)
                 Text(
                     "No se han hayado contraseñas en compromiso",
-                    color = Color.White.copy(alpha = 0.7f),
+                    color = Color.White.copy(alpha = 0.7f) ,
                     fontSize = 13.sp
                 )
                 Spacer(modifier = Modifier.height(4.dp))
-                Text("Última comprobación :", color = Color.Gray, fontSize = 12.sp)
-                Text("Hace $lastChecked", color = Color.White, fontSize = 12.sp)
+                Text("Última comprobación :", color = Color.White, fontSize = 12.sp)
+                Text("Hace $lastChecked", color = Color.White , fontSize = 12.sp)
             }
         }
     }

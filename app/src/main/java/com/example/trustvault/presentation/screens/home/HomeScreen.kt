@@ -63,7 +63,7 @@ fun HomeScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            PasswordHealthCard(1f, "Hace 2 horas")
+            PasswordHealthCard(viewModel, 1f, "Hace 2 horas")
 
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
@@ -80,7 +80,7 @@ fun HomeScreen(
                 if (getAccountsResult != null) {
                     val accountItems = viewModel.getAccountItems(getAccountsResult!!)
                     items(accountItems) { account ->
-                        AccountCard(account, openDetailedAccountCard = { selectedAccount = account })
+                        AccountCard(viewModel, account, openDetailedAccountCard = { selectedAccount = account })
                     }
                 }
             }
@@ -92,7 +92,7 @@ fun HomeScreen(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(16.dp),
-            containerColor = if (darkTheme) DarkColorScheme.background else LightColorScheme.surface
+            containerColor = if (darkTheme) DarkColorScheme.background else Color(0xFF5F74FF)
         ) {
             Icon(
                 imageVector = Icons.Default.Add,

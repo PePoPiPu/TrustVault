@@ -1,8 +1,10 @@
 package com.example.trustvault.presentation.screens.home.user_profile_menu
 
 import android.content.Intent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -44,6 +46,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.trustvault.presentation.theme.DarkColorScheme
+import com.example.trustvault.presentation.theme.LightColorScheme
 import com.example.trustvault.presentation.utils.GradientTrackSwitch
 import com.example.trustvault.presentation.utils.RatingDialog
 import com.example.trustvault.presentation.viewmodels.home.user_profile_menu.SettingsScreenViewModel
@@ -69,18 +73,21 @@ fun SettingsScreen(
                 title = { Text("Ajustes") },
                 navigationIcon = {
                     IconButton(onClick = { onGoBackClick() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                        Icon(
+                            Icons.Default.ArrowBack,
+                            contentDescription = "Back",
+                            tint = if(darkTheme) Color.White else Color.Black)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xFF121212),
-                    titleContentColor = Color.White,
-                    navigationIconContentColor = Color.White
+                    containerColor = if (darkTheme) DarkColorScheme.surface else LightColorScheme.background,
+                    titleContentColor = if(darkTheme) Color.White else Color.Black,
+                    navigationIconContentColor = if(darkTheme) Color.White else Color.Black
                 ),
                 modifier = Modifier.padding(top = 25.dp)
             )
         },
-        containerColor = Color(0xFF121212)
+        containerColor = if (darkTheme) DarkColorScheme.surface else LightColorScheme.background
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -92,6 +99,7 @@ fun SettingsScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             SettingSwitchItem(
+                darkTheme = darkTheme,
                 icon = Icons.Default.Notifications,
                 title = "Notificaciones",
                 checked = notificationsEnabled,
@@ -99,6 +107,7 @@ fun SettingsScreen(
             )
 
             SettingSwitchItem(
+                darkTheme = darkTheme,
                 icon = Icons.Default.Brightness6,
                 title = "Modo Oscuro/Claro",
                 checked = darkTheme,
@@ -110,11 +119,11 @@ fun SettingsScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            SettingItem(Icons.Default.Star, "Calificar App")
-            SettingItem(Icons.Default.Share, "Compartir App")
-            SettingItem(Icons.Default.Lock, "Política de privacidad", onPrivacyPolicyClick)
-            SettingItem(Icons.Default.Description, "Términos y Condiciones", onTermsConditionsClick)
-            SettingItem(Icons.Default.Email, "Contacto")
+            SettingItem(darkTheme, Icons.Default.Star, "Calificar App")
+            SettingItem(darkTheme, Icons.Default.Share, "Compartir App")
+            SettingItem(darkTheme, Icons.Default.Lock, "Política de privacidad", onPrivacyPolicyClick)
+            SettingItem(darkTheme, Icons.Default.Description, "Términos y Condiciones", onTermsConditionsClick)
+            SettingItem(darkTheme, Icons.Default.Email, "Contacto")
 
             Spacer(modifier = Modifier.weight(1f))
 
@@ -127,9 +136,11 @@ fun SettingsScreen(
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(Icons.Default.ExitToApp, contentDescription = "Cerrar Sesión", tint = Color.White)
+                Icon(Icons.Default.ExitToApp,
+                    contentDescription = "Cerrar Sesión",
+                    tint = if(darkTheme) Color.White else Color.Black)
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("Cerrar Sesión", color = Color.White)
+                Text("Cerrar Sesión", color = if(darkTheme) Color.White else Color.Black)
             }
         }
     }
@@ -137,6 +148,7 @@ fun SettingsScreen(
 
 @Composable
 fun SettingSwitchItem(
+    darkTheme: Boolean,
     icon: ImageVector,
     title: String,
     checked: Boolean,
@@ -148,10 +160,11 @@ fun SettingSwitchItem(
             .padding(vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(icon, contentDescription = title, tint = Color.White)
+        Icon(icon, contentDescription = title, tint = if(darkTheme) Color.White else Color.Black)
         Spacer(modifier = Modifier.width(16.dp))
-        Text(title, color = Color.White, modifier = Modifier.weight(1f))
+        Text(title, color = if(darkTheme) Color.White else Color.Black, modifier = Modifier.weight(1f))
         GradientTrackSwitch(
+            darkTheme = darkTheme,
             checked = checked,
             onCheckedChange = onCheckedChange
         )
@@ -159,11 +172,14 @@ fun SettingSwitchItem(
 }
 
 @Composable
-fun SettingItem(icon: ImageVector, title: String, lambda: () -> Unit = {}) {
+fun SettingItem(
+    darkTheme: Boolean,
+    icon: ImageVector,
+    title: String,
+    lambda: () -> Unit = {}) {
 
     var showDialog by remember { mutableStateOf(false) }
     var showSharesheet by remember { mutableStateOf(false) }
-
 
     val context = LocalContext.current
 
@@ -182,7 +198,6 @@ fun SettingItem(icon: ImageVector, title: String, lambda: () -> Unit = {}) {
         context.startActivity(shareIntent)
     }
 
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -200,8 +215,8 @@ fun SettingItem(icon: ImageVector, title: String, lambda: () -> Unit = {}) {
             .padding(vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(icon, contentDescription = title, tint = Color.White)
+        Icon(icon, contentDescription = title, tint = if(darkTheme) Color.White else Color.Black)
         Spacer(modifier = Modifier.width(16.dp))
-        Text(title, color = Color.White)
+        Text(title, color = if(darkTheme) Color.White else Color.Black)
     }
 }

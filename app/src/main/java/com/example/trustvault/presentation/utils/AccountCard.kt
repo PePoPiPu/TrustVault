@@ -24,18 +24,24 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.trustvault.presentation.viewmodels.home.HomeScreenViewModel
 
 @Composable
 fun AccountCard(
+    viewModel: HomeScreenViewModel = hiltViewModel(),
     account: AccountItem,
     openDetailedAccountCard: () -> Unit = {}
     ) {
+    val darkTheme =  viewModel.darkTheme
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .aspectRatio(1f) // Keep it square
             .clickable { openDetailedAccountCard() },
-        colors = CardDefaults.cardColors(Color(0xFF1C1C2A)),
+        colors = CardDefaults.cardColors(
+            if (darkTheme) Color(0xFF1E1E1E) else Color(0xFF5F74FF)
+        ),
         shape = RoundedCornerShape(20.dp),
         elevation = CardDefaults.cardElevation(8.dp)
     ) {

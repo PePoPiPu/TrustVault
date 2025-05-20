@@ -65,12 +65,14 @@ fun UserProfile(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF121212)) // Dark background
+            .background(if (darkTheme) DarkColorScheme.surface else LightColorScheme.background) // Dark background
             .padding(16.dp)
     ) {
         // Profile Section
         Card(
-            colors = CardDefaults.cardColors(Color(0xFF1E1E1E)),
+            colors = CardDefaults.cardColors(
+                if (darkTheme) Color(0xFF1E1E1E) else Color(0xFF5F74FF)
+            ),
             shape = RoundedCornerShape(16.dp),
             elevation = CardDefaults.cardElevation(
                 defaultElevation = 8.dp
@@ -85,13 +87,13 @@ fun UserProfile(
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text("Aniceto González García", color = Color.White, fontWeight = FontWeight.Bold)
-                    Text("anicetogonzalez@gmail.com", color = Color.Gray)
+                    Text("anicetogonzalez@gmail.com", color = if(darkTheme) Color.Gray else Color.White)
                     Button(
                         onClick = { /* Edit profile */ },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFBB86FC)),
+                        colors = ButtonDefaults.buttonColors(containerColor = if(darkTheme) Color(0xFFBB86FC) else Color(0xFF99FFE2)),
                         modifier = Modifier.padding(top = 8.dp)
                     ) {
-                        Text("Editar Perfil", color = Color.White)
+                        Text("Editar Perfil", color = if(darkTheme) Color.White else Color.Black)
                     }
                 }
                 Image(
@@ -123,9 +125,9 @@ fun UserProfile(
                     .padding(vertical = 12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(icons[index], contentDescription = item, tint = Color.White)
+                Icon(icons[index], contentDescription = item, tint = if(darkTheme) Color.White else Color.Black)
                 Spacer(modifier = Modifier.width(16.dp))
-                Text(item, color = Color.White)
+                Text(item, color = if(darkTheme) Color.White else Color.Black)
             }
         }
 
@@ -139,9 +141,9 @@ fun UserProfile(
                 .padding(vertical = 16.dp),
             horizontalArrangement = Arrangement.Start
         ) {
-            Icon(Icons.Default.ExitToApp, contentDescription = "Cerrar Sesión", tint = Color.White)
+            Icon(Icons.Default.ExitToApp, contentDescription = "Cerrar Sesión", tint = if(darkTheme) Color.White else Color.Black)
             Spacer(modifier = Modifier.width(8.dp))
-            Text("Cerrar Sesión", color = Color.White)
+            Text("Cerrar Sesión", color = if(darkTheme) Color.White else Color.Black)
         }
     }
 }

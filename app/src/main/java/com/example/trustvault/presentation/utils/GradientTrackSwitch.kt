@@ -21,9 +21,11 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.trustvault.presentation.theme.DarkModePrimaryGradient
+import com.example.trustvault.presentation.theme.LightModePrimaryGradient
 
 @Composable
 fun GradientTrackSwitch(
+    darkTheme: Boolean,
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit
 ) {
@@ -43,7 +45,7 @@ fun GradientTrackSwitch(
             .clip(RoundedCornerShape(50))
             .background(
                 if (checked)
-                    DarkModePrimaryGradient
+                    if (darkTheme) DarkModePrimaryGradient else LightModePrimaryGradient
                 else
                     Brush.linearGradient(
                         colors = listOf(Color.DarkGray, Color.Gray)

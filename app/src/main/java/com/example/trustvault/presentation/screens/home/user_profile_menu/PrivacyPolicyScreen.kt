@@ -31,16 +31,25 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.trustvault.R
+import com.example.trustvault.presentation.theme.DarkColorScheme
+import com.example.trustvault.presentation.theme.LightColorScheme
+import com.example.trustvault.presentation.viewmodels.home.HomeScreenViewModel
 import com.mikepenz.markdown.m3.Markdown
 import com.mikepenz.markdown.m3.markdownColor
 import com.mikepenz.markdown.m3.markdownTypography
+import dagger.hilt.android.lifecycle.HiltViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PrivacyPolicyScreen(onBack: () -> Unit = {}) {
+fun PrivacyPolicyScreen(
+    viewModel: HomeScreenViewModel = hiltViewModel(),
+    onBack: () -> Unit = {}
+) {
 
+    val darkTheme = viewModel.darkTheme
     val context = LocalContext.current
     var privacyPolicy by remember { mutableStateOf("") }
 
@@ -54,18 +63,22 @@ fun PrivacyPolicyScreen(onBack: () -> Unit = {}) {
                 title = { Text("Política de privacidad") },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Volver")
+                        Icon(
+                            Icons.Default.ArrowBack,
+                            contentDescription = "Volver",
+                            tint = if (darkTheme) Color.White else Color.Black
+                        )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xFF121212),
-                    titleContentColor = Color.White,
-                    navigationIconContentColor = Color.White
+                    containerColor = if (darkTheme) DarkColorScheme.surface else LightColorScheme.background,
+                    titleContentColor = if (darkTheme) Color.White else Color.Black,
+                    navigationIconContentColor = if (darkTheme) Color.White else Color.Black
                 ),
                 modifier = Modifier.padding(top = 25.dp)
             )
         },
-        containerColor = Color(0xFF121212)
+        containerColor = if (darkTheme) DarkColorScheme.surface else LightColorScheme.background
     ) { padding ->
         Column(
             modifier = Modifier
@@ -77,14 +90,14 @@ fun PrivacyPolicyScreen(onBack: () -> Unit = {}) {
                 content = privacyPolicy,
                 modifier = Modifier.fillMaxWidth(),
                 colors = markdownColor(
-                    text = Color.White
+                    text = if (darkTheme) Color.White else Color.Black
                 ),
                 typography = markdownTypography(
-                    h1 = TextStyle(fontSize = 18.sp, color = Color.White, fontWeight = FontWeight.Bold),
-                    h2 = TextStyle(fontSize = 16.sp, color = Color.White, fontWeight = FontWeight.SemiBold),
-                    h3 = TextStyle(fontSize = 14.sp, color = Color.White, fontWeight = FontWeight.SemiBold),
-                    text = TextStyle(fontSize = 12.sp, color = Color.White),
-                    list = TextStyle(fontSize = 12.sp, color = Color.White)
+                    h1 = TextStyle(fontSize = 18.sp, color = if (darkTheme) Color.White else Color.Black, fontWeight = FontWeight.Bold),
+                    h2 = TextStyle(fontSize = 16.sp, color = if (darkTheme) Color.White else Color.Black, fontWeight = FontWeight.SemiBold),
+                    h3 = TextStyle(fontSize = 14.sp, color = if (darkTheme) Color.White else Color.Black, fontWeight = FontWeight.SemiBold),
+                    text = TextStyle(fontSize = 12.sp, color = if (darkTheme) Color.White else Color.Black),
+                    list = TextStyle(fontSize = 12.sp, color = if (darkTheme) Color.White else Color.Black)
                 )
             )
         }
