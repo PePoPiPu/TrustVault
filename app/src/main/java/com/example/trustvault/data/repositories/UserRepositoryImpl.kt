@@ -162,18 +162,6 @@ class UserRepositoryImpl @Inject constructor(
                 .set(userWithHashedPassword)
                 .await()
 
-            val newAccountData = hashMapOf(
-                "platformName" to "TrustVault",
-                "storedEmail" to user.email,
-                "storedPassword" to userWithHashedPassword.password
-            )
-
-            db.collection("users")
-                .document(userId)
-                .collection("accounts")
-                .add(newAccountData)
-                .await()
-
             Result.success(Unit)
         } catch (e: Exception) {
             Log.d("ERROR: ", e.toString())
