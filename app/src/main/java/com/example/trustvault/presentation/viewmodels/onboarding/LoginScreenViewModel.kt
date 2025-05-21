@@ -66,7 +66,7 @@ class LoginScreenViewModel @Inject constructor(
     fun getUserIv() {
         viewModelScope.launch {
             val result =  biometricLoginUseCase.getUserIv()
-             userIv.value = result.getOrNull()!!
+             userIv.value = result.getOrNull()
         }
     }
 

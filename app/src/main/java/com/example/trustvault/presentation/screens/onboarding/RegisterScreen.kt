@@ -243,7 +243,7 @@ fun RegisterScreen(
                 "US" to "+1"    // United States
             )
 
-            CountryPickerOutlinedTextField(
+            CountryPickerOutlinedTextField( // If this stops logging errors everything breaks :(
                 mobileNumber = CountryPickerUtils.getFormattedMobileNumber(
                     viewModel.phone, selectedCountryState?.countryCode ?: "ES"
                 ),

@@ -40,7 +40,7 @@ class GetStartedViewModel @Inject constructor(
                 setBlockModes(KeyProperties.BLOCK_MODE_CBC)
                 setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
                 setUserAuthenticationRequired(true) // requires biometric authentication
-                setUserAuthenticationParameters(0, KeyProperties.AUTH_BIOMETRIC_STRONG) // requires biometricAuthentication everytime the key is used
+                setUserAuthenticationParameters(0, KeyProperties.AUTH_BIOMETRIC_STRONG or KeyProperties.AUTH_DEVICE_CREDENTIAL) // requires biometricAuthentication everytime the key is used
                 build()
             }
             return keyGenParameterSpec

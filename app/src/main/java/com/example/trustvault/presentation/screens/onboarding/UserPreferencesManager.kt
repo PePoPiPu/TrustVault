@@ -93,7 +93,7 @@ class UserPreferencesManager @Inject constructor(application: Application) { // 
     }
 
     val authTypeFlow: Flow<Boolean> = context.dataStore.data.map { preferences ->
-        preferences[AUTH_TYPE_KEY] ?: true
+        preferences[AUTH_TYPE_KEY] ?: false
     }
 
     val isRegisteredFlow: Flow<Boolean> = context.dataStore.data.map { preferences ->

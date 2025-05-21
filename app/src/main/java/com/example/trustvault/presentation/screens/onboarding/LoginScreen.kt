@@ -103,6 +103,8 @@ import com.example.trustvault.presentation.viewmodels.onboarding.LoginScreenView
                    }
                }
            )
+       } else if(!isRegistered && cipher == null) {
+           Toast.makeText(context, "Tu huella no está registrada en TrustVault.", Toast.LENGTH_SHORT).show()
        }
 
         Column (

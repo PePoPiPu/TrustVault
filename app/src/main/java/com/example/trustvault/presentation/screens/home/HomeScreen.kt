@@ -44,6 +44,7 @@ fun HomeScreen(
     onAddClick: () -> Unit = {}
 ) {
 
+    var accountItems by remember {mutableStateOf<List<AccountItem>?>(null)}
     val darkTheme = viewModel.darkTheme
     val getAccountsResult by viewModel.getAccountsResult.observeAsState()
     var selectedAccount by remember { mutableStateOf<AccountItem?>(null) }
@@ -77,10 +78,12 @@ fun HomeScreen(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 contentPadding = PaddingValues(8.dp)
             ) {
+
                 if (getAccountsResult != null) {
-                    val accountItems = viewModel.getAccountItems(getAccountsResult!!)
-                    items(accountItems) { account ->
-                        AccountCard(viewModel, account, openDetailedAccountCard = { selectedAccount = account })
+                    accountItems = viewModel.getAccountItems(getAccountsResult!!)
+                    items(accountItems as List<Any?>) { account ->
+                        AccountCard(viewModel,
+                            account as AccountItem, openDetailedAccountCard = { selectedAccount = account })
                     }
                 }
             }

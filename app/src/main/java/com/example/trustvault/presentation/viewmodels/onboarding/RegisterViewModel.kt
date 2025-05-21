@@ -75,9 +75,12 @@ class RegisterViewModel @Inject constructor(
 
         viewModelScope.launch {
             val result = registerUseCase.execute(user, cipher)
+            if(result.isSuccess) {
+                userPreferencesManager.saveIsRegistered(true)
+                userPreferencesManager.saveAuthType(true)
+            }
             _registrationResult.value = result
         }
-
     }
 
     // Email validation function
