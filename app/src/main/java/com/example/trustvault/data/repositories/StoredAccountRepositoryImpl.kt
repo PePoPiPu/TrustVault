@@ -31,7 +31,7 @@ class StoredAccountRepositoryImpl @Inject constructor(
         val currentUser = FirebaseAuth.getInstance().currentUser?.uid
 
         val docSnapshot = firestore.collection("users")
-            .document(currentUser.toString()) // to non-nullable string
+            .document(userId.toString()) // to non-nullable string
             .get()
             .await()
 
