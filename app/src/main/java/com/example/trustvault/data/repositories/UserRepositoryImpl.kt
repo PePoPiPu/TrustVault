@@ -27,6 +27,16 @@ class UserRepositoryImpl @Inject constructor(
 
     val auth = FirebaseAuth.getInstance()
 
+    /**
+     * Logs in user using email and password credentials.
+     *
+     * If a user is already logged in, it first signs them out. Then it attempts to sign in
+     * using Firebase Authentication and fetches the user profile from Firestore.
+     *
+     * @param email The user's email address.
+     * @param password The user's password.
+     * @return A [Result] containing the authenticated [User] object or an error if login fails.
+     */
     override suspend fun loginUser(
         email: String,
         password: String
@@ -58,6 +68,14 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
+    /**
+     * Gets the Initialization Vector (IV) for the currently stored user from Firestore.
+     *
+     * The method gets the user's email from the credential store, finds the corresponding user
+     * in Firestore, and decodes the IV from Base64 format.
+     *
+     * @return A [Result] containing the IV as a [ByteArray], or an error if the user is not found.
+     */
     override suspend fun getUserIv(): Result<ByteArray> {
         return try {
             // Get credentials from dataStore
@@ -86,6 +104,16 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
+    /**
+     * Logs in a user using biometric authentication.
+     *
+     * This method retrieves encrypted credentials from the secure storage, decrypts the master key
+     * using the given [Cipher], then decrypts the stored password and performs a regular login.
+     *
+     * @param cipher The initialized [Cipher] used to decrypt the master key.
+     * @param secretKey The device's secret key for decryption.
+     * @return A [Result] indicating success or failure of the biometric login process.
+     */
     override suspend fun loginBiometricUser(cipher: Cipher, secretKey: SecretKey?): Result<Unit> {
         return try {
             // Get credentials from dataStore
@@ -122,6 +150,19 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
+    /**
+     * Registers a new user account in Firebase Authentication and Firestore.
+     *
+     * This method performs the following:
+     * - Derives a master encryption key from the user's password.
+     * - Encrypts the password and master key.
+     * - Hashes the password using Argon2.
+     * - Stores the encrypted data and user information in Firestore.
+     *
+     * @param user The [User] object containing registration data.
+     * @param cipher The [Cipher] used to encrypt the master key.
+     * @return A [Result] indicating success or failure of the registration process.
+     */
     override suspend fun registerUser(
         user: User,
         cipher: Cipher?
@@ -173,6 +214,12 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
+    /**
+     * Retrieves a user from Firestore by their username.
+     *
+     * @param username The username of the user.
+     * @return A [Result] containing the [User] object or an error if not found.
+     */
     override suspend fun getUser(username: String): Result<User> {
         return try {
             val querySnapshot = firestore.collection("users")
@@ -191,6 +238,14 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
+    /**
+     * Updates the details of an existing user in Firestore.
+     *
+     * The password is re-hashed using Argon2 before storing.
+     *
+     * @param user The [User] object with updated information.
+     * @return A [Result] indicating success or failure.
+     */
     override suspend fun updateUser(user: User): Result<Unit> {
         return try {
             val querySnapshot = firestore.collection("users")
@@ -223,6 +278,12 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
+    /**
+     * Deletes a user from Firestore using their username.
+     *
+     * @param user The [User] to be deleted.
+     * @return A [Result] indicating success or failure.
+     */
     override suspend fun deleteUser(user: User): Result<Unit> {
         return try {
             val querySnapshot = firestore.collection("users")
@@ -247,6 +308,12 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
+    /**
+     * Sends a password reset email to the specified email address using Firebase Authentication.
+     *
+     * @param email The email of the user to send the reset link to.
+     * @return A [Result] indicating success or failure.
+     */
     override suspend fun forgotPassword(email: String): Result<Unit> {
         return try {
             auth.sendPasswordResetEmail(email).await()
@@ -256,6 +323,14 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
+    /**
+     * Hashes user password using Argon2ID.
+     *
+     * The resulting hash includes metadata (algorithm, salt, parameters).
+     *
+     * @param password The plaintext password to hash.
+     * @return The encoded Argon2 hash string.
+     */
     private fun hashPassword(password: String): String {
         val argon2Kt = Argon2Kt()
         // Since strings are immutable and cannot be wiped from memory in a secure manner
@@ -279,6 +354,12 @@ class UserRepositoryImpl @Inject constructor(
         return encodedHashResult
     }
 
+    /**
+     * Generates a secure random salt for hashing.
+     *
+     * @param length The desired length of the salt in bytes.
+     * @return A [ByteArray] containing the salt.
+     */
     private fun generateSalt(length: Int = 32) : ByteArray{
         val salt = ByteArray(length)
         SecureRandom().nextBytes(salt)
