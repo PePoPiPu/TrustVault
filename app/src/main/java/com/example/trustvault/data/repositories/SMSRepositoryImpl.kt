@@ -15,13 +15,27 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
+/**
+ * Implementation of [SMSRepository] that handles sending SMS verification codes using Firebase Authentication.
+ *
+ * @property firebaseAuth An instance of [FirebaseAuth] used for sending verification codes.
+ */
 class SMSRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth
 ) : SMSRepository {
 
+    // Store the verification ID returned by Firebase
     var storedVerificationId: String? = null
 
-    // Sends Verification code
+    /**
+     * Sends a verification code to the specified phone number using Firebase Authentication.
+     * This function uses coroutines and suspends until the result is returned or an error occurs.
+     *
+     * @param context The context from which the request is made. It must be an [Activity] context.
+     * @param phoneNumber The phone number to which the verification code will be sent.
+     * @return A [Result] containing either the verification ID if successful, or an error if the operation failed.
+     */
+
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun sendCode(context: Context, phoneNumber: String): Result<String> {
         return suspendCancellableCoroutine { continuation ->
@@ -30,6 +44,7 @@ class SMSRepositoryImpl @Inject constructor(
                 .setTimeout(30L, TimeUnit.SECONDS)
                 .setActivity(context as Activity)  // Ensure the context is an Activity
                 .setCallbacks(object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+                    // If the code has been successfully sent to the phone numbre
                     override fun onCodeSent(
                         verificationId: String,
                         token: PhoneAuthProvider.ForceResendingToken
@@ -43,6 +58,7 @@ class SMSRepositoryImpl @Inject constructor(
                         Log.d("TAG", "Verification completed automatically.")
                     }
 
+                    // Verification proccess fails
                     override fun onVerificationFailed(e: FirebaseException) {
                         Log.e("TAG", "Verification failed: ${e.message}")
                         continuation.resume(Result.failure(e), null)
