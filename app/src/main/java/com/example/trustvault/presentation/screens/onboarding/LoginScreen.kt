@@ -22,12 +22,16 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -83,6 +87,7 @@ import com.example.trustvault.presentation.viewmodels.onboarding.LoginScreenView
         }
         val darkTheme = viewModel.darkTheme
         val isRegistered = viewModel.registrationStatus
+        var emailError by remember { mutableStateOf<String?>(null) }
         val context = LocalContext.current
         val userIv = viewModel.userIv.value
         val cipher = remember(userIv) {
@@ -158,12 +163,15 @@ import com.example.trustvault.presentation.viewmodels.onboarding.LoginScreenView
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.Absolute.Center
             ) {
-                // Username Input
+                // Email Input
                 OutlinedTextField(
-                    value = viewModel.username,
+                    value = viewModel.email,
                     singleLine = true,
-                    onValueChange = { viewModel.username = it },
-                    label = { Text("Usuario") },
+                    onValueChange = {
+                        viewModel.email = it
+                        emailError = if (!viewModel.isValidEmail(it)) "Please enter a valid email" else null
+                    },
+                    label = { Text("Email") },
                     modifier = Modifier.fillMaxWidth(0.9f),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedContainerColor = Color(0xFFF2F2F2),
@@ -172,6 +180,15 @@ import com.example.trustvault.presentation.viewmodels.onboarding.LoginScreenView
                         focusedLabelColor = if (darkTheme) Color.White else Color.Black
                     ),
                     shape = RoundedCornerShape(12.dp)
+                )
+            }
+            // Display the error message
+            if (emailError != null) {
+                Text(
+                    text = emailError!!, // Not null assertion. Tells kotlin this variable cannot be null at this point
+                    color = MaterialTheme.colorScheme.error,
+                    style = TextStyle(fontSize = 12.sp),
+                    modifier = Modifier.padding(start = 16.dp, top = 4.dp)
                 )
             }
 

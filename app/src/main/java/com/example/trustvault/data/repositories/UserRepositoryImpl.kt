@@ -154,8 +154,12 @@ class UserRepositoryImpl @Inject constructor(
             userWithHashedPassword.iv = ivBase64
             // Register the user first in Firebase Auth
             val authResult = auth.createUserWithEmailAndPassword(user.email, user.password).await()
+            auth.signInWithEmailAndPassword(user.email, user.password).await()
             // Check if the userId exists
             val userId = authResult.user?.uid ?: throw Exception("User ID not found after registration")
+
+            // Check current logged in user
+            Log.d("USER LOGGED AFTER REGISTRATION", auth.currentUser?.uid.toString())
 
             db.collection("users")
                 .document(userId)

@@ -1,5 +1,6 @@
 package com.example.trustvault.presentation.viewmodels.onboarding
 
+import android.util.Patterns
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -49,7 +50,7 @@ class LoginScreenViewModel @Inject constructor(
 
     val secretKey = keyEntry?.secretKey
 
-    var username by mutableStateOf("")
+    var email by mutableStateOf("")
     var password by mutableStateOf("")
     var userIv: MutableState<ByteArray?> = mutableStateOf(ByteArray(0) { 0x00 })
 
@@ -57,7 +58,11 @@ class LoginScreenViewModel @Inject constructor(
     val loginResult: State<Boolean?> = _loginResult
 
     val isFormValid: Boolean
-        get() = username.isNotBlank() && password.isNotBlank()
+        get() = email.isNotBlank() && password.isNotBlank()
+
+    fun isValidEmail(email: String): Boolean {
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
 
     fun initializeCipher(): Cipher {
         return encryptionManager.createDecryptionCipher(secretKey, userIv.value)
@@ -72,7 +77,7 @@ class LoginScreenViewModel @Inject constructor(
 
     fun loginUser() {
         viewModelScope.launch {
-            val result = loginUseCase.execute(username, password)
+            val result = loginUseCase.execute(email, password)
 
             if(result.isSuccess) {
                 _loginResult.value = result.isSuccess

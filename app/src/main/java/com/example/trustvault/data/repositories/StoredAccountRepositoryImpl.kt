@@ -19,6 +19,7 @@ class StoredAccountRepositoryImpl @Inject constructor(
     private val encryptionManager: EncryptionManager,
     private val credentialStore: SecureCredentialStore
 ) : StoredAccountRepository {
+
     override suspend fun addAccount(
         userId: String,
         platformName: String,
@@ -28,8 +29,8 @@ class StoredAccountRepositoryImpl @Inject constructor(
     ): Result<Unit> {
 
         // retrieve master key for current user
-        val currentUser = FirebaseAuth.getInstance().currentUser?.uid
-
+        val auth = FirebaseAuth.getInstance()
+        val currentUser = auth.currentUser?.uid
         val docSnapshot = firestore.collection("users")
             .document(userId.toString()) // to non-nullable string
             .get()

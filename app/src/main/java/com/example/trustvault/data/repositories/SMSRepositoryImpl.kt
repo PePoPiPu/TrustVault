@@ -54,29 +54,32 @@ class SMSRepositoryImpl @Inject constructor(
         }
     }
 
+    // Commented this function since it's using a test phone number. Gives problems when doing operations in
+    // data layer afterwards since it always logs in the test phone number user. - Alex
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun verifyCodeManually(verificationId: String, code: String, context: Context): Result<Unit> {
-        Log.d("VERIFICATIONID", verificationId)
-        return if (verificationId != null) {
-            val credential = PhoneAuthProvider.getCredential(verificationId, code)
-            suspendCancellableCoroutine { continuation ->
-                FirebaseAuth.getInstance()
-                    .signInWithCredential(credential)
-                    .addOnCompleteListener(context as Activity) { task ->
-                        if (task.isSuccessful) {
-                            Log.d("TAG", "signInWithCredential:success")
-                            continuation.resume(Result.success(Unit), null)
-                        } else {
-                            Log.w("TAG", "signInWithCredential:failure", task.exception)
-                            continuation.resume(
-                                Result.failure(task.exception ?: Exception("Unknown error")),
-                                null
-                            )
-                        }
-                    }
-            }
-        } else {
-            Result.failure(Exception("Verification ID is null"))
-        }
+//        Log.d("VERIFICATIONID", verificationId)
+//        return if (verificationId != null) {
+//            val credential = PhoneAuthProvider.getCredential(verificationId, code)
+//            suspendCancellableCoroutine { continuation ->
+//                FirebaseAuth.getInstance()
+//                    .signInWithCredential(credential)
+//                    .addOnCompleteListener(context as Activity) { task ->
+//                        if (task.isSuccessful) {
+//                            Log.d("TAG", "signInWithCredential:success")
+//                            continuation.resume(Result.success(Unit), null)
+//                        } else {
+//                            Log.w("TAG", "signInWithCredential:failure", task.exception)
+//                            continuation.resume(
+//                                Result.failure(task.exception ?: Exception("Unknown error")),
+//                                null
+//                            )
+//                        }
+//                    }
+//            }
+//        } else {
+//            Result.failure(Exception("Verification ID is null"))
+//        }
+        return Result.success(Unit)
     }
 }

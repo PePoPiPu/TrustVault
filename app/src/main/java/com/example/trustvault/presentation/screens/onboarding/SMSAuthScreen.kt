@@ -59,7 +59,6 @@ import kotlinx.coroutines.launch
 
 @SuppressLint("RestrictedApi")
 @Composable
-    // TODO: As soon as this screen is painted, send a code to the users phone number and check it automatically, if possible
     fun SMSAuthScreen(
         onContinueClick: () -> Unit = {}
     ) {
