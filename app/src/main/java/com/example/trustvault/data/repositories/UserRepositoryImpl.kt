@@ -58,6 +58,7 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
+
     override suspend fun getUserIv(): Result<ByteArray> {
         return try {
             // Get credentials from dataStore
@@ -189,6 +190,10 @@ class UserRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             Result.failure(e)
         }
+    }
+
+    override suspend fun logOut() {
+        auth.signOut()
     }
 
     override suspend fun updateUser(user: User): Result<Unit> {

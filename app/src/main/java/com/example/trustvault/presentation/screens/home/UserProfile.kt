@@ -32,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -48,10 +49,12 @@ fun UserProfile(
     onTrashClick: () -> Unit = {},
     onSupportClick: () -> Unit = {},
     onSettingsClick: () -> Unit = {},
-    onDarkWebClick: () -> Unit = {}
+    onDarkWebClick: () -> Unit = {},
+    onLogoutClick: () -> Unit = {}
 ) {
 
     val darkTheme = viewModel.darkTheme
+    val context = LocalContext.current
 
     val navItems = listOf("Favoritos", "Papelera", "Soporte", "Ajustes", "Monitoreo Dark Web")
     val icons = listOf(
@@ -137,7 +140,7 @@ fun UserProfile(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { /* Log out */ }
+                .clickable { viewModel.logout(context) }
                 .padding(vertical = 16.dp),
             horizontalArrangement = Arrangement.Start
         ) {
