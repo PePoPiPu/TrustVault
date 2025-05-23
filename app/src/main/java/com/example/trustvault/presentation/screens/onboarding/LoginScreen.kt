@@ -275,7 +275,7 @@ import com.example.trustvault.presentation.viewmodels.onboarding.LoginScreenView
 
                     ),
                     modifier = Modifier
-                        .padding(top = 250.dp, bottom = 16.dp)
+                        .padding(top = 16.dp, bottom = 16.dp)
                         .clickable {
                             onRegisterClick()
                         }
@@ -297,7 +297,6 @@ import com.example.trustvault.presentation.viewmodels.onboarding.LoginScreenView
                         .padding(bottom = 32.dp)
                         .clickable {
                             onForgotPasswordClick()
-                            Toast.makeText(context, "Te pasa por cafre, cacho mamón.", Toast.LENGTH_SHORT).show()
                         }
                 )
             }
