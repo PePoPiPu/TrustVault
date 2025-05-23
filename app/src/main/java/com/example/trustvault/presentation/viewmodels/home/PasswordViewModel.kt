@@ -41,6 +41,9 @@ class PasswordViewModel @Inject constructor(
 
     val secretKey = keyEntry?.secretKey
 
+    val isFormValid: Boolean
+        get() = platformName.isNotBlank() && email.isNotBlank() && password.isNotBlank()
+
     fun getUserIv() {
         viewModelScope.launch {
             val result =  biometricLoginUseCase.getUserIv()

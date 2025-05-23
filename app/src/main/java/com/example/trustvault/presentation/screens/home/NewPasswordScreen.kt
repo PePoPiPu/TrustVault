@@ -46,6 +46,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.trustvault.presentation.screens.onboarding.GenericBiometricScreen
 import com.example.trustvault.presentation.theme.DarkColorScheme
 import com.example.trustvault.presentation.theme.DarkModePrimaryGradient
+import com.example.trustvault.presentation.theme.DisabledButtonGradient
 import com.example.trustvault.presentation.theme.LightColorScheme
 import com.example.trustvault.presentation.theme.LightModePrimaryGradient
 import com.example.trustvault.presentation.utils.rememberImeState
@@ -190,6 +191,7 @@ fun NewPasswordScreen(
                     onClick = {
                         showBiometricPrompt.value = true
                     },
+                    enabled = viewModel.isFormValid,
                     modifier = Modifier
                         .fillMaxWidth(0.9f)
                         .height(50.dp),
@@ -201,7 +203,11 @@ fun NewPasswordScreen(
                         modifier = Modifier
                             .fillMaxSize()
                             .background(
-                                if(darkTheme) DarkModePrimaryGradient else LightModePrimaryGradient,
+                                when {
+                                    darkTheme && viewModel.isFormValid -> DarkModePrimaryGradient
+                                    !darkTheme && viewModel.isFormValid -> LightModePrimaryGradient
+                                    else -> DisabledButtonGradient  // Greyed out when form is not filled out
+                                },
                                 shape = RoundedCornerShape(12.dp)
                             ),
                         contentAlignment = Alignment.Center

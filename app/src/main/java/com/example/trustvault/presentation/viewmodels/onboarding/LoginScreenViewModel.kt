@@ -86,7 +86,6 @@ class LoginScreenViewModel @Inject constructor(
                 val errorMsg = exception?.message ?: "Unknown error"
                 _loginResult.value = result.isFailure
             }
-
         }
     }
 
