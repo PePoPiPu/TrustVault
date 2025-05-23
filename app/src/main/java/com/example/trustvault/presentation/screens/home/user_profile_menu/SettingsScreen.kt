@@ -66,6 +66,7 @@ fun SettingsScreen(
     var darkModeEnabled by remember { mutableStateOf(true) }
 
     val darkTheme by themeViewModel.darkTheme.collectAsState()
+    val context = LocalContext.current
 
     Scaffold (
         topBar = {
@@ -131,7 +132,7 @@ fun SettingsScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { /* Log out */ }
+                    .clickable { viewModel.logout(context) }
                     .padding(vertical = 24.dp),
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically
