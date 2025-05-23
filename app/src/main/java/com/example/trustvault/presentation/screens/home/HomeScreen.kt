@@ -51,7 +51,7 @@ fun HomeScreen(
 
     // We use launchedEffect(Unit) because it will only run the first time the composable
     // is composed/recomposed
-    LaunchedEffect(Unit) {
+    LaunchedEffect(getAccountsResult) {
         viewModel.getAccounts()
     }
 
