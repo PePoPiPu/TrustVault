@@ -7,7 +7,6 @@ import com.example.trustvault.domain.models.StoredAccount
 import com.example.trustvault.domain.models.User
 import com.example.trustvault.domain.repositories.StoredAccountRepository
 import com.example.trustvault.presentation.utils.SecureCredentialStore
-import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await

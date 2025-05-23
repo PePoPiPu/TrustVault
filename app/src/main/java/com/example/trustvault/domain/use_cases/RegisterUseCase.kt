@@ -1,6 +1,5 @@
 package com.example.trustvault.domain.use_cases
 
-import android.util.Log
 import com.example.trustvault.domain.models.User
 import com.example.trustvault.domain.repositories.UserRepository
 import javax.crypto.Cipher

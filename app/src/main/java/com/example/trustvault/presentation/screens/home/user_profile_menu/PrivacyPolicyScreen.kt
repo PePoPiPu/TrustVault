@@ -39,7 +39,6 @@ import com.example.trustvault.presentation.viewmodels.home.HomeScreenViewModel
 import com.mikepenz.markdown.m3.Markdown
 import com.mikepenz.markdown.m3.markdownColor
 import com.mikepenz.markdown.m3.markdownTypography
-import dagger.hilt.android.lifecycle.HiltViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)

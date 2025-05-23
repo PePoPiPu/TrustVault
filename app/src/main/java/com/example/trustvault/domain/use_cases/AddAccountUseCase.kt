@@ -1,6 +1,5 @@
 package com.example.trustvault.domain.use_cases
 
-import com.example.trustvault.domain.models.StoredAccount
 import com.example.trustvault.domain.repositories.StoredAccountRepository
 import javax.crypto.Cipher
 import javax.inject.Inject

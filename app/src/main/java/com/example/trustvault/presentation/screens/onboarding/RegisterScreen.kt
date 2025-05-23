@@ -1,7 +1,6 @@
 package com.example.trustvault.presentation.screens.onboarding
 
 import android.annotation.SuppressLint
-import android.hardware.biometrics.BiometricPrompt
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

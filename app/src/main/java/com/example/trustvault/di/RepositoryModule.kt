@@ -1,6 +1,5 @@
 package com.example.trustvault.di
 
-import com.example.trustvault.data.encryption.EncryptionManager
 import com.example.trustvault.data.repositories.SMSRepositoryImpl
 import com.example.trustvault.data.repositories.StoredAccountRepositoryImpl
 import com.example.trustvault.data.repositories.UserRepositoryImpl

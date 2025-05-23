@@ -49,8 +49,7 @@ fun UserProfile(
     onTrashClick: () -> Unit = {},
     onSupportClick: () -> Unit = {},
     onSettingsClick: () -> Unit = {},
-    onDarkWebClick: () -> Unit = {},
-    onLogoutClick: () -> Unit = {}
+    onDarkWebClick: () -> Unit = {}
 ) {
 
     val darkTheme = viewModel.darkTheme
@@ -92,7 +91,7 @@ fun UserProfile(
                     Text("Aniceto González García", color = Color.White, fontWeight = FontWeight.Bold)
                     Text("anicetogonzalez@gmail.com", color = if(darkTheme) Color.Gray else Color.White)
                     Button(
-                        onClick = { /* Edit profile */ },
+                        onClick = { TODO("Edit profile") },
                         colors = ButtonDefaults.buttonColors(containerColor = if(darkTheme) Color(0xFFBB86FC) else Color(0xFF99FFE2)),
                         modifier = Modifier.padding(top = 8.dp)
                     ) {

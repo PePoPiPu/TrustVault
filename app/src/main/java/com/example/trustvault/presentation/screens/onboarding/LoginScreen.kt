@@ -81,7 +81,6 @@ import com.example.trustvault.presentation.viewmodels.onboarding.LoginScreenView
         onContinueClick: () -> Unit = {},
         onForgotPasswordClick: () -> Unit = {}
     ) {
-
         LaunchedEffect(Unit) {
             viewModel.getUserIv()
         }
@@ -120,12 +119,11 @@ import com.example.trustvault.presentation.viewmodels.onboarding.LoginScreenView
             verticalArrangement = Arrangement.Center, // Vertical Alignment
             horizontalAlignment = Alignment.CenterHorizontally // Horizontal Alignment
         ) {
-            Spacer(modifier = Modifier.height(10.dp))
             // Go back icon
             Row (
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
-                    .padding(top = 32.dp, start = 16.dp),
+                    .padding(top = 16.dp, start = 16.dp),
                 horizontalArrangement = Arrangement.Start
             ) {
                 Image(
@@ -138,7 +136,7 @@ import com.example.trustvault.presentation.viewmodels.onboarding.LoginScreenView
                         }
                 )
             }
-
+            Spacer(modifier = Modifier.height(60.dp))
             // Title
             Row (
                 modifier = Modifier
@@ -154,7 +152,7 @@ import com.example.trustvault.presentation.viewmodels.onboarding.LoginScreenView
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold
                     ),
-                    modifier = Modifier.padding(top = 200.dp, bottom = 32.dp)
+                    modifier = Modifier.padding(top = 125.dp, bottom = 32.dp)
                 )
             }
             // Form Fields
@@ -300,6 +298,9 @@ import com.example.trustvault.presentation.viewmodels.onboarding.LoginScreenView
                         }
                 )
             }
+
+            Spacer(modifier = Modifier.height(40.dp))
+
         }
     }
 
