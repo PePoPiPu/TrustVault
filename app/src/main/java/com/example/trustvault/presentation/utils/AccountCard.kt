@@ -26,6 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.trustvault.presentation.viewmodels.home.HomeScreenViewModel
+import com.example.trustvault.R
 
 @Composable
 fun AccountCard(
@@ -53,7 +54,7 @@ fun AccountCard(
             verticalArrangement = Arrangement.Center
         ) {
             Image(
-                painter = painterResource(id = account.iconResId),
+                painter = painterResource(id = if(account.iconResId != null) account.iconResId else R.drawable.question_mark),
                 contentDescription = null,
                 modifier = Modifier.size(40.dp)
             )

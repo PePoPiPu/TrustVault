@@ -29,6 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.trustvault.R
 import com.example.trustvault.presentation.models.AccountItem
 import com.example.trustvault.presentation.screens.onboarding.GenericBiometricScreen
 import com.example.trustvault.presentation.viewmodels.home.DetailedAccountCardViewModel
@@ -80,7 +81,7 @@ fun DetailedAccountCard(
             verticalArrangement = Arrangement.Center
         ) {
             Image(
-                painter = painterResource(id = accountDetails.iconResId),
+                painter = painterResource(id = if(accountDetails.iconResId != null) accountDetails.iconResId else R.drawable.question_mark),
                 contentDescription = null,
                 modifier = Modifier.size(40.dp)
             )

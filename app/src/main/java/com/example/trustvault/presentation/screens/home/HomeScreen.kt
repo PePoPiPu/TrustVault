@@ -78,12 +78,10 @@ fun HomeScreen(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 contentPadding = PaddingValues(8.dp)
             ) {
-
                 if (getAccountsResult != null) {
                     accountItems = viewModel.getAccountItems(getAccountsResult!!)
                     items(accountItems as List<Any?>) { account ->
-                        AccountCard(viewModel,
-                            account as AccountItem, openDetailedAccountCard = { selectedAccount = account })
+                        AccountCard(viewModel, account as AccountItem, openDetailedAccountCard = { selectedAccount = account })
                     }
                 }
             }

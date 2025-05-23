@@ -46,9 +46,9 @@ class HomeScreenViewModel @Inject constructor(
     fun getAccountItems(accounts: List<StoredAccount>): List<AccountItem> {
         val accountItems = mutableListOf<AccountItem>()
         for (account in accounts) {
-            val platform = enumValues<Platforms>().first {it.name.equals(account.platformName, ignoreCase = true) }
+            val platform = enumValues<Platforms>().firstOrNull {it.name.equals(account.platformName, ignoreCase = true) }
             val accItem = AccountItem(
-                iconResId = platform.iconResId,
+                iconResId = platform?.iconResId,
                 name = account.platformName,
                 email = account.storedEmail,
                 password = account.encryptedPassword,
