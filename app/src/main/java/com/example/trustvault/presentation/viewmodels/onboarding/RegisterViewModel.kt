@@ -20,6 +20,14 @@ import java.security.KeyStore
 import javax.crypto.Cipher
 import javax.inject.Inject
 
+/**
+ * ViewModel responsible for managing the user registration process, including form validation,
+ * secure key handling with Android Keystore, and password encryption using a cipher.
+ *
+ * @property userPreferencesManager Manages user settings and registration state.
+ * @property registerUseCase Handles business logic for registering a new user.
+ * @property encryptionManager Provides cipher for encrypting sensitive information.
+ */
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
     private val userPreferencesManager: UserPreferencesManager,
@@ -53,6 +61,11 @@ class RegisterViewModel @Inject constructor(
     val isFormValid: Boolean
         get() = email.isNotBlank() && username.isNotBlank() && phone.isNotBlank() && password.isNotBlank() && confirmPassword.isNotBlank()
 
+    /**
+     * Register a new user with the encryption cipher.
+     *
+     * @param cipher The cipher used to encrypt the user's password or key.
+     */
     fun register(cipher: Cipher) {
         if(!isFormValid) {
             _registrationResult.value = Result.failure(Exception("All fields are required"))
@@ -83,12 +96,22 @@ class RegisterViewModel @Inject constructor(
         }
     }
 
-    // Email validation function
+    /**
+     * Validates the email format.
+     *
+     * @param email The email string to validate.
+     * @return True if the email is valid, false otherwise.
+     */
     fun isValidEmail(email: String): Boolean {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
-    // Password validation function
+    /**
+     * Validates the password based on common security rules.
+     *
+     * @param password The password string to validate.
+     * @return An error message string if the password is invalid, or null if it's valid.
+     */
     fun validatePassword(password: String): String? {
         return when {
             password.length < 8 -> "Password must be at least 8 characters long."
@@ -100,7 +123,13 @@ class RegisterViewModel @Inject constructor(
         }
     }
 
-    // countryCode: ISO 3166-1 alpha-2 code (e.g., "us", "es", "fr")
+    /**
+     * Validates the phone number based on the given country code.
+     *
+     * @param countryCode ISO 3166-1 alpha-2 country code (e.g., "US", "ES").
+     * @param phoneNumber The phone number string to validate.
+     * @return True if the phone number is valid for the given country, false otherwise.
+     */
     fun validatePhoneNumber(countryCode: String?, phoneNumber: String) : Boolean {
         if(phoneNumber.isBlank()) return false
         val phoneUtil = PhoneNumberUtil.getInstance()

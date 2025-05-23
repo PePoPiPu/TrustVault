@@ -73,6 +73,16 @@ class StoredAccountRepositoryImpl @Inject constructor(
         }
     }
 
+    /**
+     * Retrieves the list of stored accounts for the specified user from Firestore.
+     *
+     * This method checks if the user is currently logged in AND fetch all documents
+     * under the `accounts` subcollection for the given `userId`. Each document is converted into a
+     * [StoredAccount] object.
+     *
+     * @param userId The unique identifier of the user whose stored accounts are being retrieved.
+     * @return A [Result] containing a list of [StoredAccount] objects if successful, or an exception if an error occurs.
+     */
     override suspend fun getAccounts(userId: String): Result<List<StoredAccount>> {
         return try {
             Log.d("CurrentUserStoredAccountsRepo", FirebaseAuth.getInstance().currentUser?.uid.toString())
@@ -95,6 +105,7 @@ class StoredAccountRepositoryImpl @Inject constructor(
         }
     }
 
+    //PENDING IMPLEMENTATIONS
     override suspend fun getAccount(userId: String): Result<StoredAccount> {
         TODO("Not yet implemented")
     }

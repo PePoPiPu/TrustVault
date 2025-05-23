@@ -16,6 +16,14 @@ import java.security.KeyStore
 import javax.crypto.KeyGenerator
 import javax.inject.Inject
 
+/**
+ * ViewModel for the Get Started screen.
+ *
+ * This ViewModel handles the logic for initializing secure biometric keys in the Android KeyStore,
+ * based on the selected authentication type, and manages the theme state via [UserPreferencesManager].
+ *
+ * It ensures that a secure encryption key exists before proceeding and exposes dark mode preference.
+ */
 @HiltViewModel
 class GetStartedViewModel @Inject constructor(
     private val userPreferencesManager: UserPreferencesManager
@@ -30,6 +38,11 @@ class GetStartedViewModel @Inject constructor(
         "AndroidKeyStore"
     )
 
+    /**
+     * Creates a [KeyGenParameterSpec] depending on the authentication type.
+     *
+     * @return Configured key generation parameters.
+     */
     @RequiresApi(Build.VERSION_CODES.R)
     private fun currentKeyGenParameterSpec() : KeyGenParameterSpec {
         if(authType) {
@@ -59,6 +72,9 @@ class GetStartedViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Generates a new secure key in the Android KeyStore using the current parameters.
+     */
     @RequiresApi(Build.VERSION_CODES.R)
     private fun generateKey() {
         val keyGenParameterSpec = currentKeyGenParameterSpec()
@@ -66,6 +82,11 @@ class GetStartedViewModel @Inject constructor(
         keyGenerator.generateKey()
     }
 
+    /**
+     * Checks if the biometric-protected key already exists in the KeyStore.
+     *
+     * @return `true` if the key exists, `false` otherwise.
+     */
     private fun keyExists() : Boolean {
         val keyStore = KeyStore.getInstance("AndroidKeyStore")
         keyStore.load(null)
@@ -79,6 +100,11 @@ class GetStartedViewModel @Inject constructor(
 //        }
 //    }
 
+    /**
+     * Checks for the existence of the secure key, and generates it if missing.
+     *
+     * Logs the current key if it already exists.
+     */
     @RequiresApi(Build.VERSION_CODES.R)
     fun checkKey() {
         if(!keyExists()) {
