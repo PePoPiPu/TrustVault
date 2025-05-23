@@ -60,21 +60,39 @@ class LoginScreenViewModel @Inject constructor(
     val isFormValid: Boolean
         get() = email.isNotBlank() && password.isNotBlank()
 
+    /**
+     * Validates the format of the provided email.
+     *
+     * @param email Email to validate.
+     * @return True if the email format is valid, false otherwise.
+     */
     fun isValidEmail(email: String): Boolean {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
+    /**
+     * Initializes a cipher for decryption using the retrieved secret key and IV.
+     *
+     * @return Configured Cipher object.
+     */
     fun initializeCipher(): Cipher {
         return encryptionManager.createDecryptionCipher(secretKey, userIv.value)
     }
 
+    /**
+     * Asynchronously retrieves the user's stored initialization vector for biometric login.
+     */
     fun getUserIv() {
         viewModelScope.launch {
             val result =  biometricLoginUseCase.getUserIv()
              userIv.value = result.getOrNull()
         }
     }
-
+    /**
+     * Log in the user using the provided email and password.
+     *
+     * Updates [loginResult] with the outcome.
+     */
     fun loginUser() {
         viewModelScope.launch {
             val result = loginUseCase.execute(email, password)
@@ -90,6 +108,11 @@ class LoginScreenViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Attempts to log in the user using biometric authentication and the given cipher.
+     *
+     * @param cipher Cipher initialized for biometric decryption.
+     */
     fun loginUserWithBiometrics(cipher: Cipher) {
         viewModelScope.launch {
             val result = biometricLoginUseCase.executeBiometricLogin(cipher, secretKey)

@@ -15,6 +15,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * ViewModel for managing SMS authentication during the onboarding process.
+ *
+ * This ViewModel handles sending verification codes and validating them using the provided phone number.
+ *
+ * @property userPreferencesManager Used to retrieve the current theme settings.
+ * @property smsAuthUseCase Use case for sending and verifying SMS codes.
+ */
 @HiltViewModel
 class SMSAuthScreenViewModel @Inject constructor(
     userPreferencesManager: UserPreferencesManager,
@@ -31,6 +39,12 @@ class SMSAuthScreenViewModel @Inject constructor(
 
     var storedVerificationId: String? = null
 
+    /**
+     * Sends a verification code to the user's phone.
+     *
+     * @param context The context used for sending the SMS.
+     * @param phoneNumber The phone number to send the verification code to.
+     */
     fun authorizeUser(context: Context, phoneNumber: String) {
         viewModelScope.launch {
             val result = smsAuthUseCase.executeCodeSend(context, parsedPhoneNumber)
@@ -46,6 +60,11 @@ class SMSAuthScreenViewModel @Inject constructor(
     private val _verificationResult = mutableStateOf<Boolean?>(null)
     val verificationResult: State<Boolean?> = _verificationResult
 
+    /**
+     * Verifies the user's SMS code using the stored verification ID.
+     *
+     * @param context The context used during the verification process.
+     */
     fun verifyCode(context: Context) {
         viewModelScope.launch {
             if (storedVerificationId != null) {

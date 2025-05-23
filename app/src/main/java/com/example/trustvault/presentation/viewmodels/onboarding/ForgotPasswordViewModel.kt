@@ -13,6 +13,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * ViewModel for handling forgot password functionality.
+ *
+ * This ViewModel manages the user input for the email field and communicates with
+ * the [ForgotPasswordUseCase] to initiate a password reset email. It also handles
+ * result state and error messages, and provides the current theme preference.
+ */
 @HiltViewModel
 class ForgotPasswordViewModel @Inject constructor(
     userPreferencesManager: UserPreferencesManager,
@@ -30,6 +37,11 @@ class ForgotPasswordViewModel @Inject constructor(
     val isFormValid: Boolean
         get () = email.isNotBlank()
 
+    /**
+     * Sends a password reset email to the entered address using the use case.
+     *
+     * Updates [senPassResult] with the outcome and sets appropriate [errorMsg] if needed.
+     */
     fun sendPasswordEmail() {
         viewModelScope.launch {
 
